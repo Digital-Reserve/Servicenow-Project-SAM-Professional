@@ -1,0 +1,249 @@
+installed_on,display_name,publisher,version,install_date,scenario,expected_product,expected_version,expected_edition
+NSM-WS-001,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-06,A,Acrobat,2024,Pro
+NSM-WS-002,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-27,A,Acrobat,2024,Pro
+NSM-WS-003,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-17,A,Acrobat,2024,Pro
+NSM-WS-004,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-09,A,Acrobat,2024,Pro
+NSM-WS-005,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-05-26,A,Acrobat,2024,Pro
+NSM-WS-006,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-03-18,A,Acrobat,2024,Pro
+NSM-WS-007,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-03-29,A,Acrobat,2024,Pro
+NSM-WS-008,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-22,A,Acrobat,2024,Pro
+NSM-WS-009,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-15,A,Acrobat,2024,Pro
+NSM-WS-010,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-19,A,Acrobat,2024,Pro
+NSM-WS-011,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-01-25,A,Acrobat,2024,Pro
+NSM-WS-012,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-09-02,A,Acrobat,2024,Pro
+NSM-WS-013,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-12-16,A,Acrobat,2024,Pro
+NSM-WS-014,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-26,A,Acrobat,2024,Pro
+NSM-WS-015,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-20,A,Acrobat,2024,Pro
+NSM-WS-016,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-08-31,A,Acrobat,2024,Pro
+NSM-WS-017,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-26,A,Acrobat,2024,Pro
+NSM-WS-018,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-07-09,A,Acrobat,2024,Pro
+NSM-WS-019,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-09,A,Acrobat,2024,Pro
+NSM-WS-020,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-07-05,A,Acrobat,2024,Pro
+NSM-WS-021,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-01-22,A,Acrobat,2024,Pro
+NSM-WS-022,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-06-28,A,Acrobat,2024,Pro
+NSM-WS-023,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-05-01,A,Acrobat,2024,Pro
+NSM-WS-024,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-24,A,Acrobat,2024,Pro
+NSM-WS-025,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-29,A,Acrobat,2024,Pro
+NSM-WS-026,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-02-03,A,Acrobat,2024,Pro
+NSM-WS-027,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-09-13,A,Acrobat,2024,Pro
+NSM-WS-028,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-20,A,Acrobat,2024,Pro
+NSM-WS-029,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-05-15,A,Acrobat,2024,Pro
+NSM-WS-030,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-06-12,A,Acrobat,2024,Pro
+NSM-WS-031,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-05-01,A,Acrobat,2024,Pro
+NSM-WS-032,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-05-03,A,Acrobat,2024,Pro
+NSM-WS-033,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-02,A,Acrobat,2024,Pro
+NSM-WS-034,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-01-09,A,Acrobat,2024,Pro
+NSM-WS-035,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-07-15,A,Acrobat,2024,Pro
+NSM-WS-036,Adobe Acrobat (64-bit),Adobe,24.2.20857,2026-04-11,A,Acrobat,2024,Pro
+NSM-WS-037,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-09-20,A,Acrobat,2024,Pro
+NSM-WS-038,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-09-12,A,Acrobat,2024,Pro
+NSM-WS-039,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-10-09,A,Acrobat,2024,Pro
+NSM-WS-040,Adobe Acrobat (64-bit),Adobe,24.2.20857,2025-11-30,A,Acrobat,2024,Pro
+NSM-WS-001,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-10-29,C,Visio,2021,Professional
+NSM-WS-002,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-06-08,C,Visio,2021,Professional
+NSM-WS-003,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-02-12,C,Visio,2021,Professional
+NSM-WS-004,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-03-10,C,Visio,2021,Professional
+NSM-WS-005,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-09-14,C,Visio,2021,Professional
+NSM-WS-006,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-28,C,Visio,2021,Professional
+NSM-WS-007,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-02-11,C,Visio,2021,Professional
+NSM-WS-008,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-04-23,C,Visio,2021,Professional
+NSM-WS-009,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-09-14,C,Visio,2021,Professional
+NSM-WS-010,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-10-05,C,Visio,2021,Professional
+NSM-WS-011,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-11-03,C,Visio,2021,Professional
+NSM-WS-012,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-24,C,Visio,2021,Professional
+NSM-WS-013,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-05-22,C,Visio,2021,Professional
+NSM-WS-014,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-10-03,C,Visio,2021,Professional
+NSM-WS-015,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-21,C,Visio,2021,Professional
+NSM-WS-016,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-06-04,C,Visio,2021,Professional
+NSM-WS-017,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-28,C,Visio,2021,Professional
+NSM-WS-018,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-04-14,C,Visio,2021,Professional
+NSM-WS-019,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-10-01,C,Visio,2021,Professional
+NSM-WS-020,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-09-03,C,Visio,2021,Professional
+NSM-WS-021,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-05-13,C,Visio,2021,Professional
+NSM-WS-022,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-09-11,C,Visio,2021,Professional
+NSM-WS-023,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-08-01,C,Visio,2021,Professional
+NSM-WS-024,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-02-24,C,Visio,2021,Professional
+NSM-WS-025,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-09,C,Visio,2021,Professional
+NSM-WS-026,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-04-28,C,Visio,2021,Professional
+NSM-WS-027,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-03-17,C,Visio,2021,Professional
+NSM-WS-028,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-12-19,C,Visio,2021,Professional
+NSM-WS-029,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-12-19,C,Visio,2021,Professional
+NSM-WS-030,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-06-14,C,Visio,2021,Professional
+NSM-WS-031,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-06-07,C,Visio,2021,Professional
+NSM-WS-032,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-05-02,C,Visio,2021,Professional
+NSM-WS-033,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2026-01-06,C,Visio,2021,Professional
+NSM-WS-034,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-09-15,C,Visio,2021,Professional
+NSM-WS-035,Microsoft Visio Professional 2021,Microsoft,16.0.14332.20637,2025-11-13,C,Visio,2021,Professional
+NSM-WS-010,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-01-29,D,Project,2021,Professional
+NSM-WS-011,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-10,D,Project,2021,Professional
+NSM-WS-012,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-03-20,D,Project,2021,Professional
+NSM-WS-013,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-12-05,D,Project,2021,Professional
+NSM-WS-014,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-10-18,D,Project,2021,Professional
+NSM-WS-015,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-02-17,D,Project,2021,Professional
+NSM-WS-016,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-09-23,D,Project,2021,Professional
+NSM-WS-017,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-30,D,Project,2021,Professional
+NSM-WS-018,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-12-25,D,Project,2021,Professional
+NSM-WS-019,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-07,D,Project,2021,Professional
+NSM-WS-020,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-03-30,D,Project,2021,Professional
+NSM-WS-021,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-01-13,D,Project,2021,Professional
+NSM-WS-022,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-12,D,Project,2021,Professional
+NSM-WS-023,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-05-28,D,Project,2021,Professional
+NSM-WS-024,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-10-01,D,Project,2021,Professional
+NSM-WS-025,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-09-28,D,Project,2021,Professional
+NSM-WS-026,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-21,D,Project,2021,Professional
+NSM-WS-027,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-12-31,D,Project,2021,Professional
+NSM-WS-028,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-09,D,Project,2021,Professional
+NSM-WS-029,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-10,D,Project,2021,Professional
+NSM-WS-030,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-20,D,Project,2021,Professional
+NSM-WS-031,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-26,D,Project,2021,Professional
+NSM-WS-032,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-10-10,D,Project,2021,Professional
+NSM-WS-033,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-01-11,D,Project,2021,Professional
+NSM-WS-034,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-11-12,D,Project,2021,Professional
+NSM-WS-035,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-10-05,D,Project,2021,Professional
+NSM-WS-036,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2026-04-20,D,Project,2021,Professional
+NSM-WS-037,Microsoft Project Professional 2021,Microsoft,16.0.14332.20637,2025-11-26,D,Project,2021,Professional
+NSM-SQL-01,Microsoft SQL Server 2022 Standard Edition,Microsoft,16.0.4135.4,2025-03-30,B,SQL Server,2022,Standard
+NSM-SQL-02,Microsoft SQL Server 2022 Standard Edition,Microsoft,16.0.4135.4,2025-05-16,B,SQL Server,2022,Standard
+NSM-SQL-03,Microsoft SQL Server 2022 Standard Edition,Microsoft,16.0.4135.4,2025-05-08,B,SQL Server,2022,Standard
+NSM-WIN-01,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2025-09-11,E,Windows Server,2022,Standard
+NSM-WIN-02,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2026-02-25,E,Windows Server,2022,Standard
+NSM-WIN-03,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2025-04-22,E,Windows Server,2022,Standard
+NSM-WIN-04,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2025-09-24,E,Windows Server,2022,Standard
+NSM-SQL-01,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2025-05-08,E,Windows Server,2022,Standard
+NSM-SQL-02,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2026-02-09,E,Windows Server,2022,Standard
+NSM-SQL-03,Microsoft Windows Server 2022 Standard,Microsoft,10.0.20348,2025-05-29,E,Windows Server,2022,Standard
+NSM-WS-001,Google Chrome,Google,130.0.6723.117,2026-03-29,free,Chrome,130.0.6723.117,
+NSM-WS-001,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-04-24,free,7-Zip,24.08,
+NSM-WS-001,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-01,free,Notepad++,8.7.1,
+NSM-WS-002,Google Chrome,Google,130.0.6723.117,2026-01-02,free,Chrome,130.0.6723.117,
+NSM-WS-002,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-06,free,7-Zip,24.08,
+NSM-WS-002,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-03-03,free,Notepad++,8.7.1,
+NSM-WS-003,Google Chrome,Google,130.0.6723.117,2026-01-25,free,Chrome,130.0.6723.117,
+NSM-WS-003,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-08-18,free,7-Zip,24.08,
+NSM-WS-003,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-04,free,Notepad++,8.7.1,
+NSM-WS-004,Google Chrome,Google,130.0.6723.117,2026-03-13,free,Chrome,130.0.6723.117,
+NSM-WS-004,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-26,free,7-Zip,24.08,
+NSM-WS-004,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-01-06,free,Notepad++,8.7.1,
+NSM-WS-005,Google Chrome,Google,130.0.6723.117,2026-06-12,free,Chrome,130.0.6723.117,
+NSM-WS-005,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-30,free,7-Zip,24.08,
+NSM-WS-005,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-11,free,Notepad++,8.7.1,
+NSM-WS-006,Google Chrome,Google,130.0.6723.117,2026-05-29,free,Chrome,130.0.6723.117,
+NSM-WS-006,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-01-07,free,7-Zip,24.08,
+NSM-WS-006,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-07-03,free,Notepad++,8.7.1,
+NSM-WS-007,Google Chrome,Google,130.0.6723.117,2026-04-24,free,Chrome,130.0.6723.117,
+NSM-WS-007,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-24,free,7-Zip,24.08,
+NSM-WS-007,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-02-15,free,Notepad++,8.7.1,
+NSM-WS-008,Google Chrome,Google,130.0.6723.117,2026-03-05,free,Chrome,130.0.6723.117,
+NSM-WS-008,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-05-05,free,7-Zip,24.08,
+NSM-WS-008,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-08,free,Notepad++,8.7.1,
+NSM-WS-009,Google Chrome,Google,130.0.6723.117,2026-08-23,free,Chrome,130.0.6723.117,
+NSM-WS-009,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-20,free,7-Zip,24.08,
+NSM-WS-009,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-15,free,Notepad++,8.7.1,
+NSM-WS-010,Google Chrome,Google,130.0.6723.117,2026-05-09,free,Chrome,130.0.6723.117,
+NSM-WS-010,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-08-06,free,7-Zip,24.08,
+NSM-WS-010,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-28,free,Notepad++,8.7.1,
+NSM-WS-011,Google Chrome,Google,130.0.6723.117,2026-02-10,free,Chrome,130.0.6723.117,
+NSM-WS-011,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-04-29,free,7-Zip,24.08,
+NSM-WS-011,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-18,free,Notepad++,8.7.1,
+NSM-WS-012,Google Chrome,Google,130.0.6723.117,2026-02-11,free,Chrome,130.0.6723.117,
+NSM-WS-012,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-08-15,free,7-Zip,24.08,
+NSM-WS-012,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-01,free,Notepad++,8.7.1,
+NSM-WS-013,Google Chrome,Google,130.0.6723.117,2026-07-07,free,Chrome,130.0.6723.117,
+NSM-WS-013,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-09,free,7-Zip,24.08,
+NSM-WS-013,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-01-20,free,Notepad++,8.7.1,
+NSM-WS-014,Google Chrome,Google,130.0.6723.117,2026-04-30,free,Chrome,130.0.6723.117,
+NSM-WS-014,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-04,free,7-Zip,24.08,
+NSM-WS-014,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-03-11,free,Notepad++,8.7.1,
+NSM-WS-015,Google Chrome,Google,130.0.6723.117,2026-06-21,free,Chrome,130.0.6723.117,
+NSM-WS-015,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-29,free,7-Zip,24.08,
+NSM-WS-015,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-22,free,Notepad++,8.7.1,
+NSM-WS-016,Google Chrome,Google,130.0.6723.117,2026-03-20,free,Chrome,130.0.6723.117,
+NSM-WS-016,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-17,free,7-Zip,24.08,
+NSM-WS-016,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-05-09,free,Notepad++,8.7.1,
+NSM-WS-017,Google Chrome,Google,130.0.6723.117,2026-01-15,free,Chrome,130.0.6723.117,
+NSM-WS-017,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-04-01,free,7-Zip,24.08,
+NSM-WS-017,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-02-05,free,Notepad++,8.7.1,
+NSM-WS-018,Google Chrome,Google,130.0.6723.117,2026-01-09,free,Chrome,130.0.6723.117,
+NSM-WS-018,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-21,free,7-Zip,24.08,
+NSM-WS-018,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-02,free,Notepad++,8.7.1,
+NSM-WS-019,Google Chrome,Google,130.0.6723.117,2026-03-17,free,Chrome,130.0.6723.117,
+NSM-WS-019,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-05-10,free,7-Zip,24.08,
+NSM-WS-019,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-01-21,free,Notepad++,8.7.1,
+NSM-WS-020,Google Chrome,Google,130.0.6723.117,2025-12-19,free,Chrome,130.0.6723.117,
+NSM-WS-020,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-20,free,7-Zip,24.08,
+NSM-WS-020,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-03-10,free,Notepad++,8.7.1,
+NSM-WS-021,Google Chrome,Google,130.0.6723.117,2025-12-25,free,Chrome,130.0.6723.117,
+NSM-WS-021,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-23,free,7-Zip,24.08,
+NSM-WS-021,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-25,free,Notepad++,8.7.1,
+NSM-WS-022,Google Chrome,Google,130.0.6723.117,2026-06-25,free,Chrome,130.0.6723.117,
+NSM-WS-022,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-11,free,7-Zip,24.08,
+NSM-WS-022,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-01,free,Notepad++,8.7.1,
+NSM-WS-023,Google Chrome,Google,130.0.6723.117,2026-05-05,free,Chrome,130.0.6723.117,
+NSM-WS-023,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-06,free,7-Zip,24.08,
+NSM-WS-023,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-03-10,free,Notepad++,8.7.1,
+NSM-WS-024,Google Chrome,Google,130.0.6723.117,2026-08-13,free,Chrome,130.0.6723.117,
+NSM-WS-024,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-10,free,7-Zip,24.08,
+NSM-WS-024,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-11,free,Notepad++,8.7.1,
+NSM-WS-025,Google Chrome,Google,130.0.6723.117,2026-01-23,free,Chrome,130.0.6723.117,
+NSM-WS-025,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-09,free,7-Zip,24.08,
+NSM-WS-025,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-06,free,Notepad++,8.7.1,
+NSM-WS-026,Google Chrome,Google,130.0.6723.117,2026-02-19,free,Chrome,130.0.6723.117,
+NSM-WS-026,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-28,free,7-Zip,24.08,
+NSM-WS-026,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-04,free,Notepad++,8.7.1,
+NSM-WS-027,Google Chrome,Google,130.0.6723.117,2026-03-18,free,Chrome,130.0.6723.117,
+NSM-WS-027,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-19,free,7-Zip,24.08,
+NSM-WS-027,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-02-06,free,Notepad++,8.7.1,
+NSM-WS-028,Google Chrome,Google,130.0.6723.117,2026-05-10,free,Chrome,130.0.6723.117,
+NSM-WS-028,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-08-24,free,7-Zip,24.08,
+NSM-WS-028,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-06-26,free,Notepad++,8.7.1,
+NSM-WS-029,Google Chrome,Google,130.0.6723.117,2026-06-14,free,Chrome,130.0.6723.117,
+NSM-WS-029,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-04-20,free,7-Zip,24.08,
+NSM-WS-029,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-23,free,Notepad++,8.7.1,
+NSM-WS-030,Google Chrome,Google,130.0.6723.117,2026-06-18,free,Chrome,130.0.6723.117,
+NSM-WS-030,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-17,free,7-Zip,24.08,
+NSM-WS-030,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-01-22,free,Notepad++,8.7.1,
+NSM-WS-031,Google Chrome,Google,130.0.6723.117,2026-04-08,free,Chrome,130.0.6723.117,
+NSM-WS-031,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-01-28,free,7-Zip,24.08,
+NSM-WS-031,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-20,free,Notepad++,8.7.1,
+NSM-WS-032,Google Chrome,Google,130.0.6723.117,2026-03-28,free,Chrome,130.0.6723.117,
+NSM-WS-032,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-02-01,free,7-Zip,24.08,
+NSM-WS-032,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-02-27,free,Notepad++,8.7.1,
+NSM-WS-033,Google Chrome,Google,130.0.6723.117,2026-07-16,free,Chrome,130.0.6723.117,
+NSM-WS-033,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-01-13,free,7-Zip,24.08,
+NSM-WS-033,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-03-07,free,Notepad++,8.7.1,
+NSM-WS-034,Google Chrome,Google,130.0.6723.117,2026-05-21,free,Chrome,130.0.6723.117,
+NSM-WS-034,7-Zip 24.08 (x64),Igor Pavlov,24.08,2025-12-11,free,7-Zip,24.08,
+NSM-WS-034,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-07-25,free,Notepad++,8.7.1,
+NSM-WS-035,Google Chrome,Google,130.0.6723.117,2026-06-10,free,Chrome,130.0.6723.117,
+NSM-WS-035,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-01-03,free,7-Zip,24.08,
+NSM-WS-035,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-02-09,free,Notepad++,8.7.1,
+NSM-WS-036,Google Chrome,Google,130.0.6723.117,2026-05-11,free,Chrome,130.0.6723.117,
+NSM-WS-036,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-07,free,7-Zip,24.08,
+NSM-WS-036,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-07-19,free,Notepad++,8.7.1,
+NSM-WS-037,Google Chrome,Google,130.0.6723.117,2026-03-18,free,Chrome,130.0.6723.117,
+NSM-WS-037,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-02-23,free,7-Zip,24.08,
+NSM-WS-037,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-07-09,free,Notepad++,8.7.1,
+NSM-WS-038,Google Chrome,Google,130.0.6723.117,2026-03-12,free,Chrome,130.0.6723.117,
+NSM-WS-038,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-02-05,free,7-Zip,24.08,
+NSM-WS-038,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-07,free,Notepad++,8.7.1,
+NSM-WS-039,Google Chrome,Google,130.0.6723.117,2026-08-29,free,Chrome,130.0.6723.117,
+NSM-WS-039,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-03-10,free,7-Zip,24.08,
+NSM-WS-039,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-29,free,Notepad++,8.7.1,
+NSM-WS-040,Google Chrome,Google,130.0.6723.117,2026-04-03,free,Chrome,130.0.6723.117,
+NSM-WS-040,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-07-15,free,7-Zip,24.08,
+NSM-WS-040,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-04-22,free,Notepad++,8.7.1,
+NSM-WS-041,Google Chrome,Google,130.0.6723.117,2026-07-07,free,Chrome,130.0.6723.117,
+NSM-WS-041,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-08-16,free,7-Zip,24.08,
+NSM-WS-041,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-07-21,free,Notepad++,8.7.1,
+NSM-WS-042,Google Chrome,Google,130.0.6723.117,2026-05-28,free,Chrome,130.0.6723.117,
+NSM-WS-042,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-09,free,7-Zip,24.08,
+NSM-WS-042,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-08-04,free,Notepad++,8.7.1,
+NSM-WS-043,Google Chrome,Google,130.0.6723.117,2026-02-25,free,Chrome,130.0.6723.117,
+NSM-WS-043,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-02-28,free,7-Zip,24.08,
+NSM-WS-043,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-05-22,free,Notepad++,8.7.1,
+NSM-WS-044,Google Chrome,Google,130.0.6723.117,2025-12-17,free,Chrome,130.0.6723.117,
+NSM-WS-044,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-04-19,free,7-Zip,24.08,
+NSM-WS-044,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-05-25,free,Notepad++,8.7.1,
+NSM-WS-045,Google Chrome,Google,130.0.6723.117,2025-12-20,free,Chrome,130.0.6723.117,
+NSM-WS-045,7-Zip 24.08 (x64),Igor Pavlov,24.08,2026-06-19,free,7-Zip,24.08,
+NSM-WS-045,Notepad++ (64-bit x64),Notepad++ Team,8.7.1,2026-09-01,free,Notepad++,8.7.1,

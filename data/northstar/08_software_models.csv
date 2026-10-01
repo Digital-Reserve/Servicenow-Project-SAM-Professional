@@ -1,0 +1,6 @@
+scenario,display_name,publisher,product,version,edition,platform,product_type,license_metric,maps_to_discovered_name
+A,Adobe Acrobat 2024 Pro,Adobe,Acrobat,2024,Pro,Windows,Application,Per Named User,Adobe Acrobat (64-bit)
+B,Microsoft SQL Server 2022 Standard,Microsoft,SQL Server,2022,Standard,Windows,Database,Per Core,Microsoft SQL Server 2022 Standard Edition
+C,Microsoft Visio 2021 Professional,Microsoft,Visio,2021,Professional,Windows,Application,Per Device,Microsoft Visio Professional 2021
+D,Microsoft Project 2021 Professional,Microsoft,Project,2021,Professional,Windows,Application,Per Device,Microsoft Project Professional 2021
+E,Microsoft Windows Server 2022 Standard,Microsoft,Windows Server,2022,Standard,Windows,Operating System,Per Core,Microsoft Windows Server 2022 Standard

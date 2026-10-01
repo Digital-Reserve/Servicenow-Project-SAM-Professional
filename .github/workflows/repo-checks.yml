@@ -26,7 +26,7 @@ jobs:
       - name: Synthetic data matches the generator
         run: |
           python3 scripts/generate_synthetic_data.py --out "$RUNNER_TEMP/northstar"
-          diff -r "$RUNNER_TEMP/northstar" docs/synthetic_data/northstar
+          diff -r --exclude=README.md "$RUNNER_TEMP/northstar" data/northstar
 
       - name: Verify export bundles
         run: bash scripts/verify_exports.sh

@@ -1,0 +1,13 @@
+name,os,os_version,manufacturer,model_id,serial_number,cpu_count,cpu_core_count,assigned_to,location,company,install_status,short_description
+NSM-WIN-01,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN01SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,Application host
+NSM-WIN-02,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN02SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,Application host
+NSM-WIN-03,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN03SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,Application host
+NSM-WIN-04,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN04SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,Application host
+NSM-SQL-01,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL01SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,Database server
+NSM-SQL-02,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL02SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,Database server
+NSM-SQL-03,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL03SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,Database server
+NSM-APP-01,Linux,Red Hat Enterprise Linux 9.4,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,Linux application server
+NSM-APP-02,Linux,Red Hat Enterprise Linux 9.4,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP02SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,Linux application server
+NSM-APP-03,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP03SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,Linux application server
+NSM-FS-01,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMFS01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,Linux application server
+NSM-WEB-01,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMWEB01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,Linux application server
