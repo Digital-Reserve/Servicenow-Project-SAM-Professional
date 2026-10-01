@@ -1,0 +1,60 @@
+{
+  "project_name": "ServiceNow SAM Professional Zurich Portfolio Implementation",
+  "repository": "Digital-Reserve/Servicenow-Project-SAM-Professional",
+  "package_version": 2,
+  "release_required": "Zurich",
+  "prepared_on": "2026-10-01",
+  "last_updated": "2026-10-01",
+  "last_platform_verification": "2026-10-01",
+  "implementation_status": "repository_ready_instance_not_started",
+  "current_phase": 1,
+  "current_week": 0,
+  "release_calendar_at_last_verification": {
+    "zurich_general_availability": "2025-09-10",
+    "australia_general_availability": "2026-05-05",
+    "brazil_early_availability": "2026-09-24",
+    "brazil_general_availability": "expected Q4 2026, unconfirmed",
+    "zurich_support_position": "N-1 until Brazil general availability"
+  },
+  "pdi": {
+    "requested": false,
+    "available": false,
+    "url": null,
+    "release_verified": false,
+    "patch_level": null,
+    "last_developer_site_sign_in": null
+  },
+  "sam": {
+    "documented_activation": "com.sn_samp_master_ws",
+    "developer_site_activation_label": "Software Asset Management Professional",
+    "activated": false,
+    "plugins_recorded": [],
+    "workspace_verified": false,
+    "workspace_install_path_used": null,
+    "classic_fallback_invoked": false,
+    "demo_data": null,
+    "content_service_available": false,
+    "saas_license_management": "excluded_platform_limitation"
+  },
+  "data": {
+    "synthetic_only": true,
+    "synthetic_design_ready": true,
+    "inventory_ready": false,
+    "normalization_validated": false,
+    "software_models_ready": false,
+    "entitlements_ready": false,
+    "entitlements_published": false,
+    "reconciliation_validated": false,
+    "optimization_validated": false,
+    "publisher_scenario_validated": false
+  },
+  "portfolio": {
+    "visitor_access_ready": false,
+    "github_repository_created": true,
+    "repository_checks_passing": true,
+    "exports_current": false,
+    "acceptance_passed": false
+  },
+  "blockers": [],
+  "next_action": "Phase 1: request a Zurich PDI on the Developer Site, verify the release, capture evidence, then start Week 01."
+}

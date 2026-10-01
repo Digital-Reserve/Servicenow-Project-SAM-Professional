@@ -1,0 +1,58 @@
+name,device_class,os,os_version,manufacturer,model,serial_number,cpu_count,cpu_core_count,assigned_to,location,company,install_status,virtual
+NSM-WS-001,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00001X,1,8,anna.bakker,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-002,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00002X,1,8,bram.bos,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-003,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00003X,1,8,carla.dewit,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-004,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00004X,1,8,daan.jacobs,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-005,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00005X,1,8,eva.prins,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-006,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00006X,1,8,finn.deboer,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-007,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00007X,1,8,greta.dekker,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-008,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00008X,1,8,hugo.vanderlinden,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-009,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00009X,1,8,iris.willems,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-010,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00010X,1,8,jonas.smit,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-011,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00011X,1,8,kira.hendriks,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-012,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00012X,1,8,lars.degraaf,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-013,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00013X,1,8,mila.vandenberg,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-014,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00014X,1,8,noah.jansen,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-015,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00015X,1,8,olga.vos,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-016,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00016X,1,8,pieter.dijkstra,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-017,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00017X,1,8,quinn.dehaan,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-018,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00018X,1,8,rosa.blom,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-019,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00019X,1,8,sven.mulder,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-020,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00020X,1,8,tess.brouwer,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-021,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00021X,1,8,umar.kok,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-022,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00022X,1,8,vera.koster,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-023,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00023X,1,8,wout.meijer,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-024,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00024X,1,8,xena.vandijk,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-025,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00025X,1,8,yara.vandermeer,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-026,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00026X,1,8,zoe.vanleeuwen,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-027,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00027X,1,8,aiden.visser,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-028,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00028X,1,8,bente.peters,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-029,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00029X,1,8,cas.smits,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-030,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00030X,1,8,dilan.vermeulen,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-031,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00031X,1,8,anna.jansen,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-032,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00032X,1,8,bram.vos,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-033,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00033X,1,8,carla.dijkstra,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-034,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00034X,1,8,daan.dehaan,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-035,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00035X,1,8,eva.blom,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-036,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00036X,1,8,finn.mulder,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-037,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00037X,1,8,greta.brouwer,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-038,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00038X,1,8,hugo.kok,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-039,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00039X,1,8,iris.koster,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-040,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00040X,1,8,jonas.meijer,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-041,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00041X,1,8,kira.vandijk,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-042,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00042X,1,8,lars.vandermeer,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WS-043,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00043X,1,8,mila.vanleeuwen,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WS-044,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00044X,1,8,noah.visser,Northstar Plant South,Northstar Manufacturing,Installed,false
+NSM-WS-045,Computer,Windows,11 Enterprise 23H2,Dell Inc.,Latitude 5550,NSMWS00045X,1,8,olga.peters,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WIN-01,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN01SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WIN-02,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN02SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WIN-03,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN03SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-WIN-04,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMWIN04SN,2,16,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-SQL-01,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL01SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-SQL-02,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL02SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-SQL-03,Server,Windows Server,2022 Standard,Hewlett Packard Enterprise,ProLiant DL380 Gen11,NSMSQL03SN,2,8,,Northstar HQ,Northstar Manufacturing,Installed,false
+NSM-APP-01,Server,Linux,Red Hat Enterprise Linux 9.4,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-APP-02,Server,Linux,Red Hat Enterprise Linux 9.4,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP02SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-APP-03,Server,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMAPP03SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-FS-01,Server,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMFS01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,false
+NSM-WEB-01,Server,Linux,Ubuntu 24.04 LTS,Hewlett Packard Enterprise,ProLiant DL360 Gen11,NSMWEB01SN,2,8,,Northstar Plant North,Northstar Manufacturing,Installed,false
