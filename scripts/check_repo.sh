@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Repository hygiene check for the SAM Portfolio project.
+# Repository hygiene check for the SAM Pro case study.
 # Fails when it finds secret like content, forbidden file types, disallowed
 # files in evidence/ or exports/, or broken relative Markdown links.
 # Usage: bash scripts/check_repo.sh
@@ -77,9 +77,12 @@ for f in "${files[@]}"; do
   done < <(grep -oE '\]\(([^)]+)\)' "$f" | sed -E 's/^\]\((.*)\)$/\1/' | sed -E 's/ .*$//')
 done
 
-# 6. Placeholders still present in the README are reported, not failed.
-if grep -nE 'not yet provisioned|not yet created' README.md >/dev/null 2>&1; then
-  note "README still carries placeholders for the live instance or visitor account."
+# 6. Reminders that are reported, not failed.
+if grep -nE 'From Stage 7 the address' README.md >/dev/null 2>&1; then
+  note "README does not list the live sandbox yet (expected until Stage 7)."
+fi
+if [[ -f tracker/progress.json ]] && ! python3 -c "import json,sys; json.load(open('tracker/progress.json'))" 2>/dev/null; then
+  fail "tracker/progress.json is not valid JSON"
 fi
 
 if (( status == 0 )); then echo "check_repo: all checks passed (${#files[@]} files)"; fi

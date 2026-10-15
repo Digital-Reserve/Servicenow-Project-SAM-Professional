@@ -8,30 +8,39 @@ permissions:
   contents: read
 
 jobs:
-  hygiene:
-    name: Hygiene, data and export checks
+  checks:
+    name: Hygiene, generated files, exports and secrets
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository with full history
+      - name: Check out the repository with full history
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Repository hygiene checks
+      - name: Repository hygiene (secrets, file types, links)
         run: bash scripts/check_repo.sh
 
-      - name: Validate project state JSON
-        run: python3 -c "import json; json.load(open('docs/project_state.json')); print('docs/project_state.json is valid JSON')"
-
-      - name: Synthetic data matches the generator
+      - name: Synthetic data matches its generator
         run: |
           python3 scripts/generate_synthetic_data.py --out "$RUNNER_TEMP/northstar"
-          diff -r --exclude=README.md "$RUNNER_TEMP/northstar" data/northstar
+          diff -r --exclude=README.md --exclude=servicenow "$RUNNER_TEMP/northstar" data/northstar
 
-      - name: Verify export bundles
+      - name: Guide app and generated pages are up to date
+        run: |
+          python3 scripts/build_app.py --out "$RUNNER_TEMP/build"
+          diff "$RUNNER_TEMP/build/app/SAM_Pro_Build_Guide.html" app/SAM_Pro_Build_Guide.html
+          diff "$RUNNER_TEMP/build/docs/build_guide.md" docs/build_guide.md
+          diff "$RUNNER_TEMP/build/docs/06_glossary.md" docs/06_glossary.md
+          diff "$RUNNER_TEMP/build/evidence/README.md" evidence/README.md
+          diff -r "$RUNNER_TEMP/build/data/northstar/servicenow" data/northstar/servicenow
+
+      - name: ServiceNow scripts are valid JavaScript
+        run: for f in data/northstar/servicenow/*.js; do node --check "$f"; done
+
+      - name: Export bundles verify
         run: bash scripts/verify_exports.sh
 
-      - name: Secret scan of full history with gitleaks
+      - name: Secret scan of the full history with gitleaks
         env:
           GITLEAKS_VERSION: 8.21.2
         run: |

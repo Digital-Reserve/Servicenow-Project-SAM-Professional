@@ -1,0 +1,1653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SAM Pro Build Guide</title>
+<meta name="description" content="Offline, step-by-step guide to build ServiceNow Software Asset Management Professional on a Zurich sandbox.">
+<style>
+/* Layout: a fixed run-sheet rail on the left (stages like a work order), one reading column on the right.
+   Step numbers are styled as printed asset tags; status always shows as a labelled pill. */
+:root {
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --surface-2: #edf1ef;
+  --ink: #16232a;
+  --ink-2: #435359;
+  --ink-3: #66767c;
+  --line: #d3dcd8;
+  --line-strong: #b9c6c1;
+  --accent: #0a6b5c;
+  --accent-hover: #08594c;
+  --accent-ink: #ffffff;
+  --accent-soft: #dff0ea;
+  --good: #1b7543;
+  --good-soft: #e1f2e7;
+  --warn: #8f5500;
+  --warn-soft: #faefdb;
+  --bad: #ae2620;
+  --bad-soft: #fae5e3;
+  --info: #2c5786;
+  --info-soft: #e6edf6;
+  --tag-bg: #fbfcfb;
+  --focus: #1b66d1;
+  --shadow: 0 1px 2px rgba(22, 35, 42, .06), 0 4px 14px rgba(22, 35, 42, .05);
+  --font-ui: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 10px;
+  --rail: 292px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1416; --surface: #151f22; --surface-2: #1b282c; --ink: #e3ebe9; --ink-2: #b0bebc; --ink-3: #8b9b9c;
+    --line: #2a393e; --line-strong: #3a4d53; --accent: #45bfa3; --accent-hover: #63d2b8; --accent-ink: #04211b; --accent-soft: #163a32;
+    --good: #61cf8e; --good-soft: #15352a; --warn: #efb158; --warn-soft: #382a14; --bad: #ff8d83; --bad-soft: #3b1d1b;
+    --info: #8fb7e9; --info-soft: #1a2a3b; --tag-bg: #11191b; --focus: #8ab4f8;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1416; --surface: #151f22; --surface-2: #1b282c; --ink: #e3ebe9; --ink-2: #b0bebc; --ink-3: #8b9b9c;
+  --line: #2a393e; --line-strong: #3a4d53; --accent: #45bfa3; --accent-hover: #63d2b8; --accent-ink: #04211b; --accent-soft: #163a32;
+  --good: #61cf8e; --good-soft: #15352a; --warn: #efb158; --warn-soft: #382a14; --bad: #ff8d83; --bad-soft: #3b1d1b;
+  --info: #8fb7e9; --info-soft: #1a2a3b; --tag-bg: #11191b; --focus: #8ab4f8;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.55 var(--font-ui); -webkit-font-smoothing: antialiased;
+}
+[hidden] { display: none !important; }
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: .88em; }
+code { background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; padding: .05em .35em; overflow-wrap: anywhere; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: 1.85rem; font-weight: 650; letter-spacing: -.01em; }
+h2 { font-size: 1.3rem; font-weight: 640; }
+h3 { font-size: 1.05rem; font-weight: 620; }
+p { margin: 0; }
+.muted { color: var(--ink-3); }
+.small { font-size: .86rem; }
+.eyebrow { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.tabular { font-variant-numeric: tabular-nums; }
+.svg { width: 1em; height: 1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.125em; }
+
+/* App frame */
+.app { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-height: 100%;
+  background: linear-gradient(90deg, var(--surface) 0, var(--surface) calc(var(--rail) - 1px), var(--line) calc(var(--rail) - 1px), var(--line) var(--rail), var(--bg) var(--rail)); }
+.rail {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface);
+  padding: 18px 14px 28px; display: flex; flex-direction: column; gap: 18px;
+}
+.brand { display: flex; flex-direction: column; gap: 10px; padding: 2px 6px 0; }
+.brand-name { font-family: var(--font-display); font-weight: 680; font-size: 1.08rem; display: flex; align-items: center; gap: 8px; }
+.brand-mark { width: 26px; height: 26px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 .72rem/1 var(--font-mono); letter-spacing: .02em; }
+.brand-sub { font-size: .8rem; color: var(--ink-3); }
+.nav-group { display: flex; flex-direction: column; gap: 2px; }
+.nav-group > .eyebrow { padding: 0 8px 4px; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px; text-decoration: none;
+  color: var(--ink-2); font-size: .92rem; border: 1px solid transparent; background: none; text-align: left; width: 100%; cursor: pointer;
+}
+.nav-link:hover { background: var(--surface-2); color: var(--ink); }
+.nav-link[aria-current="page"] { background: var(--accent-soft); color: var(--ink); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.nav-link .label { flex: 1; min-width: 0; }
+.nav-stage .label { display: flex; flex-direction: column; }
+.nav-stage .label small { color: var(--ink-3); font-size: .76rem; }
+.tag {
+  font: 600 .74rem/1 var(--font-mono); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--line-strong);
+  background: var(--tag-bg); color: var(--ink-2); letter-spacing: .02em; flex: none; font-variant-numeric: tabular-nums;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; border: 2px solid var(--line-strong); }
+.dot.done { background: var(--good); border-color: var(--good); }
+.dot.progress { background: var(--warn); border-color: var(--warn); }
+.dot.blocked { background: var(--bad); border-color: var(--bad); }
+
+.meter { height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .3s ease; }
+.meter.thin { height: 6px; }
+.meter-label { display: flex; justify-content: space-between; font-size: .8rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.main { min-width: 0; display: flex; flex-direction: column; }
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center; gap: 12px;
+  padding-block: 10px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+  background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.topbar .crumb { flex: 1; min-width: 0; font-size: .9rem; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar .pct { font-size: .85rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink-2); cursor: pointer; flex: none;
+}
+.icon-btn:hover { color: var(--ink); border-color: var(--line-strong); }
+.menu-btn { display: none; }
+.content {
+  width: 100%; max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px;
+  padding-block: 26px 70px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* Generic blocks */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.panel.soft { background: var(--surface-2); box-shadow: none; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border-radius: 8px; border: 1px solid var(--line-strong);
+  background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; font-size: .9rem; font-weight: 550; line-height: 1.2;
+}
+.btn:hover { border-color: var(--accent); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-ink); }
+.btn.open { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); color: var(--accent); }
+.btn.open:hover { background: var(--accent-soft); }
+.btn.danger { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--line)); }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+.btn.small { padding: 5px 9px; font-size: .82rem; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 5px 9px; border-radius: 7px; border: 1px dashed var(--line-strong);
+  background: var(--tag-bg); cursor: pointer; font: 500 .84rem/1.3 var(--font-mono); color: var(--ink); text-align: left;
+}
+.chip:hover { border-style: solid; border-color: var(--accent); }
+.chip .k { font-family: var(--font-ui); color: var(--ink-3); font-size: .78rem; }
+.chip span.v { overflow-wrap: anywhere; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: .76rem; font-weight: 650; padding: 3px 9px; border-radius: 999px; white-space: nowrap; border: 1px solid transparent; }
+.pill.done { background: var(--good-soft); color: var(--good); }
+.pill.progress { background: var(--warn-soft); color: var(--warn); }
+.pill.blocked { background: var(--bad-soft); color: var(--bad); }
+.pill.todo { background: var(--surface-2); color: var(--ink-3); border-color: var(--line); }
+.pill.optional { background: var(--info-soft); color: var(--info); }
+.pill.where { background: var(--surface-2); color: var(--ink-2); border-color: var(--line); font-weight: 600; }
+.callout { border-radius: 8px; padding: 10px 12px; font-size: .92rem; display: flex; gap: 10px; align-items: flex-start; }
+.callout .svg { margin-top: 3px; }
+.callout.note { background: var(--info-soft); color: var(--ink); }
+.callout.note .svg { color: var(--info); }
+.callout.see { background: var(--good-soft); color: var(--ink); }
+.callout.see .svg { color: var(--good); }
+.callout.warn { background: var(--warn-soft); color: var(--ink); }
+.callout.warn .svg { color: var(--warn); }
+.callout > div { min-width: 0; }
+.term {
+  font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: help;
+  text-decoration: underline dotted color-mix(in srgb, var(--accent) 70%, transparent); text-underline-offset: 3px; text-decoration-thickness: 1.5px;
+}
+.term:hover { color: var(--accent); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .74rem; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); font-weight: 650; background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.mono, td .mono { font-family: var(--font-mono); font-size: .84rem; }
+td input[type="text"], td input[type="number"], td select { width: 100%; min-width: 7rem; }
+input[type="text"], input[type="url"], input[type="number"], input[type="date"], input[type="search"], select, textarea {
+  border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); padding: 7px 9px; font-size: .92rem; min-width: 0;
+}
+textarea { width: 100%; min-height: 84px; resize: vertical; font-family: var(--font-mono); font-size: .84rem; }
+input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+label.field { display: flex; flex-direction: column; gap: 4px; font-size: .84rem; color: var(--ink-2); font-weight: 550; min-width: 0; }
+label.field input, label.field textarea, label.field select { width: 100%; }
+
+/* Hero and stage map */
+.hero { display: flex; flex-direction: column; gap: 14px; }
+.hero .lede { font-size: 1.05rem; color: var(--ink-2); max-width: 62ch; }
+.next-card { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+.next-card .what { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 320px; }
+.stage-map { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.stage-tile { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); text-decoration: none; color: var(--ink); min-width: 0; }
+.stage-tile:hover { border-color: var(--accent); color: var(--ink); }
+.stage-tile .t { font-weight: 620; font-size: .92rem; line-height: 1.3; }
+.stage-tile .row { justify-content: space-between; }
+.routine { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.routine ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; font-size: .92rem; color: var(--ink-2); }
+.rules { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+
+/* Stage page */
+.stage-head { display: flex; flex-direction: column; gap: 12px; }
+.stage-head .row { gap: 10px; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.facts .panel { padding: 14px 16px; gap: 6px; }
+.before { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; color: var(--ink-2); }
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.step.is-next { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.step-head { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; }
+.step-head .tick { padding-top: 2px; }
+.step-head .tick input { width: 22px; height: 22px; cursor: pointer; }
+.step-title { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.step-title .row { gap: 8px; }
+.step-title h3 { flex: 1 1 auto; min-width: 0; }
+.step-toggle { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; color: inherit; display: flex; gap: 8px; align-items: baseline; font: inherit; }
+.step-toggle > span:last-child { min-width: 0; flex: 1; }
+.step-toggle:hover h3 { color: var(--accent); }
+.step-done-at { font-size: .8rem; color: var(--good); font-weight: 600; }
+.step-body { padding: 0 16px 16px 50px; display: flex; flex-direction: column; gap: 12px; }
+.step.is-done .step-head h3 { color: var(--ink-2); }
+.step.is-collapsed .step-body { display: none; }
+.do { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; }
+.do li::marker { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.hint { font-size: .82rem; color: var(--ink-3); }
+.record { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.record .wide { grid-column: 1 / -1; }
+.link-slot { display: contents; }
+.shot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .88rem; color: var(--ink-2); }
+details.help { border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+details.help > summary { cursor: pointer; padding: 8px 12px; font-size: .88rem; font-weight: 600; color: var(--warn); list-style: none; display: flex; gap: 8px; align-items: center; }
+details.help > summary::-webkit-details-marker { display: none; }
+details.help ul { margin: 0; padding: 0 14px 12px 32px; display: flex; flex-direction: column; gap: 6px; font-size: .9rem; }
+.timer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); }
+.timer .clock { font: 600 1.1rem/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.script-box { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface-2); }
+.script-box .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.script-box pre { margin: 0; padding: 10px 12px; max-height: 180px; overflow: auto; font: .78rem/1.5 var(--font-mono); color: var(--ink-2); white-space: pre; }
+.checks { display: flex; flex-direction: column; gap: 8px; }
+.check { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; }
+.check input { margin-top: 2px; }
+.check.done { background: var(--good-soft); border-color: color-mix(in srgb, var(--good) 35%, var(--line)); }
+.problems { display: flex; flex-direction: column; gap: 8px; }
+.problem { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.problem > summary { cursor: pointer; padding: 10px 12px; font-weight: 600; font-size: .92rem; }
+.problem > div { padding: 0 12px 12px; font-size: .92rem; color: var(--ink-2); }
+.stage-footer { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.blocked-box { display: flex; flex-direction: column; gap: 8px; }
+.chain { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.chain .link { display: flex; flex-direction: column; gap: 6px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); position: relative; min-width: 0; }
+.chain .link .n { font: 600 .72rem/1 var(--font-mono); color: var(--ink-3); }
+.chain .link .name { font-weight: 640; font-size: .95rem; overflow-wrap: anywhere; }
+.chain .link p { font-size: .82rem; color: var(--ink-2); }
+.outcomes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.outcome { border-radius: 8px; padding: 12px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+.glossary-list { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.glossary-list dt, .glossary-list dd { margin: 0; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.glossary-list dt { font-weight: 640; background: var(--surface-2); }
+.dropzone { border: 2px dashed var(--line-strong); border-radius: var(--radius); padding: 22px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; background: var(--surface); }
+.dropzone.over { border-color: var(--accent); background: var(--accent-soft); }
+pre.preview { margin: 0; white-space: pre-wrap; word-break: break-word; font: .82rem/1.55 var(--font-mono); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px; max-height: 420px; overflow: auto; }
+.banner { display: flex; gap: 10px; align-items: flex-start; background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--line)); border-radius: 8px; padding: 10px 12px; font-size: .9rem; }
+.toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60;
+  background: var(--ink); color: var(--bg); padding: 9px 14px; border-radius: 8px; font-size: .9rem; box-shadow: var(--shadow); max-width: min(92vw, 520px);
+}
+.popover {
+  position: fixed; z-index: 50; max-width: min(340px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong);
+  border-radius: 10px; box-shadow: var(--shadow); padding: 12px 14px; font-size: .9rem; display: flex; flex-direction: column; gap: 6px;
+}
+.popover strong { font-family: var(--font-display); }
+.modal-back { position: fixed; inset: 0; background: rgba(10, 16, 18, .45); z-index: 70; display: grid; place-items: center; padding: 16px; }
+.modal { width: min(720px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.modal textarea { min-height: 260px; }
+.scrim { display: none; }
+
+@media (max-width: 1080px) {
+  .stage-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0, 1fr); background: var(--bg); }
+  .rail { position: fixed; left: 0; top: 0; bottom: 0; width: min(86vw, var(--rail)); z-index: 40; transform: translateX(-100%); visibility: hidden; box-shadow: none; transition: transform .2s ease, visibility 0s linear .2s; padding-top: calc(18px + env(safe-area-inset-top, 0px)); padding-left: max(14px, env(safe-area-inset-left, 0px)); border-right: 1px solid var(--line); }
+  body.nav-open .rail { transform: none; visibility: visible; box-shadow: var(--shadow); transition: transform .2s ease; }
+  body.nav-open .scrim { display: block; position: fixed; inset: 0; z-index: 30; background: rgba(10, 16, 18, .4); }
+  .menu-btn { display: inline-grid; }
+  .facts, .grid-2, .grid-3, .routine, .record, .outcomes { grid-template-columns: minmax(0, 1fr); }
+  .step-body { padding-left: 16px; }
+}
+@media (max-width: 520px) {
+  .stage-map { grid-template-columns: minmax(0, 1fr); }
+  .glossary-list { grid-template-columns: minmax(0, 1fr); }
+  .glossary-list dt { border-bottom: 0; }
+  h1 { font-size: 1.5rem; }
+  .content { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .topbar { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+@media print {
+  .rail, .topbar, .scrim, .actions .btn.open, .no-print, .toast, .popover { display: none !important; }
+  .app { display: block; }
+  body { background: #fff; color: #000; font-size: 12px; }
+  .step.is-collapsed .step-body { display: flex; }
+  details.help, .problem { break-inside: avoid; }
+  details > *:not(summary) { display: block !important; }
+  .step { break-inside: avoid; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="rail" id="rail" aria-label="Guide navigation"></nav>
+  <div class="scrim" id="scrim" data-action="close-nav"></div>
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-btn" data-action="open-nav" aria-label="Open the menu"><svg class="svg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="crumb" id="crumb"></div>
+      <span class="pct" id="pct"></span>
+      <button type="button" class="icon-btn" data-action="theme" id="theme-btn" aria-label="Switch colour theme"></button>
+    </header>
+    <main class="content" id="view" tabindex="-1"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="popover" id="popover" role="dialog" aria-label="Glossary" hidden></div>
+<div id="modal-root"></div>
+<noscript><p style="padding:20px">This guide needs JavaScript. Open it in Chrome, Edge, Firefox or Safari.</p></noscript>
+<script type="application/json" id="guide-content">__GUIDE_CONTENT__</script>
+<script type="application/json" id="northstar-files">__NORTHSTAR_FILES__</script>
+<script type="application/json" id="servicenow-scripts">__SERVICENOW_SCRIPTS__</script>
+<script>
+(() => {
+'use strict';
+
+/* ------------------------------------------------------------------ data */
+const readJson = id => JSON.parse(document.getElementById(id).textContent);
+const C = readJson('guide-content');
+const FILES = readJson('northstar-files');
+const SCRIPTS = readJson('servicenow-scripts');
+const STAGES = C.stages;
+const STORE_KEY = 'samProBuildGuide.v1';
+const APP_ID = 'sam-pro-build-guide';
+
+const STEP_INDEX = {};
+const CHECK_INDEX = {};
+const RECORD_INDEX = {};
+const GRID_INDEX = {};
+STAGES.forEach(stage => {
+  stage.steps.forEach(step => {
+    STEP_INDEX[step.id] = { step, stage };
+    (step.record || []).forEach(rec => { RECORD_INDEX[rec.id] = { rec, step, stage }; });
+    if (step.grid) GRID_INDEX[step.grid.id] = { grid: step.grid, step, stage };
+  });
+  (stage.checks || []).forEach(check => { CHECK_INDEX[check.id] = { check, stage }; });
+});
+const GLOSSARY = {};
+C.glossary.forEach(g => { GLOSSARY[g.term.toLowerCase()] = g; });
+
+const FILE_INFO = {
+  '01_companies.csv': 'Northstar Manufacturing and the reseller that sold the licenses.',
+  '02_locations.csv': 'Three Northstar sites in the Netherlands.',
+  '03_departments.csv': 'Six departments.',
+  '04_users.csv': '60 employees with invented names and .example email addresses.',
+  '05_workstations.csv': '45 laptops, each assigned to an employee.',
+  '06_servers.csv': '12 servers with processor and core counts.',
+  '07_software_installations.csv': '248 installations: which program is installed on which computer.',
+  '08_software_models.csv': 'The 5 products we manage. Created by hand in Stage 3.',
+  '09_entitlements.csv': 'The 5 purchases. Created by hand in Stage 4.',
+  '10_allocations.csv': '68 license assignments. Made by a script in Stage 4.',
+  '11_software_usage.csv': '103 usage rows. Made by a script in Stage 5.',
+  'SUMMARY.md': 'All counts and the five stories on one page.',
+};
+const SCRIPT_INFO = {
+  '01_load_northstar.js': { when: 'Stage 2, step 2.3', what: 'Creates the Northstar company, people, computers, servers and 248 software installations.' },
+  '02_allocate_licenses.js': { when: 'Stage 4, step 4.4', what: 'Gives one Acrobat license to each of 40 users and one Project license to each of 28 laptops.' },
+  '03_load_usage.js': { when: 'Stage 5, step 5.4', what: 'Adds 103 usage rows. 12 Project installations look unused for more than 90 days.' },
+  '00_install_workspace.js': { when: 'Stage 1, only if the workspace is missing', what: 'Starts the installation of the Software Asset Workspace.' },
+};
+
+/* ------------------------------------------------------------------ helpers */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const esc = value => String(value == null ? '' : value)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+const plain = text => String(text || '').replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (m, t, l) => l || t).replace(/\*\*/g, '').replace(/`/g, '');
+function md(text) {
+  let s = esc(text);
+  s = s.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (m, term, label) => `<button type="button" class="term" data-term="${term}">${label || term}</button>`);
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+  return s;
+}
+const pad2 = n => String(n).padStart(2, '0');
+const nowIso = () => new Date().toISOString();
+const localDate = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function fmtDate(value) {
+  if (!value) return '';
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(value) ? new Date(value + 'T12:00:00') : new Date(value);
+  if (isNaN(d)) return String(value);
+  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+const fmtTime = value => { const d = new Date(value); return isNaN(d) ? '' : `${pad2(d.getHours())}:${pad2(d.getMinutes())}`; };
+const fmtDateTime = value => `${fmtDate(value)}, ${fmtTime(value)}`;
+const csvCell = v => { const s = String(v == null ? '' : v); return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+const mdCell = v => String(v == null ? '' : v).replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+function parseCsv(text) {
+  const rows = []; let row = []; let cell = ''; let quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (quoted) {
+      if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (ch === '"') quoted = false;
+      else cell += ch;
+    } else if (ch === '"') quoted = true;
+    else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else if (ch !== '\r') cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+const ICONS = {
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M19 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>',
+  download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  upload: '<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4.5M12 17.5v.5"/>',
+  see: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  auto: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>',
+  book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>',
+  flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  file: '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>',
+  terminal: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/>',
+  archive: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.5M4.5 12h.5M4.5 18h.5"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17.5v.5"/>',
+  save: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',
+  printer: '<path d="M7 9V4h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="6"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  play: '<path d="M7 5l12 7-12 7z"/>',
+};
+const icon = name => `<svg class="svg" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+
+/* ------------------------------------------------------------------ state */
+function blankState() {
+  return {
+    app: APP_ID, version: 1, createdAt: nowIso(), updatedAt: null,
+    steps: {}, checks: {}, records: {}, grids: {}, timers: {}, blocked: {}, sessions: [], draft: null,
+    ui: { theme: 'system', open: {} },
+  };
+}
+let storageOk = true;
+function loadState() {
+  let raw = null;
+  try { raw = window.localStorage.getItem(STORE_KEY); } catch (e) { storageOk = false; }
+  if (!raw) return blankState();
+  try { return mergeState(JSON.parse(raw)); } catch (e) { return blankState(); }
+}
+function mergeState(data) {
+  const base = blankState();
+  if (!data || typeof data !== 'object') return base;
+  ['steps', 'checks', 'records', 'grids', 'timers', 'blocked'].forEach(k => { if (data[k] && typeof data[k] === 'object') base[k] = data[k]; });
+  if (Array.isArray(data.sessions)) base.sessions = data.sessions;
+  if (data.draft && typeof data.draft === 'object') base.draft = data.draft;
+  if (data.ui && typeof data.ui === 'object') base.ui = Object.assign(base.ui, data.ui, { open: data.ui.open || {} });
+  base.createdAt = data.createdAt || base.createdAt;
+  base.updatedAt = data.updatedAt || null;
+  return base;
+}
+let state = loadState();
+let saveTimer = null;
+function save() {
+  state.updatedAt = nowIso();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); storageOk = true; }
+    catch (e) { if (storageOk) { storageOk = false; toast('This browser is not saving your progress. Use Save progress at the end of the session.'); } }
+  }, 250);
+}
+
+/* ------------------------------------------------------------------ derived */
+const isDone = id => !!(state.steps[id] && state.steps[id].done);
+const isChecked = id => !!(state.checks[id] && state.checks[id].done);
+function stageProgress(stage) {
+  const required = stage.steps.filter(s => !s.optional);
+  const checks = stage.checks || [];
+  const stepsDone = required.filter(s => isDone(s.id)).length;
+  const checksDone = checks.filter(c => isChecked(c.id)).length;
+  const total = required.length + checks.length;
+  const done = stepsDone + checksDone;
+  const activity = done > 0 || stage.steps.some(s => isDone(s.id));
+  const blocked = !!(state.blocked[stage.id] && state.blocked[stage.id].on);
+  let status = 'todo';
+  if (total > 0 && done === total) status = 'done';
+  else if (blocked) status = 'blocked';
+  else if (activity) status = 'progress';
+  const times = stage.steps.map(s => state.steps[s.id]).concat(checks.map(c => state.checks[c.id]))
+    .filter(x => x && x.done && x.at).map(x => x.at).sort();
+  return {
+    stepsDone, stepsTotal: required.length, checksDone, checksTotal: checks.length, done, total,
+    pct: total ? Math.round(done * 100 / total) : 0, status,
+    startedAt: times[0] || null, finishedAt: status === 'done' ? times[times.length - 1] : null,
+  };
+}
+function overall() {
+  let done = 0, total = 0;
+  STAGES.forEach(st => { const p = stageProgress(st); done += p.done; total += p.total; });
+  return { done, total, pct: total ? Math.round(done * 100 / total) : 0 };
+}
+function nextTask() {
+  for (const stage of STAGES) {
+    const p = stageProgress(stage);
+    if (p.status === 'done') continue;
+    const step = stage.steps.find(s => !s.optional && !isDone(s.id));
+    return { stage, step: step || null };
+  }
+  return null;
+}
+const STATUS_LABEL = { done: 'Done', progress: 'In progress', blocked: 'Blocked', todo: 'Not started' };
+const STATUS_MARK = { done: '🟢', progress: '🟡', blocked: '🔴', todo: '⚪' };
+const statusPill = status => `<span class="pill ${status}">${esc(STATUS_LABEL[status])}</span>`;
+function instanceBase() {
+  const raw = String(state.records.instance_url || '').trim();
+  if (!raw) return '';
+  try {
+    const url = new URL(/^https?:\/\//i.test(raw) ? raw : 'https://' + raw);
+    return url.origin;
+  } catch (e) { return ''; }
+}
+function navHint(path) {
+  if (path === 'sys.scripts.do') return 'Scripts - Background';
+  const m = /^([a-z0-9_]+)_list\.do/i.exec(path);
+  if (m) return m[1] + '.list';
+  return path.split('?')[0];
+}
+function gridValues(id) { return state.grids[id] || {}; }
+function rateFor(grid) {
+  if (!grid.rate) return null;
+  const vals = gridValues(grid.id);
+  const filled = grid.rows.filter(r => (vals[r.id] || {})[grid.rate.column]);
+  const good = filled.filter(r => grid.rate.good.includes(vals[r.id][grid.rate.column]));
+  return { good: good.length, filled: filled.length, total: grid.rows.length, label: grid.rate.label };
+}
+
+/* ------------------------------------------------------------------ shell */
+const TOOLS = [
+  ['report', 'Session report', 'list'],
+  ['files', 'Northstar files', 'file'],
+  ['scripts', 'ServiceNow scripts', 'terminal'],
+  ['backup', 'Backup pack', 'archive'],
+  ['glossary', 'Glossary', 'search'],
+  ['help', 'Help', 'help'],
+  ['progress', 'Save or load progress', 'save'],
+];
+const VIEW_TITLES = { welcome: 'Welcome', basics: 'Basics', report: 'Session report', files: 'Northstar files', scripts: 'ServiceNow scripts', backup: 'Backup pack', glossary: 'Glossary', help: 'Help', progress: 'Save or load progress' };
+let currentView = 'welcome';
+
+function navLink(id, label, iconName) {
+  const current = currentView === id ? ' aria-current="page"' : '';
+  return `<a class="nav-link" href="#${id}"${current}>${icon(iconName)}<span class="label">${esc(label)}</span></a>`;
+}
+function renderRail() {
+  const o = overall();
+  const stages = STAGES.map(st => {
+    const p = stageProgress(st);
+    const current = currentView === 'stage-' + st.number ? ' aria-current="page"' : '';
+    return `<a class="nav-link nav-stage" href="#stage-${st.number}"${current}>
+      <span class="tag">S${st.number}</span>
+      <span class="label">${esc(st.short)}<small>${esc(STATUS_LABEL[p.status])} · ${p.done}/${p.total}</small></span>
+      <span class="dot ${p.status}" aria-hidden="true"></span></a>`;
+  }).join('');
+  $('#rail').innerHTML = `
+    <div class="brand">
+      <div class="brand-name"><span class="brand-mark">SAM</span>SAM Pro Build Guide</div>
+      <div class="brand-sub">${esc(C.meta.company)} · ${esc(C.meta.release)} sandbox</div>
+      <div class="stack" style="gap:6px">
+        <div class="meter" role="progressbar" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${o.pct}"><span style="width:${o.pct}%"></span></div>
+        <div class="meter-label"><span>${o.done} of ${o.total} tasks</span><span>${o.pct}%</span></div>
+      </div>
+    </div>
+    <div class="nav-group"><div class="eyebrow">Start</div>${navLink('welcome', 'Welcome', 'flag')}${navLink('basics', 'Basics in 5 minutes', 'book')}</div>
+    <div class="nav-group"><div class="eyebrow">Stages</div>${stages}</div>
+    <div class="nav-group"><div class="eyebrow">Toolbox</div>${TOOLS.map(t => navLink(t[0], t[1], t[2])).join('')}</div>
+    <p class="muted small" style="padding:0 8px">Content ${esc(C.meta.version)} of ${esc(fmtDate(C.meta.updated))}. Works offline. Nothing you type leaves this browser.</p>`;
+}
+function renderTop() {
+  const o = overall();
+  let crumb = VIEW_TITLES[currentView] || '';
+  if (currentView.startsWith('stage-')) {
+    const st = STAGES[Number(currentView.slice(6))];
+    crumb = `Stage ${st.number}: ${st.title}`;
+  }
+  $('#crumb').textContent = crumb;
+  $('#pct').textContent = `${o.pct}% done`;
+  const theme = state.ui.theme || 'system';
+  $('#theme-btn').innerHTML = icon(theme === 'dark' ? 'moon' : theme === 'light' ? 'sun' : 'auto');
+  $('#theme-btn').setAttribute('aria-label', `Colour theme: ${theme}. Click to change.`);
+  $('#theme-btn').title = `Theme: ${theme}`;
+}
+function applyTheme() {
+  const theme = state.ui.theme || 'system';
+  if (theme === 'system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', theme);
+}
+function storageBanner() {
+  if (storageOk) return '';
+  return `<div class="banner">${icon('alert')}<div><strong>This browser is not saving your ticks.</strong> At the end of the session open <a href="#progress">Save or load progress</a> and save a progress file, or use the end-of-session pack.</div></div>`;
+}
+
+/* ------------------------------------------------------------------ pieces */
+function callout(kind, html) {
+  const ic = kind === 'see' ? 'see' : kind === 'warn' ? 'alert' : 'info';
+  return `<div class="callout ${kind}">${icon(ic)}<div>${html}</div></div>`;
+}
+function copyChip(label, value) {
+  return `<button type="button" class="chip" data-action="copy" data-copy="${esc(value)}" title="Copy">${label ? `<span class="k">${esc(label)}</span>` : ''}<span class="v">${esc(value)}</span>${icon('copy')}</button>`;
+}
+function linkInner(label, path) {
+  const base = instanceBase();
+  if (base) return `<a class="btn open" href="${esc(base + '/' + path)}" target="_blank" rel="noopener noreferrer">${esc(label)} ${icon('ext')}</a>`;
+  return copyChip(label, navHint(path));
+}
+function linkButton(link) {
+  if (link.url) return `<a class="btn open" href="${esc(link.url)}" target="_blank" rel="noopener noreferrer">${esc(link.label)} ${icon('ext')}</a>`;
+  return `<span class="link-slot" data-link-path="${esc(link.path)}" data-link-label="${esc(link.label)}">${linkInner(link.label, link.path)}</span>`;
+}
+function refreshLinks() {
+  $$('[data-link-path]').forEach(el => { el.innerHTML = linkInner(el.dataset.linkLabel, el.dataset.linkPath); });
+  const hasBase = !!instanceBase();
+  $$('[data-link-tip]').forEach(el => { el.hidden = hasBase; });
+}
+function staticTable(t) {
+  const head = t.columns.map(c => `<th scope="col">${esc(c.label)}</th>`).join('');
+  const rows = t.rows.map(r => `<tr>${t.columns.map(c => `<td>${md(r[c.key] || '')}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function gridCell(grid, row, col) {
+  if (col.fixed) return `<span class="muted">${md(row[col.key] || '')}</span>`;
+  const vals = gridValues(grid.id);
+  const value = (vals[row.id] || {})[col.key] || '';
+  const id = `g-${grid.id}-${row.id}-${col.key}`;
+  const attrs = `id="${esc(id)}" data-grid="${esc(grid.id)}" data-row="${esc(row.id)}" data-col="${esc(col.key)}" aria-label="${esc(row.label + ': ' + col.label)}"`;
+  if (col.type === 'select') {
+    return `<select ${attrs}><option value="">Choose</option>${col.options.map(o => `<option${o === value ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+  }
+  if (col.type === 'check') return `<input type="checkbox" ${attrs}${value ? ' checked' : ''}>`;
+  return `<input type="${col.type === 'number' ? 'number' : 'text'}" ${attrs} value="${esc(value)}">`;
+}
+function rateText(grid) {
+  const r = rateFor(grid);
+  if (!r) return '';
+  return `${esc(r.label)}: <strong class="tabular">${r.good} of ${r.total}</strong>${r.filled < r.total ? ` (${r.total - r.filled} not filled in yet)` : ''}`;
+}
+function gridTable(grid) {
+  const head = `<th scope="col">${esc(grid.rowLabel || 'Item')}</th>` + grid.columns.map(c => `<th scope="col">${esc(c.label)}</th>`).join('');
+  const rows = grid.rows.map(r => `<tr><td>${esc(r.label)}</td>${grid.columns.map(c => `<td>${gridCell(grid, r, c)}</td>`).join('')}</tr>`).join('');
+  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>${grid.rate ? `<p class="hint" data-rate="${esc(grid.id)}">${rateText(grid)}</p>` : ''}`;
+}
+function recordFields(step) {
+  const fields = step.record.map(r => {
+    const value = state.records[r.id] || '';
+    const ph = esc(r.placeholder || '');
+    const input = r.type === 'textarea'
+      ? `<textarea id="rec-${esc(r.id)}" data-record="${esc(r.id)}" placeholder="${ph}">${esc(value)}</textarea>`
+      : `<input id="rec-${esc(r.id)}" type="${r.type === 'number' ? 'number' : r.type === 'url' ? 'url' : 'text'}" data-record="${esc(r.id)}" value="${esc(value)}" placeholder="${ph}" autocomplete="off" spellcheck="false">`;
+    const extra = r.id === 'instance_url' ? `<span class="hint" id="instance-hint">${instanceHint()}</span>` : '';
+    return `<label class="field${r.type === 'textarea' ? ' wide' : ''}">${esc(r.label)}${input}${extra}</label>`;
+  }).join('');
+  return `<div class="record">${fields}</div><p class="hint">Saved in this browser as you type. Never type a password here.</p>`;
+}
+function instanceHint() {
+  const base = instanceBase();
+  if (!state.records.instance_url) return 'The guide uses this address to open ServiceNow pages for you.';
+  return base ? `Open buttons will use ${esc(base)}` : 'This does not look like a web address yet.';
+}
+function elapsedText(t) {
+  if (!t || !t.start) return '0:00:00';
+  const end = t.stop ? new Date(t.stop) : new Date();
+  let sec = Math.max(0, Math.floor((end - new Date(t.start)) / 1000));
+  const h = Math.floor(sec / 3600); sec -= h * 3600;
+  const m = Math.floor(sec / 60); sec -= m * 60;
+  return `${h}:${pad2(m)}:${pad2(sec)}`;
+}
+function timerBox(step) {
+  const t = state.timers[step.id];
+  const running = !!(t && t.start && !t.stop);
+  const meta = [step.wait ? `Usually ${esc(step.wait)}` : '', t && t.start ? `started ${fmtTime(t.start)}` : ''].filter(Boolean).join(' · ');
+  const btn = running
+    ? `<button type="button" class="btn small" data-action="timer-stop" data-step-id="${step.id}">Stop</button>`
+    : `<button type="button" class="btn small" data-action="timer-start" data-step-id="${step.id}">${icon('play')} ${t ? 'Restart timer' : 'Start timer'}</button>`;
+  return `<div class="timer">${icon('clock')}<span class="clock" data-clock="${step.id}">${elapsedText(t)}</span><span class="muted small">${meta}</span><span class="row" style="margin-left:auto">${btn}</span></div>`;
+}
+function scriptHeader(name) {
+  const lines = SCRIPTS[name].split('\n');
+  const out = [];
+  for (const line of lines) {
+    if (/^\s*(\/\*|\*|\*\/)/.test(line)) out.push(line); else break;
+  }
+  return out.join('\n');
+}
+function scriptBox(name) {
+  const kb = Math.max(1, Math.round(SCRIPTS[name].length / 1024));
+  return `<div class="script-box"><div class="bar"><span class="row">${icon('terminal')}<strong class="mono">${esc(name)}</strong><span class="muted small">${kb} KB</span></span>
+    <span class="row"><button type="button" class="btn primary small" data-action="copy-script" data-script="${esc(name)}">${icon('copy')} Copy script</button>
+    <button type="button" class="btn small" data-action="download-script" data-script="${esc(name)}">${icon('download')} Download</button></span></div>
+    <pre>${esc(scriptHeader(name))}</pre></div>`;
+}
+function stepBody(step) {
+  const parts = [];
+  if (step.do && step.do.length) parts.push(`<ol class="do">${step.do.map(d => `<li>${md(d)}</li>`).join('')}</ol>`);
+  const actions = [];
+  (step.copy || []).forEach(c => actions.push(copyChip(c.label, c.value)));
+  (step.links || []).forEach(l => actions.push(linkButton(l)));
+  if (actions.length) parts.push(`<div class="actions">${actions.join('')}</div>`);
+  if ((step.links || []).some(l => l.path)) {
+    parts.push(`<p class="hint" data-link-tip${instanceBase() ? ' hidden' : ''}>Tip: add your instance address in step 0.5 and these become Open buttons. Until then, copy the name and type it into the search box of the All menu.</p>`);
+  }
+  if (step.script) parts.push(scriptBox(step.script));
+  if (step.table) parts.push(staticTable(step.table));
+  if (step.grid) parts.push(gridTable(step.grid));
+  if (step.note) parts.push(callout('note', md(step.note)));
+  if (step.timer) parts.push(timerBox(step));
+  if (step.see) parts.push(callout('see', `<strong>You should see:</strong> ${md(step.see)}`));
+  if (step.help && step.help.length) parts.push(`<details class="help"><summary>${icon('alert')} If not</summary><ul>${step.help.map(h => `<li>${md(h)}</li>`).join('')}</ul></details>`);
+  if (step.record && step.record.length) parts.push(recordFields(step));
+  if (step.shot) parts.push(`<div class="shot">${icon('camera')}<span>Take a screenshot and save it as</span>${copyChip('', 'evidence/' + step.shot)}</div>`);
+  return parts.join('');
+}
+function stepCard(step, nextId) {
+  const st = state.steps[step.id];
+  const done = !!(st && st.done);
+  const collapsed = done && !state.ui.open[step.id];
+  const isNext = !done && step.id === nextId;
+  const classes = ['step', done ? 'is-done' : '', collapsed ? 'is-collapsed' : '', isNext ? 'is-next' : ''].filter(Boolean).join(' ');
+  const badges = [
+    step.where ? `<span class="pill where">${esc(step.where)}</span>` : '',
+    step.optional ? '<span class="pill optional">Optional</span>' : '',
+    isNext ? '<span class="pill progress">Next</span>' : '',
+    done ? `<span class="step-done-at">${icon('check')} Done ${esc(fmtDateTime(st.at))}</span>` : '',
+  ].join('');
+  return `<article class="${classes}" id="step-${step.id}" data-step="${step.id}">
+    <div class="step-head">
+      <span class="tick"><input type="checkbox" id="chk-${step.id}" data-step-check="${step.id}"${done ? ' checked' : ''} aria-label="Mark step ${esc(step.num)} as done"></span>
+      <div class="step-title">
+        <h3><button type="button" class="step-toggle" data-action="toggle-step" data-step-id="${step.id}" aria-expanded="${collapsed ? 'false' : 'true'}" aria-controls="body-${step.id}"><span class="tag">${esc(step.num)}</span><span>${esc(plain(step.title))}</span></button></h3>
+        <div class="row">${badges}</div>
+      </div>
+    </div>
+    <div class="step-body" id="body-${step.id}">${stepBody(step)}</div>
+  </article>`;
+}
+function blockedBox(stage) {
+  const b = state.blocked[stage.id] || {};
+  return `<details class="help no-print"${b.on ? ' open' : ''}><summary>${icon('flag')} Blocked or waiting?</summary>
+    <div class="blocked-box" style="padding:0 14px 12px">
+      <label class="row"><input type="checkbox" id="blocked-${stage.id}" data-blocked="${stage.id}"${b.on ? ' checked' : ''}> <span>Mark this stage as blocked in the tracker</span></label>
+      <label class="field">Reason, for example "On the Zurich waitlist since 15 Oct"<input type="text" id="blocked-reason-${stage.id}" data-blocked-reason="${stage.id}" value="${esc(b.reason || '')}"></label>
+    </div></details>`;
+}
+
+/* ------------------------------------------------------------------ views */
+function stageTile(stage) {
+  const p = stageProgress(stage);
+  return `<a class="stage-tile" href="#stage-${stage.number}">
+    <div class="row"><span class="tag">S${stage.number}</span>${statusPill(p.status)}</div>
+    <span class="t">${esc(stage.title)}</span>
+    <span class="muted small">${esc(stage.time)}</span>
+    <div class="meter thin" aria-hidden="true"><span style="width:${p.pct}%"></span></div>
+    <span class="meter-label"><span>${p.done} of ${p.total}</span><span>${p.pct}%</span></span>
+  </a>`;
+}
+function viewWelcome() {
+  const o = overall();
+  const next = nextTask();
+  const nextLine = next
+    ? (next.step ? `Stage ${next.stage.number}, step ${esc(next.step.num)}: ${esc(plain(next.step.title))}` : `Stage ${next.stage.number}: tick the checks to finish the stage`)
+    : 'All stages are complete. Present the case study.';
+  const routineCol = (title, items) => `<div class="panel"><span class="eyebrow">${esc(title)}</span><ol>${items.map(i => `<li>${md(i)}</li>`).join('')}</ol></div>`;
+  return `
+    <section class="hero">
+      <span class="eyebrow">${esc(C.meta.company)} · ServiceNow ${esc(C.meta.release)} · Software Asset Management Professional</span>
+      <h1>Build SAM Professional, one stage at a time</h1>
+      <p class="lede">${esc(C.meta.subtitle)} Every step says where to click, what you should see and what to write down. Your ticks stay in this browser.</p>
+    </section>
+    ${storageBanner()}
+    <div class="next-card">
+      <div class="what"><span class="eyebrow">${o.done ? 'Next step' : 'Start here'}</span><strong>${nextLine}</strong>
+        <span class="muted small">${next ? esc(next.stage.title) + ' · ' + esc(next.stage.time) : ''}</span></div>
+      ${next ? `<a class="btn primary" href="#stage-${next.stage.number}" data-focus-step="${next.step ? next.step.id : ''}">${o.done ? 'Continue' : 'Start Stage 0'} ${icon('arrow')}</a>` : ''}
+    </div>
+    ${o.done === 0 ? callout('note', '<strong>First session?</strong> Do Stage 0 today. If your instance arrives quickly, start Stage 1 straight away: its installation runs by itself for one to two hours, and you can read the Basics while you wait.') : ''}
+    <section class="stack">
+      <div class="row" style="justify-content:space-between"><h2>The eight stages</h2><span class="muted small">About 12 to 15 hours in total, in sessions of 2 to 3 hours</span></div>
+      <div class="stage-map">${STAGES.map(stageTile).join('')}</div>
+    </section>
+    <section class="stack"><h2>How a session works</h2>
+      <div class="routine">${routineCol('At the start', C.routine.start)}${routineCol('During', C.routine.during)}${routineCol('At the end', C.routine.end)}</div>
+    </section>
+    <section class="panel"><h2>Five rules</h2><ol class="rules">${C.rules.map(r => `<li>${md(r)}</li>`).join('')}</ol></section>`;
+}
+function viewBasics() {
+  const b = C.basics;
+  const stories = staticTable({
+    columns: [{ key: 'scenario', label: 'Story' }, { key: 'product', label: 'Product' }, { key: 'metric', label: 'Counted' },
+      { key: 'owned', label: 'Owned' }, { key: 'used', label: 'Used' }, { key: 'position', label: 'Result' }, { key: 'money', label: 'Why it matters' }],
+    rows: C.stories,
+  });
+  return `
+    <section class="hero"><span class="eyebrow">Five-minute read</span><h1>Software Asset Management in plain words</h1>
+      ${b.intro.map(p => `<p class="lede">${md(p)}</p>`).join('')}</section>
+    <section class="stack"><h2>Three questions SAM answers</h2>
+      <div class="grid-3">${b.questions.map(q => `<div class="panel"><strong>${esc(q.q)}</strong><p class="muted">${md(q.a)}</p></div>`).join('')}</div></section>
+    <section class="stack"><h2>The chain we build, stage by stage</h2>
+      <div class="chain">${b.chain.map((c, i) => `<div class="link"><span class="n">${i + 1} · Stage ${c.stage}</span><span class="name">${esc(c.name)}</span><p>${md(c.plain)}</p></div>`).join('')}</div></section>
+    <section class="stack"><h2>Three possible results</h2>
+      <div class="outcomes">${b.outcomes.map(o => `<div class="outcome"><span class="pill ${o.tone === 'good' ? 'done' : o.tone === 'bad' ? 'blocked' : 'progress'}">${esc(o.name)}</span><p>${md(o.plain)}</p></div>`).join('')}</div></section>
+    <section class="stack"><h2>Our five stories</h2><p class="muted">Northstar Manufacturing is invented. The numbers show what the tool does, not real savings.</p>${stories}</section>`;
+}
+function viewStage(stage) {
+  const p = stageProgress(stage);
+  const nextStep = stage.steps.find(s => !s.optional && !isDone(s.id));
+  const nextId = nextStep ? nextStep.id : null;
+  const prev = STAGES[stage.number - 1];
+  const nxt = STAGES[stage.number + 1];
+  const checks = (stage.checks || []).map(c => {
+    const done = isChecked(c.id);
+    return `<label class="check${done ? ' done' : ''}"><input type="checkbox" id="chk-${c.id}" data-check="${c.id}"${done ? ' checked' : ''}><span>${md(c.text)}</span></label>`;
+  }).join('');
+  const problems = (stage.problems || []).map(pr => `<details class="problem"><summary>${esc(pr.problem)}</summary><div>${md(pr.fix)}</div></details>`).join('');
+  const shots = stage.steps.filter(s => s.shot).map(s => `<li><code>evidence/${esc(s.shot)}</code> <span class="muted small">step ${esc(s.num)}</span></li>`).join('');
+  return `
+    <section class="stage-head">
+      <div class="row"><span class="tag">STAGE ${stage.number} OF ${STAGES.length - 1}</span>${statusPill(p.status)}<span class="muted small">${icon('clock')} ${esc(stage.time)}</span></div>
+      <h1>${esc(stage.title)}</h1>
+      <div class="meter" role="progressbar" aria-label="Stage progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.pct}"><span style="width:${p.pct}%"></span></div>
+      <div class="meter-label"><span>${p.stepsDone} of ${p.stepsTotal} steps · ${p.checksDone} of ${p.checksTotal} checks</span><span>${p.pct}%</span></div>
+    </section>
+    ${storageBanner()}
+    <div class="facts">
+      <div class="panel"><span class="eyebrow">What we achieve</span><p>${md(stage.goal)}</p></div>
+      <div class="panel"><span class="eyebrow">Why it matters</span><p>${md(stage.why)}</p></div>
+    </div>
+    ${stage.before && stage.before.length ? `<div class="panel soft"><span class="eyebrow">Before you start</span><ul class="before">${stage.before.map(b => `<li>${md(b)}</li>`).join('')}</ul></div>` : ''}
+    ${blockedBox(stage)}
+    <section class="steps" aria-label="Steps">${stage.steps.map(s => stepCard(s, nextId)).join('')}</section>
+    <section class="stack"><h2>Checks before you finish</h2><div class="checks">${checks}</div></section>
+    ${problems ? `<section class="stack"><h2>Troubleshooting</h2><div class="problems">${problems}</div></section>` : ''}
+    ${shots ? `<section class="panel soft"><span class="eyebrow">Screenshots for this stage</span><ul class="before">${shots}</ul></section>` : ''}
+    <div class="stage-footer no-print">
+      <span class="row">${prev ? `<a class="btn" href="#stage-${prev.number}">${icon('back')} Stage ${prev.number}</a>` : '<a class="btn" href="#welcome">' + icon('back') + ' Welcome</a>'}
+      ${nxt ? `<a class="btn" href="#stage-${nxt.number}">Stage ${nxt.number} ${icon('arrow')}</a>` : ''}</span>
+      <span class="row"><button type="button" class="btn" data-action="print">${icon('printer')} Print this stage</button><a class="btn primary" href="#report">${icon('list')} Session report</a></span>
+    </div>`;
+}
+
+/* ------------------------------------------------------------------ sessions */
+const nextSessionNumber = () => state.sessions.reduce((m, s) => Math.max(m, s.n), 0) + 1;
+function ensureDraft() {
+  const today = localDate();
+  const d = state.draft;
+  const committed = d && state.sessions.some(s => s.n === d.n);
+  if (!d || (committed && d.date !== today)) {
+    const nt = nextTask();
+    state.draft = { n: committed || !d ? nextSessionNumber() : d.n, date: today, people: d ? d.people : '', notes: '', blockers: '', next: nt ? (nt.step ? `Stage ${nt.stage.number}, step ${nt.step.num}: ${plain(nt.step.title)}` : `Stage ${nt.stage.number}: finish the checks`) : '' };
+    save();
+  }
+  return state.draft;
+}
+function previousSession(n) {
+  return state.sessions.filter(s => s.n < n).sort((a, b) => b.n - a.n)[0] || null;
+}
+function itemsSince(sinceIso, untilIso) {
+  const items = [];
+  const inRange = at => at && (!sinceIso || at > sinceIso) && (!untilIso || at <= untilIso);
+  STAGES.forEach(stage => {
+    stage.steps.forEach(step => { const s = state.steps[step.id]; if (s && s.done && inRange(s.at)) items.push({ kind: 'step', id: step.id, at: s.at }); });
+    (stage.checks || []).forEach(c => { const s = state.checks[c.id]; if (s && s.done && inRange(s.at)) items.push({ kind: 'check', id: c.id, at: s.at }); });
+  });
+  return items;
+}
+function draftSession() {
+  const d = ensureDraft();
+  const existing = state.sessions.find(s => s.n === d.n);
+  const prev = previousSession(d.n);
+  const items = itemsSince(prev ? prev.committedAt : null, null);
+  return Object.assign({}, d, { items: items.map(i => i.id), committedAt: existing ? existing.committedAt : null });
+}
+function commitDraft() {
+  const sess = draftSession();
+  sess.committedAt = nowIso();
+  const idx = state.sessions.findIndex(s => s.n === sess.n);
+  if (idx >= 0) state.sessions[idx] = sess; else state.sessions.push(sess);
+  state.sessions.sort((a, b) => a.n - b.n);
+  save();
+  return sess;
+}
+const sessionFileName = s => `${s.date}_session-${pad2(s.n)}.md`;
+const blockerLines = text => String(text || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+
+/* ------------------------------------------------------------------ markdown, csv, json */
+function factsRows() {
+  const rows = [];
+  Object.keys(RECORD_INDEX).forEach(id => {
+    const { rec, step } = RECORD_INDEX[id];
+    if (rec.fact && state.records[id]) rows.push([rec.label, state.records[id], `Step ${step.num}`]);
+  });
+  Object.keys(GRID_INDEX).forEach(id => {
+    const { grid, step } = GRID_INDEX[id];
+    const r = rateFor(grid);
+    if (r && r.filled) rows.push([`Northstar normalization (${r.label.toLowerCase()})`, `${r.good} of ${r.total}`, `Step ${step.num}`]);
+  });
+  return rows;
+}
+function gridMarkdown(grid) {
+  const vals = gridValues(grid.id);
+  const cols = grid.columns;
+  const head = `| ${[grid.rowLabel || 'Item'].concat(cols.map(c => c.label)).map(mdCell).join(' | ')} |`;
+  const sep = `| ${['---'].concat(cols.map(() => '---')).join(' | ')} |`;
+  const body = grid.rows.map(r => `| ${[r.label].concat(cols.map(c => {
+    if (c.fixed) return plain(r[c.key] || '');
+    const v = (vals[r.id] || {})[c.key];
+    if (c.type === 'check') return v ? 'Yes' : '';
+    return v || '';
+  })).map(mdCell).join(' | ')} |`);
+  return [head, sep].concat(body).join('\n');
+}
+function gridHasValues(grid) {
+  const vals = gridValues(grid.id);
+  return grid.rows.some(r => grid.columns.some(c => !c.fixed && (vals[r.id] || {})[c.key]));
+}
+function trackerMd() {
+  const o = overall();
+  const next = nextTask();
+  const last = state.sessions[state.sessions.length - 1];
+  const bar = '▰'.repeat(Math.round(o.pct / 10)) + '▱'.repeat(10 - Math.round(o.pct / 10));
+  const lines = [
+    '# Project tracker', '',
+    `Generated by the SAM Pro Build Guide on ${fmtDateTime(nowIso())}. Do not edit this file by hand: update the guide and download a new end-of-session pack (see tracker/README.md).`, '',
+    `**Progress:** ${bar} ${o.pct}% (${o.done} of ${o.total} tasks)`, '',
+    `**Now:** ${next ? `Stage ${next.stage.number}, ${next.stage.title}` : 'All stages complete'}  `,
+    `**Next step:** ${next ? (next.step ? `${next.step.num} ${plain(next.step.title)}` : 'finish the stage checks') : 'present the case study'}  `,
+    `**Last session:** ${last ? `#${last.n} on ${fmtDate(last.date)}` : 'none yet'}`, '',
+    '## Stages', '',
+    '| Stage | Status | Steps | Checks | Started | Finished |',
+    '| --- | --- | --- | --- | --- | --- |',
+  ];
+  STAGES.forEach(st => {
+    const p = stageProgress(st);
+    lines.push(`| ${st.number} ${mdCell(st.title)} | ${STATUS_MARK[p.status]} ${STATUS_LABEL[p.status]} | ${p.stepsDone}/${p.stepsTotal} | ${p.checksDone}/${p.checksTotal} | ${p.startedAt ? fmtDate(p.startedAt) : ''} | ${p.finishedAt ? fmtDate(p.finishedAt) : ''} |`);
+  });
+  lines.push('', 'Status key: 🟢 Done · 🟡 In progress · 🔴 Blocked · ⚪ Not started', '');
+  lines.push('## Blockers', '');
+  const blocked = STAGES.filter(st => state.blocked[st.id] && state.blocked[st.id].on);
+  const sessionBlockers = last ? blockerLines(last.blockers) : [];
+  if (!blocked.length && !sessionBlockers.length) lines.push('None.');
+  blocked.forEach(st => lines.push(`- Stage ${st.number} ${st.title}: ${state.blocked[st.id].reason || 'no reason given'}`));
+  sessionBlockers.forEach(b => lines.push(`- From session ${last.n}: ${b}`));
+  lines.push('', '## Key facts', '');
+  const facts = factsRows();
+  if (!facts.length) lines.push('Nothing recorded yet.');
+  else { lines.push('| Fact | Value | Recorded in |', '| --- | --- | --- |'); facts.forEach(f => lines.push(`| ${f.map(mdCell).join(' | ')} |`)); }
+  const summaryGrids = Object.values(GRID_INDEX).filter(g => g.grid.summary && gridHasValues(g.grid));
+  if (summaryGrids.length) {
+    lines.push('', '## Results recorded', '');
+    summaryGrids.forEach(g => { lines.push(`### Step ${g.step.num}: ${plain(g.step.title)}`, '', gridMarkdown(g.grid), ''); });
+  }
+  lines.push('', '## Sessions', '');
+  if (!state.sessions.length) lines.push('No sessions recorded yet.');
+  else {
+    lines.push('| # | Date | People | Tasks done | Report |', '| --- | --- | --- | --- | --- |');
+    state.sessions.forEach(s => lines.push(`| ${s.n} | ${fmtDate(s.date)} | ${mdCell(s.people || '')} | ${(s.items || []).length} | [Session ${s.n}](sessions/${sessionFileName(s)}) |`));
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+function tasksCsv() {
+  const rows = [['stage', 'stage_title', 'task', 'title', 'required', 'status', 'completed_on', 'evidence']];
+  STAGES.forEach(st => {
+    st.steps.forEach(s => {
+      const x = state.steps[s.id];
+      rows.push([st.number, st.title, s.num, plain(s.title), s.optional ? 'no' : 'yes', x && x.done ? 'Done' : 'Open', x && x.done ? localDate(new Date(x.at)) : '', s.shot ? 'evidence/' + s.shot : '']);
+    });
+    (st.checks || []).forEach((c, i) => {
+      const x = state.checks[c.id];
+      rows.push([st.number, st.title, `${st.number}.check${i + 1}`, plain(c.text), 'yes', x && x.done ? 'Done' : 'Open', x && x.done ? localDate(new Date(x.at)) : '', '']);
+    });
+  });
+  return rows.map(r => r.map(csvCell).join(',')).join('\n') + '\n';
+}
+function progressJson() {
+  const copy = JSON.parse(JSON.stringify(state));
+  delete copy.ui;
+  copy.exportedAt = nowIso();
+  copy.contentVersion = C.meta.version;
+  return JSON.stringify(copy, null, 2) + '\n';
+}
+function itemLabel(id) {
+  if (STEP_INDEX[id]) { const { step } = STEP_INDEX[id]; return `${step.num} ${plain(step.title)}`; }
+  if (CHECK_INDEX[id]) { const { check, stage } = CHECK_INDEX[id]; return `Stage ${stage.number} check: ${plain(check.text)}`; }
+  return id;
+}
+function sessionMd(sess) {
+  const o = overall();
+  const items = sess.items || [];
+  const stageNums = Array.from(new Set(items.map(id => (STEP_INDEX[id] || CHECK_INDEX[id] || {}).stage).filter(Boolean).map(st => st.number))).sort((a, b) => a - b);
+  const steps = items.filter(id => STEP_INDEX[id]);
+  const checks = items.filter(id => CHECK_INDEX[id]);
+  const shots = steps.map(id => STEP_INDEX[id].step.shot).filter(Boolean);
+  const records = [];
+  steps.forEach(id => (STEP_INDEX[id].step.record || []).forEach(r => { if (state.records[r.id]) records.push([r.label, state.records[r.id]]); }));
+  const lines = [
+    `# Session ${sess.n}: ${fmtDate(sess.date)}`, '',
+    `**People:** ${sess.people || 'not recorded'}  `,
+    `**Stages worked on:** ${stageNums.length ? stageNums.map(n => `${n} ${STAGES[n].short}`).join(', ') : 'none'}  `,
+    `**Overall progress after this session:** ${o.pct}% (${o.done} of ${o.total} tasks)`, '',
+    '## Done in this session', '',
+  ];
+  if (!steps.length) lines.push('No steps ticked.');
+  steps.forEach(id => lines.push(`- ${itemLabel(id)}`));
+  if (checks.length) { lines.push('', '## Checks passed', ''); checks.forEach(id => lines.push(`- ${itemLabel(id)}`)); }
+  if (records.length) {
+    lines.push('', '## Recorded', '', '| Item | Value |', '| --- | --- |');
+    records.forEach(r => lines.push(`| ${mdCell(r[0])} | ${mdCell(r[1])} |`));
+  }
+  lines.push('', '## Notes', '', sess.notes ? sess.notes : 'None.');
+  lines.push('', '## Blockers', '');
+  const bl = blockerLines(sess.blockers);
+  lines.push(bl.length ? bl.map(b => `- ${b}`).join('\n') : 'None.');
+  lines.push('', '## Next session', '', sess.next || 'Not planned yet.');
+  lines.push('', '## Screenshots to upload to evidence/', '');
+  lines.push(shots.length ? shots.map(s => `- ${s}`).join('\n') : 'None in this session.');
+  lines.push('');
+  return lines.join('\n');
+}
+function resultsMd() {
+  const pos = gridValues('positions');
+  const story = id => C.stories.find(s => s.scenario === id);
+  const lines = ['| Measure | Result |', '| --- | --- |'];
+  const rec = id => state.records[id] || 'not recorded yet';
+  lines.push(`| ServiceNow release | ${mdCell(rec('build_name'))} |`);
+  const before = rateFor(GRID_INDEX.norm_before.grid);
+  const after = rateFor(GRID_INDEX.norm_after.grid);
+  lines.push(`| Northstar software names clean | ${before.filled ? before.good + ' of 8 before' : 'before not recorded'}, ${after.filled ? after.good + ' of 8 after' : 'after not recorded'} |`);
+  ['A', 'B', 'C', 'D', 'E'].forEach(id => {
+    const v = pos[id] || {};
+    const s = story(id);
+    const got = v.position ? `${v.owned || '?'} owned, ${v.used || '?'} used, ${v.position}` : 'not recorded yet';
+    lines.push(`| ${id} ${mdCell(s.product)} | ${mdCell(got)} |`);
+  });
+  lines.push(`| Project removal candidates | ${mdCell(rec('candidates'))} |`);
+  lines.push(`| Potential savings shown (EUR) | ${mdCell(rec('savings'))} |`);
+  const vt = gridValues('visitor_tests');
+  const passed = Object.values(vt).filter(v => v.result === 'Pass').length;
+  lines.push(`| Visitor security tests passed | ${passed} of ${GRID_INDEX.visitor_tests.grid.rows.length} |`);
+  return lines.join('\n') + '\n';
+}
+
+/* ------------------------------------------------------------------ zip and sha-256 */
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+  return t;
+})();
+function crc32(bytes) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function makeZip(entries) {
+  const enc = new TextEncoder();
+  const now = new Date();
+  const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2);
+  const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  const chunks = []; const central = []; let offset = 0;
+  entries.forEach(e => {
+    const name = enc.encode(e.name);
+    const data = typeof e.data === 'string' ? enc.encode(e.data) : e.data;
+    const crc = crc32(data);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true); local.setUint16(4, 20, true); local.setUint16(6, 0x0800, true); local.setUint16(8, 0, true);
+    local.setUint16(10, dosTime, true); local.setUint16(12, dosDate, true); local.setUint32(14, crc, true);
+    local.setUint32(18, data.length, true); local.setUint32(22, data.length, true); local.setUint16(26, name.length, true); local.setUint16(28, 0, true);
+    chunks.push(new Uint8Array(local.buffer), name, data);
+    const cen = new DataView(new ArrayBuffer(46));
+    cen.setUint32(0, 0x02014b50, true); cen.setUint16(4, 20, true); cen.setUint16(6, 20, true); cen.setUint16(8, 0x0800, true); cen.setUint16(10, 0, true);
+    cen.setUint16(12, dosTime, true); cen.setUint16(14, dosDate, true); cen.setUint32(16, crc, true); cen.setUint32(20, data.length, true);
+    cen.setUint32(24, data.length, true); cen.setUint16(28, name.length, true); cen.setUint16(30, 0, true); cen.setUint16(32, 0, true);
+    cen.setUint16(34, 0, true); cen.setUint16(36, 0, true); cen.setUint32(38, 0, true); cen.setUint32(42, offset, true);
+    central.push(new Uint8Array(cen.buffer), name);
+    offset += 30 + name.length + data.length;
+  });
+  const size = central.reduce((s, c) => s + c.length, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(4, 0, true); end.setUint16(6, 0, true); end.setUint16(8, entries.length, true);
+  end.setUint16(10, entries.length, true); end.setUint32(12, size, true); end.setUint32(16, offset, true); end.setUint16(20, 0, true);
+  return new Blob(chunks.concat(central, [new Uint8Array(end.buffer)]), { type: 'application/zip' });
+}
+const SHA_K = new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+function sha256Fallback(bytes) {
+  const h = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
+  const len = bytes.length; const bitLen = len * 8;
+  const total = ((len + 9 + 63) >> 6) << 6;
+  const buf = new Uint8Array(total); buf.set(bytes); buf[len] = 0x80;
+  const dv = new DataView(buf.buffer);
+  dv.setUint32(total - 8, Math.floor(bitLen / 0x100000000)); dv.setUint32(total - 4, bitLen >>> 0);
+  const w = new Uint32Array(64);
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let off = 0; off < total; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, hh] = h;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (hh + S1 + ch + SHA_K[i] + w[i]) >>> 0;
+      const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + maj) >>> 0;
+      hh = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + b) >>> 0; h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;
+    h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0; h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;
+  }
+  return Array.from(h).map(x => x.toString(16).padStart(8, '0')).join('');
+}
+async function sha256Hex(bytes) {
+  try {
+    if (window.crypto && window.crypto.subtle) {
+      const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch (e) { /* fall back below */ }
+  return sha256Fallback(bytes);
+}
+
+/* ------------------------------------------------------------------ downloads, clipboard, toast, modal */
+function download(name, data, type) {
+  const blob = data instanceof Blob ? data : new Blob([data], { type: type || 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+let toastTimer = null;
+function toast(message) {
+  const el = $('#toast');
+  el.textContent = message; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2600);
+}
+function closeModal() { $('#modal-root').innerHTML = ''; }
+function openModal(html) {
+  $('#modal-root').innerHTML = `<div class="modal-back" data-action="modal-close-back"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;
+  const focusable = $('#modal-root textarea, #modal-root input, #modal-root button');
+  if (focusable) focusable.focus();
+}
+function manualCopy(text, title) {
+  openModal(`<div class="row" style="justify-content:space-between"><h2>${esc(title || 'Copy this text')}</h2><button type="button" class="icon-btn" data-action="modal-close" aria-label="Close">${icon('x')}</button></div>
+    <p class="muted">Your browser blocked automatic copying. The text is selected: press Ctrl+C (Cmd+C on a Mac), then close this box.</p>
+    <textarea id="manual-copy" readonly>${esc(text)}</textarea>`);
+  const ta = $('#manual-copy'); ta.focus(); ta.select();
+}
+async function copyText(text, label) {
+  try {
+    if (navigator.clipboard && window.isSecureContext !== false) {
+      await navigator.clipboard.writeText(text);
+      toast(`Copied${label ? ': ' + label : ''}`);
+      return;
+    }
+  } catch (e) { /* fall through */ }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    if (ok) { toast(`Copied${label ? ': ' + label : ''}`); return; }
+  } catch (e) { /* fall through */ }
+  manualCopy(text, label);
+}
+
+/* ------------------------------------------------------------------ toolbox views */
+function viewReport() {
+  const sess = draftSession();
+  const saved = state.sessions.find(s => s.n === sess.n);
+  const list = sess.items.length
+    ? `<ul class="before">${sess.items.map(id => `<li>${esc(itemLabel(id))}</li>`).join('')}</ul>`
+    : '<p class="muted">Nothing ticked since the last session report yet.</p>';
+  const history = state.sessions.length
+    ? staticTable({ columns: [{ key: 'n', label: '#' }, { key: 'date', label: 'Date' }, { key: 'people', label: 'People' }, { key: 'count', label: 'Tasks done' }, { key: 'file', label: 'Report file' }],
+      rows: state.sessions.map(s => ({ n: String(s.n), date: fmtDate(s.date), people: s.people || '', count: String((s.items || []).length), file: '`tracker/sessions/' + sessionFileName(s) + '`' })) })
+    : '<p class="muted">No sessions saved yet.</p>';
+  return `
+    <section class="stage-head"><div class="row"><span class="tag">SESSION ${pad2(sess.n)}</span>${saved ? '<span class="pill done">Pack downloaded</span>' : '<span class="pill todo">Not downloaded yet</span>'}</div>
+      <h1>Session report and tracker</h1>
+      <p class="lede" style="color:var(--ink-2)">Fill this in at the end of every session, then download the end-of-session pack. It updates the tracker folder in the repository.</p></section>
+    ${storageBanner()}
+    <div class="panel">
+      <div class="grid-2">
+        <label class="field">Session date<input type="date" id="d-date" data-draft="date" value="${esc(sess.date)}"></label>
+        <label class="field">Who took part (initials)<input type="text" id="d-people" data-draft="people" value="${esc(sess.people || '')}" placeholder="AB, CD"></label>
+      </div>
+      <label class="field">Notes: what went well, what looked different from the guide<textarea id="d-notes" data-draft="notes">${esc(sess.notes || '')}</textarea></label>
+      <label class="field">Blockers, one per line<textarea id="d-blockers" data-draft="blockers" placeholder="On the Zurich waitlist since 15 Oct">${esc(sess.blockers || '')}</textarea></label>
+      <label class="field">Plan for the next session<textarea id="d-next" data-draft="next">${esc(sess.next || '')}</textarea></label>
+    </div>
+    <div class="panel"><div class="row" style="justify-content:space-between"><h2>Done in this session</h2><span class="muted small">${sess.items.length} tasks since ${previousSession(sess.n) ? 'session ' + previousSession(sess.n).n : 'the start'}</span></div>${list}</div>
+    <div class="panel">
+      <h2>Download the end-of-session pack</h2>
+      <p>The pack is one zip file with <code>tracker/TRACKER.md</code>, <code>tracker/tasks.csv</code>, <code>tracker/progress.json</code> and <code>tracker/sessions/${esc(sessionFileName(sess))}</code>. Unzip it into the repository folder, let it replace the old files, and upload them to GitHub together with the new screenshots.</p>
+      <div class="actions">
+        <button type="button" class="btn primary" data-action="download-pack">${icon('download')} Download end-of-session pack</button>
+        <button type="button" class="btn" data-action="copy-report">${icon('copy')} Copy report text</button>
+        <button type="button" class="btn" data-action="copy-results">${icon('copy')} Copy results table</button>
+        <button type="button" class="btn" data-action="new-session">Start session ${nextSessionNumber() === sess.n ? sess.n + 1 : nextSessionNumber()}</button>
+      </div>
+      <details class="help"><summary>${icon('see')} Preview the report</summary><pre class="preview" id="report-preview">${esc(sessionMd(sess))}</pre></details>
+    </div>
+    <div class="panel"><h2>Sessions so far</h2>${history}</div>`;
+}
+function viewFiles() {
+  const names = Object.keys(FILES);
+  const cards = names.map(name => {
+    const text = FILES[name];
+    const isCsv = name.endsWith('.csv');
+    const rows = isCsv ? parseCsv(text) : [];
+    const preview = isCsv
+      ? `<div class="table-wrap"><table><thead><tr>${rows[0].map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.slice(1, 6).map(r => `<tr>${r.map(c => `<td class="mono">${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
+      : `<pre class="preview">${esc(text)}</pre>`;
+    return `<div class="panel">
+      <div class="row" style="justify-content:space-between"><span class="row">${icon('file')}<strong class="mono">${esc(name)}</strong>${isCsv ? `<span class="muted small">${rows.length - 1} rows</span>` : ''}</span>
+      <button type="button" class="btn small" data-action="download-file" data-file="${esc(name)}">${icon('download')} Download</button></div>
+      <p class="muted">${esc(FILE_INFO[name] || '')}</p>
+      <details class="help"><summary>${icon('see')} Preview</summary><div style="padding:0 12px 12px">${preview}</div></details>
+    </div>`;
+  }).join('');
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>Northstar files</h1>
+      <p class="lede">The invented company, as spreadsheet files. The scripts already contain this data, so you only need these files to look at the data, for the optional import exercise in step 2.9, or to hand them to someone else. Everything here is synthetic.</p></section>
+    <div class="actions"><button type="button" class="btn primary" data-action="download-all-files">${icon('download')} Download all files as a zip</button></div>
+    ${cards}`;
+}
+function viewScripts() {
+  const order = ['01_load_northstar.js', '02_allocate_licenses.js', '03_load_usage.js', '00_install_workspace.js'];
+  const cards = order.map(name => `<div class="panel">
+      <div class="row" style="justify-content:space-between"><span class="row"><strong>${esc(SCRIPT_INFO[name].what)}</strong></span><span class="pill where">${esc(SCRIPT_INFO[name].when)}</span></div>
+      ${scriptBox(name)}</div>`).join('');
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>ServiceNow scripts</h1>
+      <p class="lede">These scripts do the repetitive work in seconds. They only create or update Northstar records, and you can run each one again without making duplicates.</p></section>
+    <div class="panel soft"><span class="eyebrow">How to run a script</span>
+      <ol class="do"><li>In your instance click <strong>All</strong> and type <strong>Scripts - Background</strong>. Open it.</li>
+      <li>Click <strong>Copy script</strong> here, click into the big box there and paste.</li>
+      <li>Keep the scope <strong>global</strong> and click <strong>Run script</strong>. Read the result lines and copy them into the guide.</li>
+      <li>A security message? Profile picture, <strong>Elevate role</strong>, tick <strong>security_admin</strong>, Update, and try again.</li></ol></div>
+    ${cards}`;
+}
+let backupFiles = [];
+function viewBackup() {
+  const rel = state.records._backup_folder || 'release_01';
+  const list = backupFiles.length
+    ? staticTable({ columns: [{ key: 'name', label: 'File' }, { key: 'size', label: 'Bytes' }, { key: 'hash', label: 'SHA-256' }],
+      rows: backupFiles.map(f => ({ name: '`' + f.name + '`', size: String(f.bytes.length), hash: f.hash ? '`' + f.hash.slice(0, 16) + '…`' : 'calculating' })) })
+    : '<p class="muted">No files added yet.</p>';
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox · Stage 6, step 6.8</span><h1>Backup pack</h1>
+      <p class="lede">Drop the XML files you exported in steps 6.6 and 6.7. The guide adds a manifest and checksums and gives you one zip for the repository's exports folder. The files never leave your computer.</p></section>
+    <label class="dropzone" id="dropzone" for="backup-input">${icon('upload')}<strong>Drop XML files here, or click to choose them</strong><span class="muted small">Update sets and record exports (.xml)</span>
+      <input type="file" id="backup-input" multiple accept=".xml,.csv,.json,.txt" hidden></label>
+    <div class="panel"><div class="row" style="justify-content:space-between"><h2>Files in the pack</h2>${backupFiles.length ? `<button type="button" class="btn small" data-action="clear-backup">${icon('x')} Clear</button>` : ''}</div>${list}
+      <div class="grid-2">
+        <label class="field">Folder name inside exports/<input type="text" id="backup-folder" data-backup-folder value="${esc(rel)}"></label>
+        <label class="field">Notes for the manifest<input type="text" id="backup-notes" data-backup-notes value="${esc(state.records._backup_notes || '')}" placeholder="End of Stage 6"></label>
+      </div>
+      <div class="actions"><button type="button" class="btn primary" data-action="download-backup"${backupFiles.length && backupFiles.every(f => f.hash) ? '' : ' disabled'}>${icon('download')} Download backup pack</button></div>
+      <p class="hint">Unzip the pack into the repository folder. It creates exports/${esc(rel)}/ with your files, MANIFEST.md and SHA256SUMS. The repository check verifies the checksums on GitHub.</p>
+    </div>`;
+}
+function viewGlossary() {
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>Glossary</h1>
+      <p class="lede">Every term used in this guide, in one sentence. Underlined words in the steps open the same explanation.</p></section>
+    <label class="field">Search<input type="search" id="glossary-search" placeholder="Type a word, for example entitlement" autocomplete="off"></label>
+    <dl class="glossary-list" id="glossary-list">${C.glossary.map(g => `<dt data-g="${esc(g.term.toLowerCase())}">${esc(g.term)}</dt><dd data-g="${esc(g.term.toLowerCase())}">${md(g.plain)}</dd>`).join('')}</dl>`;
+}
+function viewHelp() {
+  const items = [
+    ['I cannot find a menu or page', 'Click All (top left in ServiceNow) and type the name into the search box. You can also type a table name followed by .list, for example alm_license.list, and press Enter. Menu labels can differ slightly between patch levels; look for the same idea.'],
+    ['The instance does not open', 'It is probably asleep. Sign in to developer.servicenow.com and wake it. Waking takes 3 to 5 minutes, at most 20.'],
+    ['Something looks different from the guide', 'Carry on with the same idea, and write the difference in the notes of the session report. The next update of the guide fixes it.'],
+    ['A Copy button does nothing', 'The guide then opens a box with the text selected: press Ctrl+C (Cmd+C on a Mac). Scripts can also be downloaded as files on the Scripts page.'],
+    ['My ticks are gone', 'Ticks live in this browser. On another computer, open Save or load progress and load tracker/progress.json from the repository.'],
+    ['Who can help', 'ServiceNow support does not handle personal instances. Use the ServiceNow Community forums, and write blockers in the session report so the tracker shows them.'],
+    ['What this guide stores', 'Only what you tick and type, in this browser. It never sends anything anywhere. Never type passwords into it.'],
+  ];
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>Help</h1></section>
+    <div class="problems">${items.map(i => `<details class="problem" open><summary>${esc(i[0])}</summary><div>${md(i[1])}</div></details>`).join('')}</div>`;
+}
+function viewProgress() {
+  const o = overall();
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>Save or load progress</h1>
+      <p class="lede">Your ticks and notes are saved in this browser. To move them to another computer, or to keep a copy, use a progress file. The end-of-session pack already contains one: tracker/progress.json.</p></section>
+    ${storageBanner()}
+    <div class="grid-2">
+      <div class="panel"><h2>Save</h2><p class="muted">${o.done} of ${o.total} tasks done. Last change ${state.updatedAt ? esc(fmtDateTime(state.updatedAt)) : 'not yet'}.</p>
+        <div class="actions"><button type="button" class="btn primary" data-action="save-progress">${icon('download')} Save progress file</button></div></div>
+      <div class="panel"><h2>Load</h2><p class="muted">Choose tracker/progress.json from the repository, or a file you saved. It replaces what this browser has.</p>
+        <label class="btn" for="load-input">${icon('upload')} Choose a progress file</label><input type="file" id="load-input" accept=".json,application/json" hidden></div>
+    </div>
+    <div class="panel"><h2>Start again</h2><p class="muted">Clears every tick and note in this browser. Save a progress file first if you may need it.</p>
+      <label class="field">Type RESET to confirm<input type="text" id="reset-confirm" autocomplete="off"></label>
+      <div class="actions"><button type="button" class="btn danger" data-action="reset">Clear all progress</button></div></div>`;
+}
+
+/* ------------------------------------------------------------------ routing */
+let pendingFocus = null;
+function render() {
+  const hash = (location.hash || '#welcome').slice(1);
+  let html;
+  const m = /^stage-(\d+)$/.exec(hash);
+  if (m && STAGES[Number(m[1])]) { currentView = hash; html = viewStage(STAGES[Number(m[1])]); }
+  else {
+    const views = { welcome: viewWelcome, basics: viewBasics, report: viewReport, files: viewFiles, scripts: viewScripts, backup: viewBackup, glossary: viewGlossary, help: viewHelp, progress: viewProgress };
+    currentView = views[hash] ? hash : 'welcome';
+    html = views[currentView]();
+  }
+  $('#view').innerHTML = html;
+  renderRail();
+  renderTop();
+  document.title = `${$('#crumb').textContent} · SAM Pro Build Guide`;
+  document.body.classList.remove('nav-open');
+  if (pendingFocus) {
+    const el = document.getElementById('step-' + pendingFocus);
+    pendingFocus = null;
+    if (el) { el.scrollIntoView({ block: 'start' }); return; }
+  }
+  window.scrollTo(0, 0);
+}
+function refreshProgressBits() {
+  renderRail(); renderTop();
+  const m = /^stage-(\d+)$/.exec(currentView);
+  if (m) {
+    const stage = STAGES[Number(m[1])];
+    const p = stageProgress(stage);
+    const head = $('.stage-head');
+    if (head) {
+      const meter = $('.meter > span', head); if (meter) meter.style.width = p.pct + '%';
+      const label = $('.meter-label', head); if (label) label.innerHTML = `<span>${p.stepsDone} of ${p.stepsTotal} steps · ${p.checksDone} of ${p.checksTotal} checks</span><span>${p.pct}%</span>`;
+      const pill = $('.pill', head); if (pill) pill.outerHTML = statusPill(p.status);
+    }
+  }
+}
+function rerenderStep(stepId) {
+  const { step, stage } = STEP_INDEX[stepId];
+  const nextStep = stage.steps.find(s => !s.optional && !isDone(s.id));
+  stage.steps.forEach(s => {
+    const el = document.getElementById('step-' + s.id);
+    if (el && (s.id === stepId || el.classList.contains('is-next') || (nextStep && s.id === nextStep.id))) {
+      el.outerHTML = stepCard(s, nextStep ? nextStep.id : null);
+    }
+  });
+  refreshProgressBits();
+  return step;
+}
+
+/* ------------------------------------------------------------------ popover */
+function showTerm(btn) {
+  const g = GLOSSARY[String(btn.dataset.term).toLowerCase()];
+  if (!g) return;
+  const pop = $('#popover');
+  pop.innerHTML = `<strong>${esc(g.term)}</strong><span>${md(g.plain)}</span><a href="#glossary" class="small">Open the glossary</a>`;
+  pop.hidden = false;
+  const r = btn.getBoundingClientRect();
+  const w = pop.offsetWidth; const h = pop.offsetHeight;
+  let left = Math.min(Math.max(16, r.left), window.innerWidth - w - 16);
+  let top = r.bottom + 8;
+  if (top + h > window.innerHeight - 16) top = Math.max(16, r.top - h - 8);
+  pop.style.left = left + 'px'; pop.style.top = top + 'px';
+}
+const hidePopover = () => { $('#popover').hidden = true; };
+
+/* ------------------------------------------------------------------ actions */
+async function addBackupFiles(fileList) {
+  const list = Array.from(fileList || []);
+  for (const file of list) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const safe = file.name.replace(/[\\/:*?"<>|]+/g, '_');
+    backupFiles = backupFiles.filter(f => f.name !== safe);
+    backupFiles.push({ name: safe, bytes, hash: null });
+  }
+  if (currentView === 'backup') render();
+  for (const f of backupFiles) { if (!f.hash) f.hash = await sha256Hex(f.bytes); }
+  if (currentView === 'backup') render();
+}
+async function downloadBackup() {
+  const folder = String(state.records._backup_folder || 'release_01').trim().replace(/[^A-Za-z0-9_.-]+/g, '_') || 'release_01';
+  const notes = state.records._backup_notes || '';
+  const enc = new TextEncoder();
+  const rows = backupFiles.map(f => `| ${mdCell(f.name)} | ${f.bytes.length} | \`${f.hash}\` |`).join('\n');
+  const manifest = [
+    `# ${folder} manifest`, '',
+    `Created: ${localDate()}  `,
+    `Instance release and build: ${state.records.build_name || 'not recorded'} ${state.records.build_tag || ''}  `,
+    `Created with: SAM Pro Build Guide ${C.meta.version}`, '',
+    '## Contents', '', '| File | Bytes | SHA-256 |', '| --- | --- | --- |', rows, '',
+    '## Restore sequence', '',
+    '1. Request a Zurich instance and activate SAM Professional with demo data (guide Stages 0 and 1).',
+    '2. Import each update set: All, Retrieved Update Sets, Import Update Set from XML; then Preview and Commit, in S1 to S6 order.',
+    '3. Run the Northstar loader script (guide Stage 2, step 2.3).',
+    '4. Import the record exports (software models, entitlements, reclamation rule): open the list, right-click a column heading, Import XML.',
+    '5. Publish the entitlements, run the allocation and usage scripts, run the license check (guide Stages 4 and 5).',
+    '6. Recreate the visitor and repeat the visitor tests (guide Stage 6).', '',
+    '## Notes', '', notes || 'None.', '',
+  ].join('\n');
+  const manifestBytes = enc.encode(manifest);
+  const manifestHash = await sha256Hex(manifestBytes);
+  const sums = backupFiles.map(f => `${f.hash}  ${f.name}`).concat([`${manifestHash}  MANIFEST.md`]).join('\n') + '\n';
+  const entries = backupFiles.map(f => ({ name: `exports/${folder}/${f.name}`, data: f.bytes }))
+    .concat([{ name: `exports/${folder}/MANIFEST.md`, data: manifestBytes }, { name: `exports/${folder}/SHA256SUMS`, data: sums }]);
+  download(`backup_pack_${folder}_${localDate()}.zip`, makeZip(entries));
+  toast(`Backup pack downloaded with ${backupFiles.length} files`);
+}
+function downloadPack() {
+  const sess = commitDraft();
+  const entries = [
+    { name: 'tracker/TRACKER.md', data: trackerMd() },
+    { name: 'tracker/tasks.csv', data: tasksCsv() },
+    { name: 'tracker/progress.json', data: progressJson() },
+    { name: `tracker/sessions/${sessionFileName(sess)}`, data: sessionMd(sess) },
+  ];
+  download(`end_of_session_pack_${sess.date}_session-${pad2(sess.n)}.zip`, makeZip(entries));
+  toast(`Session ${sess.n} saved and the pack downloaded`);
+  render();
+}
+function loadProgressFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(String(reader.result));
+      if (data.app !== APP_ID) throw new Error('not a progress file');
+      const theme = state.ui.theme;
+      state = mergeState(data);
+      state.ui.theme = theme;
+      save(); applyTheme(); render();
+      const o = overall();
+      toast(`Progress loaded: ${o.done} of ${o.total} tasks done`);
+    } catch (e) {
+      toast('That file is not a progress file from this guide.');
+    }
+  };
+  reader.readAsText(file);
+}
+const ACTIONS = {
+  'open-nav': () => document.body.classList.add('nav-open'),
+  'close-nav': () => document.body.classList.remove('nav-open'),
+  theme: () => {
+    const order = ['system', 'light', 'dark'];
+    state.ui.theme = order[(order.indexOf(state.ui.theme || 'system') + 1) % order.length];
+    applyTheme(); renderTop(); save();
+    toast(`Theme: ${state.ui.theme}`);
+  },
+  copy: el => copyText(el.dataset.copy, el.dataset.copy.length > 40 ? '' : el.dataset.copy),
+  'copy-script': el => copyText(SCRIPTS[el.dataset.script], el.dataset.script),
+  'download-script': el => download(el.dataset.script, SCRIPTS[el.dataset.script], 'text/javascript;charset=utf-8'),
+  'download-file': el => download(el.dataset.file, FILES[el.dataset.file], el.dataset.file.endsWith('.csv') ? 'text/csv;charset=utf-8' : 'text/markdown;charset=utf-8'),
+  'download-all-files': () => {
+    download('northstar_files.zip', makeZip(Object.keys(FILES).map(n => ({ name: 'northstar/' + n, data: FILES[n] }))));
+    toast('Northstar files downloaded');
+  },
+  'toggle-step': el => {
+    const id = el.dataset.stepId;
+    const card = document.getElementById('step-' + id);
+    const collapsed = card.classList.toggle('is-collapsed');
+    el.setAttribute('aria-expanded', String(!collapsed));
+    if (isDone(id)) { state.ui.open[id] = !collapsed; save(); }
+  },
+  'timer-start': el => { state.timers[el.dataset.stepId] = { start: nowIso(), stop: null }; save(); rerenderStep(el.dataset.stepId); },
+  'timer-stop': el => { const t = state.timers[el.dataset.stepId]; if (t) t.stop = nowIso(); save(); rerenderStep(el.dataset.stepId); },
+  print: () => window.print(),
+  'download-pack': () => downloadPack(),
+  'copy-report': () => copyText(sessionMd(draftSession()), 'session report'),
+  'copy-results': () => copyText(resultsMd(), 'results table'),
+  'new-session': () => {
+    const d = ensureDraft();
+    const n = Math.max(nextSessionNumber(), d.n + 1);
+    const nt = nextTask();
+    state.draft = { n, date: localDate(), people: d.people || '', notes: '', blockers: '', next: nt ? (nt.step ? `Stage ${nt.stage.number}, step ${nt.step.num}: ${plain(nt.step.title)}` : `Stage ${nt.stage.number}: finish the checks`) : '' };
+    save(); render(); toast(`Session ${n} started`);
+  },
+  'save-progress': () => { download(`sam_guide_progress_${localDate()}.json`, progressJson(), 'application/json'); toast('Progress file saved'); },
+  reset: () => {
+    const v = ($('#reset-confirm') || {}).value;
+    if (String(v).trim().toUpperCase() !== 'RESET') { toast('Type RESET in the box first.'); return; }
+    const theme = state.ui.theme;
+    state = blankState(); state.ui.theme = theme; save(); render();
+    toast('All progress cleared in this browser');
+  },
+  'clear-backup': () => { backupFiles = []; render(); },
+  'download-backup': el => { if (!el.disabled) downloadBackup(); },
+  'modal-close': () => closeModal(),
+  'modal-close-back': (el, ev) => { if (ev.target === el) closeModal(); },
+};
+
+document.addEventListener('click', ev => {
+  const term = ev.target.closest('.term');
+  if (term) { ev.preventDefault(); showTerm(term); return; }
+  if (!ev.target.closest('#popover')) hidePopover();
+  const focusLink = ev.target.closest('[data-focus-step]');
+  if (focusLink && focusLink.dataset.focusStep) pendingFocus = focusLink.dataset.focusStep;
+  const el = ev.target.closest('[data-action]');
+  if (el && ACTIONS[el.dataset.action]) {
+    if (el.tagName === 'A') ev.preventDefault();
+    ACTIONS[el.dataset.action](el, ev);
+  }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.dataset.stepCheck) {
+    const id = t.dataset.stepCheck;
+    if (t.checked) state.steps[id] = { done: true, at: nowIso() }; else delete state.steps[id];
+    delete state.ui.open[id];
+    save();
+    const step = rerenderStep(id);
+    if (t.checked) {
+      toast(`Step ${step.num} done`);
+      const { stage } = STEP_INDEX[id];
+      const next = stage.steps.find(s => !s.optional && !isDone(s.id));
+      const nextEl = next && document.getElementById('step-' + next.id);
+      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    return;
+  }
+  if (t.dataset.check) {
+    const id = t.dataset.check;
+    if (t.checked) state.checks[id] = { done: true, at: nowIso() }; else delete state.checks[id];
+    save();
+    t.closest('.check').classList.toggle('done', t.checked);
+    refreshProgressBits();
+    const { stage } = CHECK_INDEX[id];
+    if (stageProgress(stage).status === 'done') toast(`Stage ${stage.number} complete. Write the session report, or carry on with Stage ${stage.number + 1}.`);
+    return;
+  }
+  if (t.dataset.blocked) {
+    const id = t.dataset.blocked;
+    state.blocked[id] = Object.assign({}, state.blocked[id], { on: t.checked, at: nowIso() });
+    save(); refreshProgressBits();
+    return;
+  }
+  if (t.dataset.record === 'instance_url') { refreshLinks(); return; }
+  if (t.id === 'backup-input') { addBackupFiles(t.files); t.value = ''; return; }
+  if (t.id === 'load-input') { if (t.files[0]) loadProgressFile(t.files[0]); t.value = ''; return; }
+  if (t.dataset.grid) handleGrid(t);
+});
+function handleGrid(t) {
+  const g = state.grids[t.dataset.grid] = state.grids[t.dataset.grid] || {};
+  const row = g[t.dataset.row] = g[t.dataset.row] || {};
+  row[t.dataset.col] = t.type === 'checkbox' ? (t.checked ? 'yes' : '') : t.value;
+  save();
+  const rate = document.querySelector(`[data-rate="${t.dataset.grid}"]`);
+  if (rate) rate.innerHTML = rateText(GRID_INDEX[t.dataset.grid].grid);
+}
+let previewTimer = null;
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if (t.dataset.record) {
+    state.records[t.dataset.record] = t.value; save();
+    if (t.dataset.record === 'instance_url') { const h = $('#instance-hint'); if (h) h.innerHTML = instanceHint(); refreshLinks(); }
+    return;
+  }
+  if (t.dataset.grid && t.type !== 'checkbox' && t.tagName !== 'SELECT') { handleGrid(t); return; }
+  if (t.dataset.draft) {
+    ensureDraft(); state.draft[t.dataset.draft] = t.value; save();
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(() => { const p = $('#report-preview'); if (p) p.textContent = sessionMd(draftSession()); }, 250);
+    return;
+  }
+  if (t.dataset.blockedReason) {
+    const id = t.dataset.blockedReason;
+    state.blocked[id] = Object.assign({ on: false }, state.blocked[id], { reason: t.value });
+    save(); return;
+  }
+  if (t.dataset.backupFolder !== undefined) { state.records._backup_folder = t.value; save(); return; }
+  if (t.dataset.backupNotes !== undefined) { state.records._backup_notes = t.value; save(); return; }
+  if (t.id === 'glossary-search') {
+    const q = t.value.trim().toLowerCase();
+    $$('#glossary-list [data-g]').forEach(el => {
+      const term = el.dataset.g;
+      const text = el.tagName === 'DD' ? el.textContent.toLowerCase() : term;
+      const pairHit = term.includes(q) || (el.tagName === 'DT' ? (el.nextElementSibling.textContent.toLowerCase().includes(q)) : text.includes(q));
+      el.hidden = q && !pairHit;
+    });
+  }
+});
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape') { hidePopover(); closeModal(); document.body.classList.remove('nav-open'); }
+});
+document.addEventListener('dragover', ev => {
+  const dz = ev.target.closest && ev.target.closest('#dropzone');
+  if (dz) { ev.preventDefault(); dz.classList.add('over'); }
+});
+document.addEventListener('dragleave', ev => {
+  const dz = ev.target.closest && ev.target.closest('#dropzone');
+  if (dz) dz.classList.remove('over');
+});
+document.addEventListener('drop', ev => {
+  const dz = ev.target.closest && ev.target.closest('#dropzone');
+  if (dz) { ev.preventDefault(); dz.classList.remove('over'); addBackupFiles(ev.dataTransfer.files); }
+});
+window.addEventListener('hashchange', render);
+window.addEventListener('resize', hidePopover);
+setInterval(() => {
+  $$('[data-clock]').forEach(el => { const t = state.timers[el.dataset.clock]; if (t && t.start && !t.stop) el.textContent = elapsedText(t); });
+}, 500);
+
+applyTheme();
+render();
+window.__samGuide = { trackerMd, tasksCsv, progressJson, sessionMd, resultsMd, makeZip, sha256Hex, sha256Fallback, state: () => state };
+})();
+</script>
+</body>
+</html>

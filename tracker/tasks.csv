@@ -1,0 +1,101 @@
+stage,stage_title,task,title,required,status,completed_on,evidence
+0,Get your ServiceNow sandbox,0.1,Sign in to the ServiceNow Developer Site,yes,Open,,
+0,Get your ServiceNow sandbox,0.2,Check whether you already have an instance,yes,Open,,
+0,Get your ServiceNow sandbox,0.3,Request a Zurich instance,yes,Open,,
+0,Get your ServiceNow sandbox,0.4,While you wait: learn and prepare,no,Open,,
+0,Get your ServiceNow sandbox,0.5,Save the instance details,yes,Open,,evidence/S0_01_developer_site_instance.png
+0,Get your ServiceNow sandbox,0.6,Sign in and check that it is Zurich,yes,Open,,evidence/S0_02_build_name_zurich.png
+0,Get your ServiceNow sandbox,0.7,Set the weekly reminder,yes,Open,,
+0,Get your ServiceNow sandbox,0.check1,You can sign in to the instance as admin.,yes,Open,,
+0,Get your ServiceNow sandbox,0.check2,"The stats page shows Build name Zurich, or the release rule was applied and written in tracker/decisions.md.",yes,Open,,
+0,Get your ServiceNow sandbox,0.check3,The admin password is only in a password manager.,yes,Open,,
+1,Switch on SAM Professional,1.1,Start the change log for this stage,yes,Open,,
+1,Switch on SAM Professional,1.2,Start the SAM Professional installation,yes,Open,,
+1,Switch on SAM Professional,1.3,While it installs: read the basics,no,Open,,
+1,Switch on SAM Professional,1.4,Check the installed parts,yes,Open,,evidence/S1_01_plugins.png
+1,Switch on SAM Professional,1.5,Check the SAM tables,yes,Open,,evidence/S1_02_tables.png
+1,Switch on SAM Professional,1.6,Check the SAM roles and automatic jobs,yes,Open,,evidence/S1_03_roles_and_jobs.png
+1,Switch on SAM Professional,1.7,Open the Software Asset Workspace,yes,Open,,evidence/S1_04_sam_workspace.png
+1,Switch on SAM Professional,1.8,Check for the Content Service,yes,Open,,evidence/S1_05_content_service.png
+1,Switch on SAM Professional,1.9,Take the before picture of normalization,yes,Open,,evidence/S1_06_normalization_before.png
+1,Switch on SAM Professional,1.10,Give each team member their own login,no,Open,,
+1,Switch on SAM Professional,1.check1,"SAM plugins are active, and their IDs and versions are written down.",yes,Open,,
+1,Switch on SAM Professional,1.check2,"The installation, discovery model, software model and entitlement lists open.",yes,Open,,
+1,Switch on SAM Professional,1.check3,"sam_user and sam_admin exist, and the SAM job names are written down.",yes,Open,,
+1,Switch on SAM Professional,1.check4,"The Software Asset Workspace opens, or the classic-menu fallback is written in tracker/decisions.md.",yes,Open,,
+1,Switch on SAM Professional,1.check5,The Content Service result and the before counts of normalization are recorded.,yes,Open,,
+2,"Create our fake company, Northstar",2.1,Start the change log for this stage,yes,Open,,
+2,"Create our fake company, Northstar",2.2,Open Scripts - Background,yes,Open,,
+2,"Create our fake company, Northstar",2.3,Run the Northstar loader,yes,Open,,evidence/S2_01_loader_result.png
+2,"Create our fake company, Northstar",2.4,Check the people and computers,yes,Open,,evidence/S2_02_people_and_computers.png
+2,"Create our fake company, Northstar",2.5,Check the server processor numbers,yes,Open,,
+2,"Create our fake company, Northstar",2.6,Check the software installations,yes,Open,,evidence/S2_03_installations.png
+2,"Create our fake company, Northstar",2.7,Group the installations by discovery model,yes,Open,,evidence/S2_04_installations_by_discovery_model.png
+2,"Create our fake company, Northstar",2.8,Run the name cleaning once,yes,Open,,
+2,"Create our fake company, Northstar",2.9,Learn the manual import way,no,Open,,
+2,"Create our fake company, Northstar",2.check1,The loader result says RESULT: OK.,yes,Open,,
+2,"Create our fake company, Northstar",2.check2,"60 users, 45 laptops and 12 servers exist.",yes,Open,,
+2,"Create our fake company, Northstar",2.check3,NSM-SQL-01 shows CPU count 2 and CPU core count 4.,yes,Open,,
+2,"Create our fake company, Northstar",2.check4,"248 installations, all with a discovery model, in 8 groups.",yes,Open,,
+2,"Create our fake company, Northstar",2.check5,The normalization job ran once.,yes,Open,,
+3,Clean the software names and define our products,3.1,Start the change log for this stage,yes,Open,,
+3,Clean the software names and define our products,3.2,Write down the status of our 8 discovery models,yes,Open,,evidence/S3_01_normalization_before.png
+3,Clean the software names and define our products,3.3,Accept the suggestions that fit,yes,Open,,
+3,Clean the software names and define our products,3.4,Clean the remaining names by hand,yes,Open,,evidence/S3_02_manual_normalization.png
+3,Clean the software names and define our products,3.5,Write down the status after cleaning,yes,Open,,evidence/S3_03_normalization_after.png
+3,Clean the software names and define our products,3.6,Create the 5 software models,yes,Open,,evidence/S3_04_software_model.png
+3,Clean the software names and define our products,3.7,Check that each model finds its installations,yes,Open,,evidence/S3_05_discovery_map.png
+3,Clean the software names and define our products,3.check1,All 8 Northstar discovery models are Normalized or Manually normalized.,yes,Open,,
+3,Clean the software names and define our products,3.check2,The status before and after is recorded.,yes,Open,,
+3,Clean the software names and define our products,3.check3,"5 software models exist with publisher, product, version and edition.",yes,Open,,
+3,Clean the software names and define our products,3.check4,Each model has a discovery map.,yes,Open,,
+4,Enter what we bought and run the license check,4.1,Start the change log for this stage,yes,Open,,
+4,Enter what we bought and run the license check,4.2,Create the 5 entitlements,yes,Open,,evidence/S4_01_entitlement_form.png
+4,Enter what we bought and run the license check,4.3,Publish each entitlement,yes,Open,,evidence/S4_02_entitlements_published.png
+4,Enter what we bought and run the license check,4.4,Hand out the licenses,yes,Open,,evidence/S4_03_allocations.png
+4,Enter what we bought and run the license check,4.5,Run the license check,yes,Open,,
+4,Enter what we bought and run the license check,4.6,Read the five results,yes,Open,,evidence/S4_04_results_overview.png
+4,Enter what we bought and run the license check,4.7,Follow one result back to its source,yes,Open,,evidence/S4_05_trace_sql_server.png
+4,Enter what we bought and run the license check,4.8,Look at the fix options,yes,Open,,evidence/S4_06_remediation_options.png
+4,Enter what we bought and run the license check,4.check1,5 entitlements exist and all are Published.,yes,Open,,
+4,Enter what we bought and run the license check,4.check2,40 Acrobat user allocations and 28 Project device allocations exist.,yes,Open,,
+4,Enter what we bought and run the license check,4.check3,The license check finished without errors.,yes,Open,,
+4,Enter what we bought and run the license check,4.check4,"The results are recorded: A compliant, B under-licensed, C over-licensed, D and E compliant.",yes,Open,,
+4,Enter what we bought and run the license check,4.check5,The SQL Server result is traced back to the servers.,yes,Open,,
+5,Microsoft rules and finding unused software,5.1,Start the change log for this stage,yes,Open,,
+5,Microsoft rules and finding unused software,5.2,Open the Microsoft view,yes,Open,,evidence/S5_01_microsoft_view.png
+5,Microsoft rules and finding unused software,5.3,Understand the per core rule,yes,Open,,evidence/S5_02_per_core_detail.png
+5,Microsoft rules and finding unused software,5.4,Add the usage data,yes,Open,,evidence/S5_03_usage_records.png
+5,Microsoft rules and finding unused software,5.5,Create the reclamation rule,yes,Open,,evidence/S5_04_reclamation_rule.png
+5,Microsoft rules and finding unused software,5.6,Find the unused installations,yes,Open,,
+5,Microsoft rules and finding unused software,5.7,Check the removal candidates,yes,Open,,evidence/S5_05_removal_candidates.png
+5,Microsoft rules and finding unused software,5.8,Show the savings and the process,yes,Open,,evidence/S5_06_savings.png
+5,Microsoft rules and finding unused software,5.9,Look at the automation behind it,yes,Open,,evidence/S5_07_reclamation_flow.png
+5,Microsoft rules and finding unused software,5.check1,The Microsoft view is open and the per core rule is explained in your own words.,yes,Open,,
+5,Microsoft rules and finding unused software,5.check2,103 usage rows exist.,yes,Open,,
+5,Microsoft rules and finding unused software,5.check3,The reclamation rule is saved with Project.,yes,Open,,
+5,Microsoft rules and finding unused software,5.check4,Removal candidates for Project are found and the savings are recorded.,yes,Open,,
+5,Microsoft rules and finding unused software,5.check5,No real computer was touched.,yes,Open,,
+6,"Dashboard, visitor login and backup",6.1,Start the change log for this stage,yes,Open,,
+6,"Dashboard, visitor login and backup",6.2,Look at the built-in analytics,yes,Open,,evidence/S6_01_workspace_analytics.png
+6,"Dashboard, visitor login and backup",6.3,Build the management dashboard,yes,Open,,evidence/S6_02_dashboard.png
+6,"Dashboard, visitor login and backup",6.4,Create the read-only visitor,yes,Open,,
+6,"Dashboard, visitor login and backup",6.5,Test the visitor in a private window,yes,Open,,evidence/S6_03_visitor_refused.png
+6,"Dashboard, visitor login and backup",6.6,Close and export the update sets,yes,Open,,
+6,"Dashboard, visitor login and backup",6.7,Export our key records,yes,Open,,
+6,"Dashboard, visitor login and backup",6.8,Pack the backup for the repository,yes,Open,,evidence/S6_04_backup_pack.png
+6,"Dashboard, visitor login and backup",6.check1,The dashboard answers the management questions.,yes,Open,,
+6,"Dashboard, visitor login and backup",6.check2,"Every visitor test passed, and the visitor is inactive again.",yes,Open,,
+6,"Dashboard, visitor login and backup",6.check3,The 6 update sets are Complete and exported.,yes,Open,,
+6,"Dashboard, visitor login and backup",6.check4,exports/release_01 with manifest and checksums is in the repository.,yes,Open,,
+7,Finish the case study and present,7.1,Copy your numbers into the case study,yes,Open,,
+7,Finish the case study and present,7.2,Run the acceptance checklist,yes,Open,,
+7,Finish the case study and present,7.3,Switch on the visitor,yes,Open,,
+7,Finish the case study and present,7.4,Run the paper recovery test,yes,Open,,
+7,Finish the case study and present,7.5,Rehearse the five-minute demo,yes,Open,,
+7,Finish the case study and present,7.6,Publish the release,yes,Open,,
+7,Finish the case study and present,7.7,Present it,yes,Open,,
+7,Finish the case study and present,7.check1,The case study has real numbers and evidence links.,yes,Open,,
+7,Finish the case study and present,7.check2,"The acceptance checklist passed, or exceptions are documented.",yes,Open,,
+7,Finish the case study and present,7.check3,The visitor is active and retested.,yes,Open,,
+7,Finish the case study and present,7.check4,Release v1.0.0 is published.,yes,Open,,

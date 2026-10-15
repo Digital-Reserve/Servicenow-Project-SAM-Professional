@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Verifies every exports/release_* folder: XML parses, CSV is readable,
-# MANIFEST.md exists, SHA256SUMS exists and matches.
+# Verifies every exports/release_* folder: MANIFEST.md exists, SHA256SUMS exists,
+# lists every file and matches, XML files parse, CSV files read.
+# Tolerates Windows line endings in SHA256SUMS.
 # Usage: bash scripts/verify_exports.sh
 set -u
 cd "$(dirname "$0")/.." || exit 2
@@ -12,20 +13,22 @@ if (( ${#releases[@]} == 0 )); then
   echo "verify_exports: no release folders yet, nothing to verify"
   exit 0
 fi
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
 for rel in "${releases[@]}"; do
   rel=${rel%/}
   echo "== $rel"
   [[ -f "$rel/MANIFEST.md" ]] || fail "$rel has no MANIFEST.md"
   if [[ -f "$rel/SHA256SUMS" ]]; then
-    (cd "$rel" && sha256sum --quiet -c SHA256SUMS) || fail "$rel checksum mismatch"
-    # every file except the sums file must be listed
+    tr -d '\r' < "$rel/SHA256SUMS" > "$tmp"
+    (cd "$rel" && sha256sum --quiet -c "$tmp") || fail "$rel checksum mismatch"
     for f in "$rel"/*; do
       base=$(basename "$f")
       [[ "$base" == "SHA256SUMS" ]] && continue
-      grep -qE "[[:space:]]\*?$base$" "$rel/SHA256SUMS" || fail "$rel/$base is not listed in SHA256SUMS"
+      grep -qF "  $base" "$tmp" || grep -qF " *$base" "$tmp" || fail "$rel/$base is not listed in SHA256SUMS"
     done
   else
-    fail "$rel has no SHA256SUMS (create with: cd $rel && sha256sum * > SHA256SUMS)"
+    fail "$rel has no SHA256SUMS (the guide app's Backup pack creates it)"
   fi
   for x in "$rel"/*.xml; do
     python3 - "$x" <<'PY' || fail "XML does not parse: $x"

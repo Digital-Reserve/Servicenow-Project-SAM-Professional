@@ -1,4 +1,4 @@
-# Platform verification report
+# Platform research, 1 October 2026
 
 Prepared: 1 October 2026
 Scope: online verification of every platform dependent claim in the handover package before any instance work starts.
@@ -7,7 +7,7 @@ Method: official ServiceNow documentation and Developer Site pages first, Servic
 Every claim below is marked with one of:
 
 * `CONFIRMED` the handover statement holds as written.
-* `CORRECTED` the handover statement needed a change; the change is recorded in `docs/handover_mapping.md`.
+* `CORRECTED` the handover statement needed a change; the change is recorded in `docs/reference/project_history.md`.
 * `VERIFY IN INSTANCE` the statement cannot be settled online and must be checked on the PDI.
 
 ## 1. Release calendar
@@ -19,7 +19,7 @@ Every claim below is marked with one of:
 | Release after Australia | Brazil: early availability 24 September 2026. PDIs on Brazil became available the same day. General availability is expected in Q4 2026; third party sources cite early November 2026 and this is not yet confirmed by ServiceNow. | NEW |
 | Support position of Zurich | ServiceNow supports the current family (N) and the previous one (N-1). Today Australia is N and Zurich is N-1. When Brazil reaches general availability Zurich becomes N-2. | NEW |
 
-Impact: the Zurich requirement remains valid, but the window in which Zurich is a supported, selectable PDI release is closing. See GUIDE.md Appendix G, decision G01.
+Impact: the Zurich requirement remains valid, but the window in which Zurich is a supported, selectable PDI release is closing. See tracker/decisions.md, decision D01.
 
 ## 2. Personal Developer Instance rules
 
@@ -47,11 +47,11 @@ Source: Zurich PDI Guide and Zurich PDI FAQ on the Developer Site (links in sect
 | Failure pattern | First attempts fail for a noticeable share of users (2022, June 2025, July 2025, June 2026). Working remedies: retry from Manage my instance, activate the base Software Asset Management plugin from Application Manager first, then retry the full activation; install in sequence rather than all at once. | NEW |
 | `com.sn_samp_master_ws` | Official Zurich documentation for the Guided Experiences application names it Software Asset Management Professional Master Workspace and states it internally activates `com.sn_samp_master` and the Software Asset Workspace Store application `sn_sam_workspace`. | CONFIRMED |
 | Mapping of the PDI label to a plugin id | Not published. Confirm in the instance from the plugin list after activation. | VERIFY IN INSTANCE |
-| Software Asset Workspace on a PDI | Repeatedly reported as missing after the Developer Site activation (2023, 2024, May 2025, February 2026 on Zurich). Remedies that worked: install Software Asset Management Playbooks and Guided Setups (`sn_sam_playbook`) or Software Asset Management Guided Experiences (`com.sn_sam_playbook`) from All Available Applications; install `sn_sam_workspace` and run a repair (accepted answer, August 2026, Zurich PDI); background script installing `com.sn_sam_workspace` (Xanadu era). One March 2026 report could not make it work on Zurich and reverted to Yokohama. | CORRECTED, see GUIDE.md Session 1 step 8 |
+| Software Asset Workspace on a PDI | Repeatedly reported as missing after the Developer Site activation (2023, 2024, May 2025, February 2026 on Zurich). Remedies that worked: install Software Asset Management Playbooks and Guided Setups (`sn_sam_playbook`) or Software Asset Management Guided Experiences (`com.sn_sam_playbook`) from All Available Applications; install `sn_sam_workspace` and run a repair (accepted answer, August 2026, Zurich PDI); background script installing `com.sn_sam_workspace` (Xanadu era). One March 2026 report could not make it work on Zurich and reverted to Yokohama. | CORRECTED, see the guide app, Stage 1 |
 | Guided Experiences prerequisites | Official Zurich docs: valid entitlements for the application and its Store dependencies, role `sam_admin` or `sam_user`, activate `com.sn_samp_master_ws` first. It installs `com.snc.samp`, `com.glide.playbook_experience.config`, `sn_playbook_exp`, `now_playbook_exp` and `sn_sam_workspace`. | NEW |
 | Classic interface | Beginning with Xanadu, limited support is provided for the classic SAM interface. It stays active after upgrade. Zurich therefore favours the workspace. | CONFIRMED |
-| Content Service | The Content Service setup table `sn_samp_content_service_setup` is not installed on PDIs and content service features are restricted to licensed customer environments. Normalization on a PDI relies on the content library shipped with the plugin, demo data and manual normalization. | CORRECTED, see GUIDE.md Session 3 |
-| SaaS License Management | Separate Store application (Software Asset Management - SaaS License Management, integration plugin `com.sn_sam_saas_int`). Reported as not available for PDIs in January 2024. Licensing statements conflict (a 2023 thread says separate subscription, the current product page says included with SAM Professional). | CORRECTED, see GUIDE.md Appendix A |
+| Content Service | The Content Service setup table `sn_samp_content_service_setup` is not installed on PDIs and content service features are restricted to licensed customer environments. Normalization on a PDI relies on the content library shipped with the plugin, demo data and manual normalization. | CORRECTED, see the guide app, Stage 3 |
+| SaaS License Management | Separate Store application (Software Asset Management - SaaS License Management, integration plugin `com.sn_sam_saas_int`). Reported as not available for PDIs in January 2024. Licensing statements conflict (a 2023 thread says separate subscription, the current product page says included with SAM Professional). | CORRECTED, see docs/08_sandbox_limits_and_solutions.md |
 | Demo data | Activate Plugin with demo data is offered on the Developer Site. If demo data is missing after activation, reload it from the plugin record or retry activation. | CONFIRMED |
 
 ## 4. Zurich SAM changes
@@ -184,4 +184,4 @@ Third party, used only to corroborate calendar dates
 
 ## 10. Re-verification rule
 
-Before Session 0 starts, re-check items marked VERIFY IN INSTANCE and re-check the Developer Site release list. Record the result in `PROGRESS.md` and in `docs/project_state.json`.
+Before Stage 0 starts, re-check items marked VERIFY IN INSTANCE and re-check the Developer Site release list. Record the result in the session report of the guide app.

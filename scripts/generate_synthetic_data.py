@@ -117,27 +117,30 @@ def build(out_dir: pathlib.Path) -> None:
         workstations.append(dict(
             name=f"NSM-WS-{n:03d}", os="Windows", os_version="11 Enterprise 23H2", manufacturer="Dell Inc.",
             model_id="Latitude 5550", serial_number=f"NSMWS{n:05d}X", cpu_count="1", cpu_core_count="8",
-            assigned_to=u["user_name"], location=u["location"], company=COMPANY, install_status="Installed",
+            assigned_to=u["user_name"], location=u["location"], company=COMPANY,
         ))
-    # Servers: 4 Windows application hosts and 3 SQL servers (physical, 2 processors), 5 Linux servers.
-    windows_servers = [(f"NSM-WIN-{n:02d}", "2", "16", "Application host") for n in range(1, 5)]
-    windows_servers += [(f"NSM-SQL-{n:02d}", "2", "8", "Database server") for n in range(1, 4)]
+    # Servers. ServiceNow stores CPU count (processors) and CPU core count (cores PER processor).
+    # 4 Windows application hosts: 2 processors x 8 cores = 16 cores each.
+    # 3 SQL servers: 2 processors x 4 cores = 8 cores each.
+    # 5 Linux servers: 2 processors x 8 cores.
+    windows_servers = [(f"NSM-WIN-{n:02d}", "2", "8", "Application host") for n in range(1, 5)]
+    windows_servers += [(f"NSM-SQL-{n:02d}", "2", "4", "Database server") for n in range(1, 4)]
     linux_servers = [("NSM-APP-01", "Red Hat Enterprise Linux 9.4"), ("NSM-APP-02", "Red Hat Enterprise Linux 9.4"),
                      ("NSM-APP-03", "Ubuntu 24.04 LTS"), ("NSM-FS-01", "Ubuntu 24.04 LTS"), ("NSM-WEB-01", "Ubuntu 24.04 LTS")]
     servers = []
     for name, cpus, cores, role in windows_servers:
         servers.append(dict(
-            name=name, os="Windows Server", os_version="2022 Standard", manufacturer="Hewlett Packard Enterprise",
-            model_id="ProLiant DL380 Gen11", serial_number=f"{name.replace('-', '')}SN", cpu_count=cpus,
-            cpu_core_count=cores, assigned_to="", location=LOCATIONS[0][0], company=COMPANY,
-            install_status="Installed", short_description=role,
+            name=name, server_class="Windows Server", os="Windows Server", os_version="2022 Standard",
+            manufacturer="Hewlett Packard Enterprise", model_id="ProLiant DL380 Gen11",
+            serial_number=f"{name.replace('-', '')}SN", cpu_count=cpus, cpu_core_count=cores, virtual="false",
+            location=LOCATIONS[0][0], company=COMPANY, short_description=role,
         ))
     for name, osv in linux_servers:
         servers.append(dict(
-            name=name, os="Linux", os_version=osv, manufacturer="Hewlett Packard Enterprise",
-            model_id="ProLiant DL360 Gen11", serial_number=f"{name.replace('-', '')}SN", cpu_count="2",
-            cpu_core_count="8", assigned_to="", location=LOCATIONS[1][0], company=COMPANY,
-            install_status="Installed", short_description="Linux application server",
+            name=name, server_class="Linux Server", os="Linux", os_version=osv,
+            manufacturer="Hewlett Packard Enterprise", model_id="ProLiant DL360 Gen11",
+            serial_number=f"{name.replace('-', '')}SN", cpu_count="2", cpu_core_count="8", virtual="false",
+            location=LOCATIONS[1][0], company=COMPANY, short_description="Linux application server",
         ))
 
     models = []
@@ -160,8 +163,9 @@ def build(out_dir: pathlib.Path) -> None:
         ))
         if device.startswith("NSM-WS"):
             usage.append(dict(
-                ci=device, user=user_of[device], publisher=p["publisher"], product=p["product"], version=p["version"],
-                last_used=days_ago(last_used_days), total_usage_minutes=str(used_minutes), scenario=p["scenario"],
+                ci=device, user=user_of[device], display_name=p["discovered_name"], discovered_version=p["discovered_version"],
+                publisher=p["publisher"], product=p["product"], last_used=days_ago(last_used_days),
+                minutes_used=str(used_minutes), scenario=p["scenario"],
             ))
 
     acrobat, sql, visio, project, winsrv = (PRODUCTS[k] for k in ("acrobat", "sqlserver", "visio", "project", "winserver"))
@@ -210,8 +214,12 @@ def build(out_dir: pathlib.Path) -> None:
             "Compliant: 7 physical servers at the 16 core minimum = 112 cores, 112 owned"),
     ]
 
-    allocations = [dict(entitlement=entitlements[0]["display_name"], allocated_to_type="user",
-                        allocated_to=users[n - 1]["user_name"], quantity="1", scenario="A") for n in range(1, 41)]
+    allocations = [dict(entitlement_po=entitlements[0]["po_number"], entitlement=entitlements[0]["display_name"],
+                        allocated_to_type="user", allocated_to=users[n - 1]["user_name"], quantity="1", scenario="A")
+                   for n in range(1, 41)]
+    allocations += [dict(entitlement_po=entitlements[3]["po_number"], entitlement=entitlements[3]["display_name"],
+                         allocated_to_type="device", allocated_to=f"NSM-WS-{n:03d}", quantity="1", scenario="D")
+                    for n in range(10, 38)]
 
     def write(name: str, rows: list[dict]) -> None:
         with (out_dir / name).open("w", newline="", encoding="utf-8") as fh:
@@ -239,14 +247,14 @@ def build(out_dir: pathlib.Path) -> None:
         f"| Users | {len(users)} |", f"| Workstations | {len(workstations)} |", f"| Servers | {len(servers)} |",
         f"| Software installations | {len(installs)} ({licensable} licensable, {len(installs) - licensable} free software) |",
         f"| Software usage records | {len(usage)} |", f"| Software models | {len(models)} |",
-        f"| Entitlements | {len(entitlements)} |", f"| Allocations | {len(allocations)} |", "",
+        f"| Entitlements | {len(entitlements)} |", f"| Allocations | {len(allocations)} (40 Acrobat users, 28 Project devices) |", "",
         "| Scenario | Product | Metric | Owned | Consumed | Expected position | Money story |",
         "| --- | --- | --- | --- | --- | --- | --- |",
         "| A | Adobe Acrobat 2024 Pro | Per Named User | 40 | 40 users | Compliant | Subscription renews 31 Jan 2027 |",
-        "| B | Microsoft SQL Server 2022 Standard | Per Core | 16 cores (8 packs) | 24 cores on 3 servers | Shortage of 8 cores | True up 4 packs x EUR 3,945 = EUR 15,780 exposure |",
+        "| B | Microsoft SQL Server 2022 Standard | Per Core | 16 cores (8 packs) | 3 servers x 2 processors x 4 cores = 24 cores | Shortage of 8 cores | True up 4 packs x EUR 3,945 = EUR 15,780 exposure |",
         "| C | Microsoft Visio 2021 Professional | Per Device | 60 | 35 workstations | Surplus of 25 | 25 x EUR 579 = EUR 14,475 of rights to reuse before buying |",
         "| D | Microsoft Project 2021 Professional | Per Device | 30 | 28 workstations, 12 unused over 90 days | Compliant, 12 reclamation candidates | 12 x EUR 1,059 = EUR 12,708 reclaimable value |",
-        "| E | Microsoft Windows Server 2022 Standard | Per Core | 112 cores (56 packs) | 7 physical servers at the 16 core minimum | Compliant | Publisher rule demonstration |",
+        "| E | Microsoft Windows Server 2022 Standard | Per Core | 112 cores (56 packs) | 7 servers at the 16 core minimum = 112 (actual cores 4 x 16 + 3 x 8 = 88) | Compliant | Publisher rule demonstration |",
         "",
     ]
     (out_dir / "SUMMARY.md").write_text("\n".join(lines), encoding="utf-8")

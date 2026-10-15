@@ -1,73 +1,61 @@
-# ServiceNow SAM Professional on Zurich: a case study
+# Software Asset Management on ServiceNow: a working case study
 
-An end to end implementation of ServiceNow Software Asset Management Professional on the Zurich release, built in a Personal Developer Instance with synthetic data, in eight short sessions. The outcome is a case study for interviewers and management: from raw installations to published license positions, a quantified true up exposure, reusable rights and a reclamation pipeline.
+We are building a complete software license management solution on ServiceNow, in a free sandbox with an invented company, to show how it finds audit risks and wasted license spend.
 
 | | |
 | --- | --- |
-| Status | Session 0 of 7 next. Repository, research and data are ready. |
-| Release | Zurich |
-| Live instance | pending |
-| Visitor access | pending, read only, synthetic data only |
-| Case study | [CASE_STUDY.md](CASE_STUDY.md) |
-| How it was built | [GUIDE.md](GUIDE.md), one continuous guide |
-| Session log | [PROGRESS.md](PROGRESS.md) |
+| **Status** | Started on 15 October 2026. Live progress: [tracker/TRACKER.md](tracker/TRACKER.md) |
+| **Platform** | ServiceNow, Zurich release, Software Asset Management Professional |
+| **Effort** | 8 stages in one or two working sessions a week, about 4 to 7 weeks |
+| **Risk to the company** | None. A free personal sandbox and invented data only |
 
-## The story in one table
+## Why this matters
 
-Northstar Manufacturing, a synthetic company with 60 staff, 45 workstations and 12 servers, runs five products that together show every kind of license position.
+Every company pays for software licenses, and few can say exactly what is installed and what they own. That gap costs money in two ways:
 
-| Scenario | Product | Position | Money story |
-| --- | --- | --- | --- |
-| A | Adobe Acrobat 2024 Pro, per named user | Compliant | Subscription renewal tracked |
-| B | Microsoft SQL Server 2022 Standard, per core | Shortage of 8 cores | EUR 15,780 true up exposure |
-| C | Microsoft Visio 2021 Professional, per device | Surplus of 25 | EUR 14,475 of rights to reuse |
-| D | Microsoft Project 2021 Professional, per device | Compliant, 12 unused | EUR 12,708 reclaimable |
-| E | Microsoft Windows Server 2022 Standard, per core | Compliant | Microsoft core minimums applied |
+- **Audit risk.** Using more than you bought leads to back-payments when a vendor audits you.
+- **Waste.** Paying for licenses that nobody uses.
 
-## What is demonstrated
+ServiceNow Software Asset Management Professional compares what is installed with what was bought, automatically, and shows both.
 
-| Capability | Status | Evidence |
+## What the case study will show
+
+Northstar Manufacturing is an invented company with 60 employees, 45 laptops and 12 servers. Five of its products cover every kind of result:
+
+| Product | What the system will show | Business value |
 | --- | --- | --- |
-| Zurich instance, SAM Professional, Software Asset Workspace | Session 1 | |
-| Inventory of 248 installations through Import Sets, automatic discovery models | Session 2 | |
-| Normalization measured before and after, without the Content Service | Session 3 | |
-| Software models with discovery maps | Session 3 | |
-| Published entitlements with cost, metric and allocations | Session 4 | |
-| Reconciliation: compliant, shortage and surplus positions traced to source records | Session 4 | |
-| Microsoft per core publisher logic | Session 5 | |
-| Reclamation rule, removal candidates and savings on synthetic usage | Session 5 | |
-| Management dashboard | Session 6 | |
-| Read only visitor access, negative tested | Session 6 | |
-| Export bundle with checksums and a recovery runbook | Session 6 | |
-| Platform verification research | Done | [report](docs/research/2026-10-01_platform_verification.md) |
-| Synthetic estate and data generator | Done | [data](data/northstar/README.md) |
+| Adobe Acrobat Pro | 40 licenses for 40 users: compliant | Renewal date tracked |
+| Microsoft SQL Server | 24 processor cores in use, 16 licensed: under-licensed | EUR 15,780 audit exposure found |
+| Microsoft Visio | 60 licenses, 35 in use: over-licensed | EUR 14,475 of licenses to reuse |
+| Microsoft Project | 12 of 28 installations unused for 90 days | EUR 12,708 can be reclaimed |
+| Microsoft Windows Server | The vendor's minimum-core rules applied: compliant | A correct count where simple tools get it wrong |
 
-Nothing is marked done until its evidence file exists in `evidence/`.
+All figures belong to the invented company. They show what the tool does, not real savings.
 
-## Personal Developer Instance limits, and how each one is solved
+## How the work is organised
 
-| Limit | Solution |
+```mermaid
+flowchart LR
+  S0[0 Get the sandbox] --> S1[1 Switch on SAM Pro] --> S2[2 Load the company] --> S3[3 Clean the names]
+  S3 --> S4[4 License check] --> S5[5 Vendor rules and unused software] --> S6[6 Dashboard and backup] --> S7[7 Case study]
+```
+
+Each stage ends with checks, screenshots and a short session report, so progress is visible and every claim is proven.
+
+## Where to find things
+
+| I want to | Go to |
 | --- | --- |
-| No Content Service | Shipped content library, normalization suggestions, manual normalization, rate measured |
-| No discovery or usage feeds | Reproducible synthetic feeds loaded through Import Sets |
-| SaaS License Management not installable | Subscription lifecycle shown with a subscription entitlement and renewals |
-| Workspace may not install with activation | Documented install through Guided Experiences or the workspace application |
+| Understand the topic, with no prior knowledge | [docs](docs/README.md) |
+| See where the project stands | [tracker](tracker/TRACKER.md) |
+| Do the work, step by step | [app](app/README.md): download and double-click `SAM_Pro_Build_Guide.html` |
+| See the proof | [evidence](evidence/README.md) |
+| Read the finished story | [docs/case_study.md](docs/case_study.md) |
 
-The full table is in `GUIDE.md`, Appendix A.
+## See it live
 
-## Repository layout
+From Stage 7 the address of the sandbox and a read-only visitor login are listed here. Until then the progress lives in the tracker.
 
-| Path | Purpose |
-| --- | --- |
-| `GUIDE.md` | The implementation guide, sessions 0 to 7 and appendices |
-| `CASE_STUDY.md` | The narrative for interviewers and management |
-| `PROGRESS.md` | Session log and current status |
-| `data/northstar/` | Synthetic dataset and its design |
-| `evidence/` | Screenshots named by session |
-| `exports/` | Recovery bundles with manifests and checksums |
-| `scripts/` | Repository check, export verification, data generator |
-| `docs/` | Platform verification research, project state, handover mapping |
+## Safety
 
-## Security and data
-
-All data is synthetic. No real client, employee, contract or key data is used. No administrator credentials, tokens or cookies are stored; every push runs a secret scan. The visitor account is read only and limited to synthetic data.
+Invented data only. No passwords, company data or real license keys are stored in this repository, and every upload is checked automatically for secrets.
