@@ -2,7 +2,8 @@
  * Northstar license allocations - synthetic data for the SAM Pro case study.
  *
  * Where:  All > System Definition > Scripts - Background
- * When:   Stage 4, after the Acrobat and Project entitlements exist and are published.
+ * When:   Stage 4, after the Acrobat (NSM-ENT-A) and Project (NSM-ENT-D)
+ *         entitlements exist and are published (State "In use").
  * How:    paste this whole script, keep the scope "global", click "Run script".
  * Safe:   run it again at any time. Existing allocations are kept, never duplicated.
  *
@@ -52,29 +53,37 @@
     gr.query();
     return gr.next() ? String(gr.getUniqueValue()) : '';
   }
-  function findEntitlement(po, keyword) {
+  function newest(field, operator, value) {
     var gr = new GlideRecord('alm_license');
-    if (gr.isValidField('po_number')) {
-      gr.addQuery('po_number', po);
-      gr.orderByDesc('sys_created_on');
-      gr.setLimit(1);
-      gr.query();
-      if (gr.next()) return { id: String(gr.getUniqueValue()), name: String(gr.getDisplayValue()), how: 'PO number ' + po };
+    if (field.indexOf('.') === -1 && !gr.isValidField(field)) return null;
+    gr.addQuery(field, operator, value);
+    gr.orderByDesc('sys_created_on');
+    gr.setLimit(1);
+    gr.query();
+    return gr.next() ? gr : null;
+  }
+  // Finds the entitlement by asset tag, then by invoice number, then by product name.
+  function findEntitlement(tag, info) {
+    var gr = newest('asset_tag', '=', tag);
+    var how = 'asset tag ' + tag;
+    if (!gr && info.invoice) {
+      gr = newest('invoice_number', '=', info.invoice);
+      how = 'invoice number ' + info.invoice;
+      if (gr) warn('No entitlement with asset tag ' + tag + '. Used the one with invoice number ' + info.invoice + '. Put ' + tag + ' in its Asset tag field.');
     }
-    var byName = new GlideRecord('alm_license');
-    if (byName.isValidField('software_model')) {
-      byName.addQuery('software_model.display_name', 'CONTAINS', keyword);
-    } else {
-      byName.addQuery('display_name', 'CONTAINS', keyword);
+    if (!gr) {
+      var probe = new GlideRecord('alm_license');
+      gr = newest(probe.isValidField('software_model') ? 'software_model.display_name' : 'display_name', 'CONTAINS', info.keyword);
+      how = 'newest ' + info.keyword + ' entitlement';
+      if (gr) warn('No entitlement with asset tag ' + tag + '. Used the newest entitlement whose product contains "' + info.keyword + '": ' + gr.getDisplayValue() + '. If that is wrong, put ' + tag + ' in the Asset tag field of the right entitlement and run again.');
     }
-    byName.orderByDesc('sys_created_on');
-    byName.setLimit(1);
-    byName.query();
-    if (byName.next()) {
-      warn('No entitlement with PO number ' + po + '. Used the newest entitlement whose product contains "' + keyword + '": ' + byName.getDisplayValue() + '. If that is wrong, add the PO number to the right entitlement and run again.');
-      return { id: String(byName.getUniqueValue()), name: String(byName.getDisplayValue()), how: 'newest ' + keyword + ' entitlement' };
+    if (!gr) return null;
+    var stateText = '';
+    if (gr.isValidField('install_status')) stateText = String(gr.getDisplayValue('install_status') || '');
+    if (stateText && !/in use/i.test(stateText)) {
+      warn('Entitlement ' + tag + ' has State "' + stateText + '". Publish it (State "In use"), otherwise the license check ignores it.');
     }
-    return null;
+    return { id: String(gr.getUniqueValue()), name: String(gr.getDisplayValue()), how: how, state: stateText };
   }
   function isEntitlementRef(ref) { return ref === 'alm_license' || ref === 'alm_entitlement'; }
   function isUserRef(ref) { return ref === 'sys_user'; }
@@ -82,26 +91,27 @@
 
   try {
     if (!DATA) { out('No data found in this script. Copy it again from the guide.'); return; }
-    var plan = [
-      { type: 'user', table: 'alm_entitlement_user', targetNames: ['assigned_to', 'allocated_to', 'user'], targetTest: isUserRef, keyword: 'Acrobat' },
-      { type: 'device', table: 'alm_entitlement_asset', targetNames: ['allocated_to', 'cmdb_ci', 'ci', 'asset'], targetTest: isDeviceRef, keyword: 'Project' }
-    ];
+    var plans = {
+      user: { table: 'alm_entitlement_user', targetNames: ['assigned_to', 'allocated_to', 'user'], targetTest: isUserRef },
+      device: { table: 'alm_entitlement_asset', targetNames: ['allocated_to', 'cmdb_ci', 'ci', 'asset'], targetTest: isDeviceRef }
+    };
     var results = [];
-    plan.forEach(function (p) {
-      var rows = DATA.filter(function (r) { return r.allocated_to_type === p.type; });
+    DATA.entitlements.forEach(function (info) {
+      var rows = DATA.allocations.filter(function (r) { return r.entitlement_tag === info.tag; });
       if (!rows.length) return;
-      if (!new GlideRecord(p.table).isValid()) { warn('Table ' + p.table + ' not found. Allocate ' + p.keyword + ' by hand.'); return; }
+      var p = plans[info.type];
+      if (!new GlideRecord(p.table).isValid()) { warn('Table ' + p.table + ' not found. Allocate ' + info.keyword + ' by hand.'); return; }
       var fields = describe(p.table);
       var entField = pick(fields, ['licensed_by', 'entitlement', 'license'], isEntitlementRef);
       var targetField = pick(fields, p.targetNames, p.targetTest);
       var qtyField = pick(fields, ['quantity'], null);
-      if (!entField || !targetField) { warn('Could not find the entitlement or target field on ' + p.table + '. Allocate ' + p.keyword + ' by hand.'); return; }
-      var ent = findEntitlement(rows[0].entitlement_po, p.keyword);
-      if (!ent) { warn('No ' + p.keyword + ' entitlement found. Create and publish it first (Stage 4), then run again.'); return; }
+      if (!entField || !targetField) { warn('Could not find the entitlement or target field on ' + p.table + '. Allocate ' + info.keyword + ' by hand.'); return; }
+      var ent = findEntitlement(info.tag, info);
+      if (!ent) { warn('No ' + info.keyword + ' entitlement found (asset tag ' + info.tag + '). Create and publish it first (Stage 4), then run again.'); return; }
       var created = 0, kept = 0, missing = 0;
       rows.forEach(function (r) {
         var target = '';
-        if (p.type === 'user') {
+        if (info.type === 'user') {
           target = find('sys_user', 'user_name', r.allocated_to);
         } else if (targetField.ref.indexOf('alm_') === 0) {
           var ci = find('cmdb_ci', 'name', r.allocated_to);
@@ -122,7 +132,7 @@
         if (qtyField) gr.setValue(qtyField.name, String(r.quantity || '1'));
         if (gr.insert()) { created++; } else { warn('Could not save an allocation for ' + r.allocated_to + ' (check that the entitlement has enough rights).'); }
       });
-      results.push(p.keyword + ' (' + p.type + ' allocations, entitlement found by ' + ent.how + '): ' + created + ' created, ' + kept + ' already there, ' + missing + ' not found. Fields used: ' + p.table + '.' + entField.name + ' and ' + p.table + '.' + targetField.name);
+      results.push(info.keyword + ' (' + info.type + ' allocations, entitlement found by ' + ent.how + (ent.state ? ', State ' + ent.state : '') + '): ' + created + ' created, ' + kept + ' already there, ' + missing + ' not found. Fields used: ' + p.table + '.' + entField.name + ' and ' + p.table + '.' + targetField.name);
     });
 
     out('==================== NORTHSTAR ALLOCATIONS FINISHED ====================');

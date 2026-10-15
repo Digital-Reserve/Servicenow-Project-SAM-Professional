@@ -21,11 +21,12 @@ If the sandbox is deleted or broken, this plan rebuilds the project from the rep
 | 2 | Switch on SAM Professional with demo data and check every part | 1 | 2 hours |
 | 3 | Import the update sets: All, Retrieved Update Sets, Import Update Set from XML; then Preview and Commit, S1 to S6 in order | 6, in reverse | 30 minutes |
 | 4 | Run the Northstar loader script | 2 | 10 minutes |
-| 5 | Import the record exports for software models, entitlements and the reclamation rule: open each list, right-click a column heading, Import XML. Or recreate them from the tables in the guide | 3, 4, 5 | 30 minutes |
-| 6 | Publish the entitlements, run the allocation script, run the license check | 4 | 30 minutes |
-| 7 | Run the usage script and the reclamation job | 5 | 15 minutes |
-| 8 | Recreate the visitor and repeat the visitor tests | 6 | 30 minutes |
-| 9 | Update the sandbox address in the README and the guide (step 0.5) | 7 | 5 minutes |
+| 5 | Clean the 8 software names again with the status script and the clean values in the guide. Cleaned names are data, so neither update sets nor exports bring them back | 3 | 30 minutes |
+| 6 | Import the record exports for software models, entitlements and the reclamation rule: open each list, right-click a column heading, Import XML. Or recreate them from the field tables in the guide | 3, 4, 5 | 30 minutes |
+| 7 | Check that the five entitlements are In use (Publish them if needed), run the allocation script, run the license check | 4 | 30 minutes |
+| 8 | Run the usage script, the license check and the reclamation job | 5 | 30 minutes |
+| 9 | Recreate the visitor and repeat the visitor tests | 6 | 30 minutes |
+| 10 | Update the sandbox address in the README and the guide (step 0.5) | 7 | 5 minutes |
 
 ## Checking the backup
 

@@ -42,7 +42,10 @@ LAST_NAMES = [
     "van den Berg", "van Leeuwen", "Willems", "Koster", "Prins", "Blom",
 ]
 
-# Demonstration products. Scenario letters match data/northstar/README.md and GUIDE.md.
+# Demonstration products. Scenario letters match data/northstar/README.md and the guide.
+# unit_cost is the price of ONE right (one user, one device or one core): ServiceNow
+# multiplies it by the number of rights. Per core products are sold in packs of 2 cores,
+# so their pack_price is twice the unit cost.
 PRODUCTS = {
     "acrobat": dict(scenario="A", publisher="Adobe", product="Acrobat", version="2024", edition="Pro",
                     platform="Windows", product_type="Application", license_metric="Per Named User",
@@ -50,7 +53,7 @@ PRODUCTS = {
     "sqlserver": dict(scenario="B", publisher="Microsoft", product="SQL Server", version="2022", edition="Standard",
                       platform="Windows", product_type="Database", license_metric="Per Core",
                       discovered_name="Microsoft SQL Server 2022 Standard Edition", discovered_version="16.0.4135.4",
-                      unit_cost="3945.00"),
+                      unit_cost="1972.50", pack_price="3945.00"),
     "visio": dict(scenario="C", publisher="Microsoft", product="Visio", version="2021", edition="Professional",
                   platform="Windows", product_type="Application", license_metric="Per Device",
                   discovered_name="Microsoft Visio Professional 2021", discovered_version="16.0.14332.20637",
@@ -62,7 +65,7 @@ PRODUCTS = {
     "winserver": dict(scenario="E", publisher="Microsoft", product="Windows Server", version="2022", edition="Standard",
                       platform="Windows", product_type="Operating System", license_metric="Per Core",
                       discovered_name="Microsoft Windows Server 2022 Standard", discovered_version="10.0.20348",
-                      unit_cost="248.00"),
+                      unit_cost="124.00", pack_price="248.00"),
 }
 
 # Free software used to show normalization of non licensable products.
@@ -143,13 +146,16 @@ def build(out_dir: pathlib.Path) -> None:
             location=LOCATIONS[1][0], company=COMPANY, short_description="Linux application server",
         ))
 
+    # Software models match every version ("is anything") and one edition: discovered versions such as
+    # 24.2.20857 never equal the licensed version 2024, and Northstar has one version per product.
     models = []
     for key, p in PRODUCTS.items():
         models.append(dict(
-            scenario=p["scenario"], display_name=f"{p['publisher']} {p['product']} {p['version']} {p['edition']}",
-            publisher=p["publisher"], product=p["product"], version=p["version"], edition=p["edition"],
-            platform=p["platform"], product_type=p["product_type"], license_metric=p["license_metric"],
-            maps_to_discovered_name=p["discovered_name"],
+            scenario=p["scenario"], display_name=f"{p['publisher']} {p['product']} {p['edition']}",
+            publisher=p["publisher"], product=p["product"], version_condition="is anything", version="",
+            edition_condition="is", edition=p["edition"], product_type="Licensable",
+            short_description=f"Northstar story {p['scenario']}", license_metric=p["license_metric"],
+            installed_version=p["version"], maps_to_discovered_name=p["discovered_name"],
         ))
 
     installs, usage = [], []
@@ -190,34 +196,36 @@ def build(out_dir: pathlib.Path) -> None:
                 expected_product=prod, expected_version=ver, expected_edition="",
             ))
 
-    def ent(name, model, scenario, metric, rights, per_pack, packs, cost, ltype, purchase, start, end, po, expected):
-        return dict(display_name=name, software_model=model, scenario=scenario, license_metric=metric,
-                    purchased_rights=str(rights), rights_per_pack=str(per_pack), packs=str(packs), unit_cost=cost,
-                    currency="EUR", license_type=ltype, purchase_date=purchase, start_date=start, end_date=end,
-                    vendor=VENDOR, po_number=po, expected_position=expected)
+    def ent(tag, name, model, scenario, metric, rights, per_pack, packs, p, ltype, purchase, start, end, invoice, expected):
+        return dict(asset_tag=tag, display_name=name, software_model=model, scenario=scenario, license_metric=metric,
+                    license_type=ltype, purchased_rights=str(rights), rights_per_pack=str(per_pack), packs=str(packs),
+                    unit_cost=p["unit_cost"], pack_price=p.get("pack_price", ""), currency="EUR",
+                    purchase_date=purchase, start_date=start, end_date=end, vendor=VENDOR, invoice_number=invoice,
+                    expected_position=expected)
 
+    # The asset tag is how the guide and the scripts find each purchase in ServiceNow.
     entitlements = [
-        ent("Adobe Acrobat Pro named user subscription", models[0]["display_name"], "A", "Per Named User", 40, 1, 40,
-            acrobat["unit_cost"], "Subscription", "2026-01-15", "2026-02-01", "2027-01-31", "NSM-PO-2026-0101",
+        ent("NSM-ENT-A", "Adobe Acrobat Pro named user subscription", models[0]["display_name"], "A", "Per Named User",
+            40, 1, 40, acrobat, "Subscription", "2026-01-15", "2026-02-01", "2027-01-31", "NSM-INV-2026-0101",
             "Compliant: 40 rights, 40 installations, 40 allocations"),
-        ent("Microsoft SQL Server 2022 Standard per core", models[1]["display_name"], "B", "Per Core", 16, 2, 8,
-            sql["unit_cost"], "Perpetual", "2025-11-20", "2025-11-20", "", "NSM-PO-2025-0877",
-            "Shortage: 24 cores required, 16 owned, true up 4 packs of 2 cores"),
-        ent("Microsoft Visio Professional 2021 per device", models[2]["display_name"], "C", "Per Device", 60, 1, 60,
-            visio["unit_cost"], "Perpetual", "2025-06-10", "2025-06-10", "", "NSM-PO-2025-0412",
+        ent("NSM-ENT-B", "Microsoft SQL Server 2022 Standard per core", models[1]["display_name"], "B", "Per Core",
+            16, 2, 8, sql, "Perpetual", "2025-11-20", "", "", "NSM-INV-2025-0877",
+            "Shortage: 24 cores required, 16 owned, true up 8 cores (4 packs of 2 cores)"),
+        ent("NSM-ENT-C", "Microsoft Visio Professional 2021 per device", models[2]["display_name"], "C", "Per Device",
+            60, 1, 60, visio, "Perpetual", "2025-06-10", "", "", "NSM-INV-2025-0412",
             "Surplus: 35 installations, 60 owned, 25 unused rights"),
-        ent("Microsoft Project Professional 2021 per device", models[3]["display_name"], "D", "Per Device", 30, 1, 30,
-            project["unit_cost"], "Perpetual", "2025-06-10", "2025-06-10", "", "NSM-PO-2025-0413",
+        ent("NSM-ENT-D", "Microsoft Project Professional 2021 per device", models[3]["display_name"], "D", "Per Device",
+            30, 1, 30, project, "Perpetual", "2025-06-10", "", "", "NSM-INV-2025-0413",
             "Compliant: 28 installations, 30 owned, 12 installations unused over 90 days"),
-        ent("Microsoft Windows Server 2022 Standard per core", models[4]["display_name"], "E", "Per Core", 112, 2, 56,
-            winsrv["unit_cost"], "Perpetual", "2025-03-05", "2025-03-05", "", "NSM-PO-2025-0150",
+        ent("NSM-ENT-E", "Microsoft Windows Server 2022 Standard per core", models[4]["display_name"], "E", "Per Core",
+            112, 2, 56, winsrv, "Perpetual", "2025-03-05", "", "", "NSM-INV-2025-0150",
             "Compliant: 7 physical servers at the 16 core minimum = 112 cores, 112 owned"),
     ]
 
-    allocations = [dict(entitlement_po=entitlements[0]["po_number"], entitlement=entitlements[0]["display_name"],
+    allocations = [dict(entitlement_tag=entitlements[0]["asset_tag"], entitlement=entitlements[0]["display_name"],
                         allocated_to_type="user", allocated_to=users[n - 1]["user_name"], quantity="1", scenario="A")
                    for n in range(1, 41)]
-    allocations += [dict(entitlement_po=entitlements[3]["po_number"], entitlement=entitlements[3]["display_name"],
+    allocations += [dict(entitlement_tag=entitlements[3]["asset_tag"], entitlement=entitlements[3]["display_name"],
                          allocated_to_type="device", allocated_to=f"NSM-WS-{n:03d}", quantity="1", scenario="D")
                     for n in range(10, 38)]
 
@@ -251,7 +259,7 @@ def build(out_dir: pathlib.Path) -> None:
         "| Scenario | Product | Metric | Owned | Consumed | Expected position | Money story |",
         "| --- | --- | --- | --- | --- | --- | --- |",
         "| A | Adobe Acrobat 2024 Pro | Per Named User | 40 | 40 users | Compliant | Subscription renews 31 Jan 2027 |",
-        "| B | Microsoft SQL Server 2022 Standard | Per Core | 16 cores (8 packs) | 3 servers x 2 processors x 4 cores = 24 cores | Shortage of 8 cores | True up 4 packs x EUR 3,945 = EUR 15,780 exposure |",
+        "| B | Microsoft SQL Server 2022 Standard | Per Core | 16 cores (8 packs) | 3 servers x 2 processors x 4 cores = 24 cores | Shortage of 8 cores | True up 8 cores x EUR 1,972.50 = EUR 15,780 exposure (4 packs of 2 cores at EUR 3,945) |",
         "| C | Microsoft Visio 2021 Professional | Per Device | 60 | 35 workstations | Surplus of 25 | 25 x EUR 579 = EUR 14,475 of rights to reuse before buying |",
         "| D | Microsoft Project 2021 Professional | Per Device | 30 | 28 workstations, 12 unused over 90 days | Compliant, 12 reclamation candidates | 12 x EUR 1,059 = EUR 12,708 reclaimable value |",
         "| E | Microsoft Windows Server 2022 Standard | Per Core | 112 cores (56 packs) | 7 servers at the 16 core minimum = 112 (actual cores 4 x 16 + 3 x 8 = 88) | Compliant | Publisher rule demonstration |",

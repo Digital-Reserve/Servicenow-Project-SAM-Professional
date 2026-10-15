@@ -1,6 +1,6 @@
 # SAM Pro Build Guide (offline app)
 
-`SAM_Pro_Build_Guide.html` is the guide we follow in every working session. It walks through all eight stages in plain language: where to click, what to type, what you should see, and what to write down.
+`SAM_Pro_Build_Guide.html` is the guide we follow in every working session. It walks through all eight stages in plain language. Every step says what it does and why, then lists one action per line: where to click, which field to fill in with which value, what you should see, and what to write down.
 
 ## Open it
 
@@ -11,6 +11,9 @@
 ## What it does for you
 
 - Shows the next step and marks each finished step with the date and time.
+- Starts each step with **What this step does**, in one or two sentences.
+- Shows a field table for every ServiceNow form we fill in: the exact field names and values, each value with a copy button.
+- Teaches the six basic moves in ServiceNow on the page **Moving around ServiceNow**, for team members who have never used it.
 - Opens the right ServiceNow page with one click, once you have entered your sandbox address in step 0.5.
 - Copies names, values and ServiceNow scripts with one click.
 - Keeps the notes each step asks for, such as plugin versions and license results.

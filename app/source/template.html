@@ -168,7 +168,7 @@ p { margin: 0; }
 .pill.blocked { background: var(--bad-soft); color: var(--bad); }
 .pill.todo { background: var(--surface-2); color: var(--ink-3); border-color: var(--line); }
 .pill.optional { background: var(--info-soft); color: var(--info); }
-.pill.where { background: var(--surface-2); color: var(--ink-2); border-color: var(--line); font-weight: 600; }
+.pill.where { background: var(--surface-2); color: var(--ink-2); border-color: var(--line); font-weight: 600; white-space: normal; max-width: 100%; }
 .callout { border-radius: 8px; padding: 10px 12px; font-size: .92rem; display: flex; gap: 10px; align-items: flex-start; }
 .callout .svg { margin-top: 3px; }
 .callout.note { background: var(--info-soft); color: var(--ink); }
@@ -241,6 +241,19 @@ label.field input, label.field textarea, label.field select { width: 100%; }
 .record { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .record .wide { grid-column: 1 / -1; }
 .link-slot { display: contents; }
+.what { margin: 0; padding: 9px 12px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 8px 8px 0; font-size: .94rem; color: var(--ink); }
+.form-block { display: flex; flex-direction: column; gap: 6px; }
+.form-title { font-size: .76rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3); }
+table.form td.f { font-weight: 600; min-width: 8.5em; }
+table.form td .note { display: block; margin-top: 3px; font-size: .8rem; color: var(--ink-3); }
+.grid-cards { display: flex; flex-direction: column; gap: 8px; }
+.grid-card { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.gc-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.gc-values, .gc-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+.kv { display: inline-flex; align-items: center; gap: 6px; font-size: .86rem; min-width: 0; }
+.kv > .k { color: var(--ink-3); font-size: .78rem; }
+.moves { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.moves .panel h2 { font-size: 1.02rem; margin: 0; }
 .shot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .88rem; color: var(--ink-2); }
 details.help { border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
 details.help > summary { cursor: pointer; padding: 8px 12px; font-size: .88rem; font-weight: 600; color: var(--warn); list-style: none; display: flex; gap: 8px; align-items: center; }
@@ -378,18 +391,29 @@ const FILE_INFO = {
   '05_workstations.csv': '45 laptops, each assigned to an employee.',
   '06_servers.csv': '12 servers with processor and core counts.',
   '07_software_installations.csv': '248 installations: which program is installed on which computer.',
-  '08_software_models.csv': 'The 5 products we manage. Created by hand in Stage 3.',
-  '09_entitlements.csv': 'The 5 purchases. Created by hand in Stage 4.',
-  '10_allocations.csv': '68 license assignments. Made by a script in Stage 4.',
+  '08_software_models.csv': 'The 5 products we manage, with the exact values for the form. Created by hand in Stage 3.',
+  '09_entitlements.csv': 'The 5 purchases with their asset tags NSM-ENT-A to NSM-ENT-E. Entered by hand in Stage 4.',
+  '10_allocations.csv': '68 license assignments, keyed by asset tag. Made by a script in Stage 4.',
   '11_software_usage.csv': '103 usage rows. Made by a script in Stage 5.',
   'SUMMARY.md': 'All counts and the five stories on one page.',
 };
 const SCRIPT_INFO = {
-  '01_load_northstar.js': { when: 'Stage 2, step 2.3', what: 'Creates the Northstar company, people, computers, servers and 248 software installations.' },
-  '02_allocate_licenses.js': { when: 'Stage 4, step 4.4', what: 'Gives one Acrobat license to each of 40 users and one Project license to each of 28 laptops.' },
-  '03_load_usage.js': { when: 'Stage 5, step 5.4', what: 'Adds 103 usage rows. 12 Project installations look unused for more than 90 days.' },
-  '00_install_workspace.js': { when: 'Stage 1, only if the workspace is missing', what: 'Starts the installation of the Software Asset Workspace.' },
+  '01_load_northstar.js': { what: 'Creates the Northstar company, people, computers, servers and 248 software installations.' },
+  '04_show_normalization.js': { what: 'Lists the 8 Northstar discovery models with their normalization status and clean values. Reads only.' },
+  '02_allocate_licenses.js': { what: 'Gives one Acrobat license to each of 40 users and one Project license to each of 28 laptops. Finds the purchases by asset tag.' },
+  '03_load_usage.js': { what: 'Adds 103 usage rows. 12 Project installations look unused for more than 90 days.' },
+  '00_install_workspace.js': { only: 'only if the workspace is missing', what: 'Starts the installation of the Software Asset Workspace.' },
 };
+const SCRIPT_ORDER = ['01_load_northstar.js', '04_show_normalization.js', '02_allocate_licenses.js', '03_load_usage.js', '00_install_workspace.js'];
+const stepNo = id => (STEP_INDEX[id] ? 'step ' + STEP_INDEX[id].step.num : '');
+function scriptWhen(name) {
+  const uses = [];
+  STAGES.forEach(st => st.steps.forEach(step => { if (step.script === name) uses.push(step); }));
+  if (!uses.length) return '';
+  const stage = STEP_INDEX[uses[0].id].stage;
+  const where = uses.length > 1 ? 'steps ' + uses.map(u => u.num).join(' and ') : 'step ' + uses[0].num;
+  return `Stage ${stage.number}, ${where}${SCRIPT_INFO[name].only ? ', ' + SCRIPT_INFO[name].only : ''}`;
+}
 
 /* ------------------------------------------------------------------ helpers */
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -437,6 +461,7 @@ function parseCsv(text) {
 
 const ICONS = {
   check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  pointer: '<path d="M6 3l12 7.5-5.2 1.6L10.5 18z"/><path d="M12.8 12.1l4.7 5.4"/>',
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
   ext: '<path d="M14 4h6v6M20 4l-9 9M19 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/>',
   download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
@@ -569,6 +594,7 @@ function rateFor(grid) {
 
 /* ------------------------------------------------------------------ shell */
 const TOOLS = [
+  ['moves', 'Moving around ServiceNow', 'pointer'],
   ['report', 'Session report', 'list'],
   ['files', 'Northstar files', 'file'],
   ['scripts', 'ServiceNow scripts', 'terminal'],
@@ -577,7 +603,7 @@ const TOOLS = [
   ['help', 'Help', 'help'],
   ['progress', 'Save or load progress', 'save'],
 ];
-const VIEW_TITLES = { welcome: 'Welcome', basics: 'Basics', report: 'Session report', files: 'Northstar files', scripts: 'ServiceNow scripts', backup: 'Backup pack', glossary: 'Glossary', help: 'Help', progress: 'Save or load progress' };
+const VIEW_TITLES = { welcome: 'Welcome', basics: 'Basics', moves: 'Moving around ServiceNow', report: 'Session report', files: 'Northstar files', scripts: 'ServiceNow scripts', backup: 'Backup pack', glossary: 'Glossary', help: 'Help', progress: 'Save or load progress' };
 let currentView = 'welcome';
 
 function navLink(id, label, iconName) {
@@ -646,6 +672,7 @@ function linkInner(label, path) {
   return copyChip(label, navHint(path));
 }
 function linkButton(link) {
+  if (link.view) return `<a class="btn" href="#${esc(link.view)}">${esc(link.label)} ${icon('arrow')}</a>`;
   if (link.url) return `<a class="btn open" href="${esc(link.url)}" target="_blank" rel="noopener noreferrer">${esc(link.label)} ${icon('ext')}</a>`;
   return `<span class="link-slot" data-link-path="${esc(link.path)}" data-link-label="${esc(link.label)}">${linkInner(link.label, link.path)}</span>`;
 }
@@ -660,7 +687,11 @@ function staticTable(t) {
   return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function gridCell(grid, row, col) {
-  if (col.fixed) return `<span class="muted">${md(row[col.key] || '')}</span>`;
+  if (col.type === 'link') return row[col.key] ? linkButton({ label: col.linkLabel || 'Open', path: row[col.key] }) : '';
+  if (col.fixed) {
+    const v = row[col.key] || '';
+    return col.copy && v && v !== 'leave empty' ? copyChip('', v) : `<span class="muted">${md(v)}</span>`;
+  }
   const vals = gridValues(grid.id);
   const value = (vals[row.id] || {})[col.key] || '';
   const id = `g-${grid.id}-${row.id}-${col.key}`;
@@ -676,7 +707,21 @@ function rateText(grid) {
   if (!r) return '';
   return `${esc(r.label)}: <strong class="tabular">${r.good} of ${r.total}</strong>${r.filled < r.total ? ` (${r.total - r.filled} not filled in yet)` : ''}`;
 }
+function formBlock(f) {
+  const rows = f.rows.map(r => `<tr><td class="f">${esc(r.field)}</td><td>${r.copy === false ? md(r.value) : copyChip('', r.value)}${r.note ? `<span class="note">${md(r.note)}</span>` : ''}</td></tr>`).join('');
+  return `<div class="form-block"><span class="form-title">${esc(f.title || 'Fill in')}</span><div class="table-wrap"><table class="form"><thead><tr><th scope="col">Field</th><th scope="col">What to enter</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+function gridCards(grid) {
+  const cards = grid.rows.map(r => {
+    const links = grid.columns.filter(c => c.type === 'link').map(c => gridCell(grid, r, c)).join('');
+    const fixed = grid.columns.filter(c => c.fixed && r[c.key]).map(c => `<span class="kv"><span class="k">${esc(c.label)}</span>${gridCell(grid, r, c)}</span>`).join('');
+    const inputs = grid.columns.filter(c => !c.fixed && c.type !== 'link').map(c => `<span class="kv"><span class="k">${esc(c.label)}</span>${gridCell(grid, r, c)}</span>`).join('');
+    return `<div class="grid-card"><div class="gc-head"><strong>${esc(r.label)}</strong>${links}</div><div class="gc-values">${fixed}</div><div class="gc-inputs">${inputs}</div></div>`;
+  }).join('');
+  return `<div class="grid-cards">${cards}</div>${grid.rate ? `<p class="hint" data-rate="${esc(grid.id)}">${rateText(grid)}</p>` : ''}`;
+}
 function gridTable(grid) {
+  if (grid.layout === 'cards') return gridCards(grid);
   const head = `<th scope="col">${esc(grid.rowLabel || 'Item')}</th>` + grid.columns.map(c => `<th scope="col">${esc(c.label)}</th>`).join('');
   const rows = grid.rows.map(r => `<tr><td>${esc(r.label)}</td>${grid.columns.map(c => `<td>${gridCell(grid, r, c)}</td>`).join('')}</tr>`).join('');
   return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>${grid.rate ? `<p class="hint" data-rate="${esc(grid.id)}">${rateText(grid)}</p>` : ''}`;
@@ -732,15 +777,17 @@ function scriptBox(name) {
 }
 function stepBody(step) {
   const parts = [];
+  if (step.what) parts.push(`<p class="what"><strong>What this step does:</strong> ${md(step.what)}</p>`);
   if (step.do && step.do.length) parts.push(`<ol class="do">${step.do.map(d => `<li>${md(d)}</li>`).join('')}</ol>`);
   const actions = [];
   (step.copy || []).forEach(c => actions.push(copyChip(c.label, c.value)));
   (step.links || []).forEach(l => actions.push(linkButton(l)));
   if (actions.length) parts.push(`<div class="actions">${actions.join('')}</div>`);
   if ((step.links || []).some(l => l.path)) {
-    parts.push(`<p class="hint" data-link-tip${instanceBase() ? ' hidden' : ''}>Tip: add your instance address in step 0.5 and these become Open buttons. Until then, copy the name and type it into the search box of the All menu.</p>`);
+    parts.push(`<p class="hint" data-link-tip${instanceBase() ? ' hidden' : ''}>Tip: add your instance address in ${stepNo('s0-5')} and these become Open buttons. Until then, copy the name and type it into the search box of the All menu.</p>`);
   }
   if (step.script) parts.push(scriptBox(step.script));
+  (step.form || []).forEach(f => parts.push(formBlock(f)));
   if (step.table) parts.push(staticTable(step.table));
   if (step.grid) parts.push(gridTable(step.grid));
   if (step.note) parts.push(callout('note', md(step.note)));
@@ -805,7 +852,7 @@ function viewWelcome() {
     <section class="hero">
       <span class="eyebrow">${esc(C.meta.company)} · ServiceNow ${esc(C.meta.release)} · Software Asset Management Professional</span>
       <h1>Build SAM Professional, one stage at a time</h1>
-      <p class="lede">${esc(C.meta.subtitle)} Every step says where to click, what you should see and what to write down. Your ticks stay in this browser.</p>
+      <p class="lede">${esc(C.meta.subtitle)} Every step says what it does, where to click, what to type, what you should see and what to write down. Your ticks stay in this browser.</p>
     </section>
     ${storageBanner()}
     <div class="next-card">
@@ -932,13 +979,13 @@ function factsRows() {
   Object.keys(GRID_INDEX).forEach(id => {
     const { grid, step } = GRID_INDEX[id];
     const r = rateFor(grid);
-    if (r && r.filled) rows.push([`Northstar normalization (${r.label.toLowerCase()})`, `${r.good} of ${r.total}`, `Step ${step.num}`]);
+    if (r && r.filled) rows.push([grid.rate.fact || `Northstar normalization (${r.label.toLowerCase()})`, `${r.good} of ${r.total}`, `Step ${step.num}`]);
   });
   return rows;
 }
 function gridMarkdown(grid) {
   const vals = gridValues(grid.id);
-  const cols = grid.columns;
+  const cols = grid.columns.filter(c => c.type !== 'link');
   const head = `| ${[grid.rowLabel || 'Item'].concat(cols.map(c => c.label)).map(mdCell).join(' | ')} |`;
   const sep = `| ${['---'].concat(cols.map(() => '---')).join(' | ')} |`;
   const body = grid.rows.map(r => `| ${[r.label].concat(cols.map(c => {
@@ -1072,6 +1119,7 @@ function resultsMd() {
     const got = v.position ? `${v.owned || '?'} owned, ${v.used || '?'} used, ${v.position}` : 'not recorded yet';
     lines.push(`| ${id} ${mdCell(s.product)} | ${mdCell(got)} |`);
   });
+  lines.push(`| SQL Server shortage: price shown to buy the missing cores (EUR) | ${mdCell(rec('remediation_price'))} |`);
   lines.push(`| Project removal candidates | ${mdCell(rec('candidates'))} |`);
   lines.push(`| Potential savings shown (EUR) | ${mdCell(rec('savings'))} |`);
   const vt = gridValues('visitor_tests');
@@ -1266,24 +1314,33 @@ function viewFiles() {
   }).join('');
   return `
     <section class="hero"><span class="eyebrow">Toolbox</span><h1>Northstar files</h1>
-      <p class="lede">The invented company, as spreadsheet files. The scripts already contain this data, so you only need these files to look at the data, for the optional import exercise in step 2.9, or to hand them to someone else. Everything here is synthetic.</p></section>
+      <p class="lede">The invented company, as spreadsheet files. The scripts already contain this data, so you only need these files to look at the data, for the optional import exercise in ${stepNo('s2-9')}, or to hand them to someone else. Everything here is synthetic.</p></section>
     <div class="actions"><button type="button" class="btn primary" data-action="download-all-files">${icon('download')} Download all files as a zip</button></div>
     ${cards}`;
 }
 function viewScripts() {
-  const order = ['01_load_northstar.js', '02_allocate_licenses.js', '03_load_usage.js', '00_install_workspace.js'];
-  const cards = order.map(name => `<div class="panel">
-      <div class="row" style="justify-content:space-between"><span class="row"><strong>${esc(SCRIPT_INFO[name].what)}</strong></span><span class="pill where">${esc(SCRIPT_INFO[name].when)}</span></div>
+  const cards = SCRIPT_ORDER.map(name => `<div class="panel">
+      <div class="row" style="justify-content:space-between"><span class="row"><strong>${esc(SCRIPT_INFO[name].what)}</strong></span><span class="pill where">${esc(scriptWhen(name))}</span></div>
       ${scriptBox(name)}</div>`).join('');
   return `
     <section class="hero"><span class="eyebrow">Toolbox</span><h1>ServiceNow scripts</h1>
-      <p class="lede">These scripts do the repetitive work in seconds. They only create or update Northstar records, and you can run each one again without making duplicates.</p></section>
+      <p class="lede">These scripts do the repetitive work in seconds. They only create, update or read Northstar records, never delete anything, and you can run each one again without making duplicates.</p></section>
     <div class="panel soft"><span class="eyebrow">How to run a script</span>
       <ol class="do"><li>In your instance click <strong>All</strong> and type <strong>Scripts - Background</strong>. Open it.</li>
       <li>Click <strong>Copy script</strong> here, click into the big box there and paste.</li>
       <li>Keep the scope <strong>global</strong> and click <strong>Run script</strong>. Read the result lines and copy them into the guide.</li>
-      <li>A security message? Profile picture, <strong>Elevate role</strong>, tick <strong>security_admin</strong>, Update, and try again.</li></ol></div>
+      <li>A security message? Your picture (top right), <strong>Elevate role</strong>, tick <strong>security_admin</strong>, <strong>Update</strong>, and try again.</li></ol></div>
     ${cards}`;
+}
+function viewMoves() {
+  const M = C.moves;
+  const card = m => `<div class="panel"><h2>${esc(m.title)}</h2><ol class="do">${m.how.map(h => `<li>${md(h)}</li>`).join('')}</ol>${m.tip ? callout('note', md(m.tip)) : ''}</div>`;
+  return `
+    <section class="hero"><span class="eyebrow">Toolbox</span><h1>Moving around ServiceNow</h1>
+      <p class="lede">${md(M.intro)}</p></section>
+    <div class="moves">${M.moves.map(card).join('')}</div>
+    <div class="panel soft"><span class="eyebrow">Four more things you will meet</span>
+      <dl class="glossary-list">${M.extras.map(x => `<dt>${esc(x.title)}</dt><dd>${md(x.text)}</dd>`).join('')}</dl></div>`;
 }
 let backupFiles = [];
 function viewBackup() {
@@ -1293,8 +1350,8 @@ function viewBackup() {
       rows: backupFiles.map(f => ({ name: '`' + f.name + '`', size: String(f.bytes.length), hash: f.hash ? '`' + f.hash.slice(0, 16) + '…`' : 'calculating' })) })
     : '<p class="muted">No files added yet.</p>';
   return `
-    <section class="hero"><span class="eyebrow">Toolbox · Stage 6, step 6.8</span><h1>Backup pack</h1>
-      <p class="lede">Drop the XML files you exported in steps 6.6 and 6.7. The guide adds a manifest and checksums and gives you one zip for the repository's exports folder. The files never leave your computer.</p></section>
+    <section class="hero"><span class="eyebrow">Toolbox · Stage 6, ${stepNo('s6-8')}</span><h1>Backup pack</h1>
+      <p class="lede">Drop the XML files you exported in ${stepNo('s6-6')} and ${stepNo('s6-7')}. The guide adds a manifest and checksums and gives you one zip for the repository's exports folder. The files never leave your computer.</p></section>
     <label class="dropzone" id="dropzone" for="backup-input">${icon('upload')}<strong>Drop XML files here, or click to choose them</strong><span class="muted small">Update sets and record exports (.xml)</span>
       <input type="file" id="backup-input" multiple accept=".xml,.csv,.json,.txt" hidden></label>
     <div class="panel"><div class="row" style="justify-content:space-between"><h2>Files in the pack</h2>${backupFiles.length ? `<button type="button" class="btn small" data-action="clear-backup">${icon('x')} Clear</button>` : ''}</div>${list}
@@ -1315,6 +1372,7 @@ function viewGlossary() {
 }
 function viewHelp() {
   const items = [
+    ['I do not know how to do something basic in ServiceNow', 'Open Moving around ServiceNow in the Toolbox. It explains the six moves every step uses: find a page, open a page from this guide, read a list, filter or group it, fill in a record, and save.'],
     ['I cannot find a menu or page', 'Click All (top left in ServiceNow) and type the name into the search box. You can also type a table name followed by .list, for example alm_license.list, and press Enter. Menu labels can differ slightly between patch levels; look for the same idea.'],
     ['The instance does not open', 'It is probably asleep. Sign in to developer.servicenow.com and wake it. Waking takes 3 to 5 minutes, at most 20.'],
     ['Something looks different from the guide', 'Carry on with the same idea, and write the difference in the notes of the session report. The next update of the guide fixes it.'],
@@ -1352,7 +1410,7 @@ function render() {
   const m = /^stage-(\d+)$/.exec(hash);
   if (m && STAGES[Number(m[1])]) { currentView = hash; html = viewStage(STAGES[Number(m[1])]); }
   else {
-    const views = { welcome: viewWelcome, basics: viewBasics, report: viewReport, files: viewFiles, scripts: viewScripts, backup: viewBackup, glossary: viewGlossary, help: viewHelp, progress: viewProgress };
+    const views = { welcome: viewWelcome, basics: viewBasics, moves: viewMoves, report: viewReport, files: viewFiles, scripts: viewScripts, backup: viewBackup, glossary: viewGlossary, help: viewHelp, progress: viewProgress };
     currentView = views[hash] ? hash : 'welcome';
     html = views[currentView]();
   }
@@ -1438,10 +1496,11 @@ async function downloadBackup() {
     '## Restore sequence', '',
     '1. Request a Zurich instance and activate SAM Professional with demo data (guide Stages 0 and 1).',
     '2. Import each update set: All, Retrieved Update Sets, Import Update Set from XML; then Preview and Commit, in S1 to S6 order.',
-    '3. Run the Northstar loader script (guide Stage 2, step 2.3).',
-    '4. Import the record exports (software models, entitlements, reclamation rule): open the list, right-click a column heading, Import XML.',
-    '5. Publish the entitlements, run the allocation and usage scripts, run the license check (guide Stages 4 and 5).',
-    '6. Recreate the visitor and repeat the visitor tests (guide Stage 6).', '',
+    `3. Run the Northstar loader script (guide Stage 2, ${stepNo('s2-3')}).`,
+    `4. Clean the 8 software names again (guide Stage 3, ${stepNo('s3-2')} to ${stepNo('s3-5')}). Cleaned names are data and are not in this backup.`,
+    '5. Import the record exports (software models, entitlements, reclamation rule): open the list, right-click a column heading, Import XML.',
+    '6. Check that the five entitlements are In use, run the allocation and usage scripts, run the license check (guide Stages 4 and 5).',
+    '7. Recreate the visitor and repeat the visitor tests (guide Stage 6).', '',
     '## Notes', '', notes || 'None.', '',
   ].join('\n');
   const manifestBytes = enc.encode(manifest);

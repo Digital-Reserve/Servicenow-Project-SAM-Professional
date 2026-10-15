@@ -69,8 +69,18 @@ def script_data() -> dict[str, object]:
         "installs": [[i["installed_on"], product_index[(i["display_name"], i["publisher"], i["version"])], i["install_date"]]
                      for i in installs],
     }
-    allocations = [{k: a[k] for k in ("entitlement_po", "entitlement", "allocated_to_type", "allocated_to", "quantity")}
-                   for a in read_csv("10_allocations.csv")]
+    rows = read_csv("10_allocations.csv")
+    product_of = {m["scenario"]: m["product"] for m in read_csv("08_software_models.csv")}
+    entitlements = []
+    for e in read_csv("09_entitlements.csv"):
+        types = {a["allocated_to_type"] for a in rows if a["entitlement_tag"] == e["asset_tag"]}
+        if types:
+            entitlements.append({"tag": e["asset_tag"], "invoice": e["invoice_number"],
+                                 "keyword": product_of[e["scenario"]], "type": types.pop()})
+    allocations = {
+        "entitlements": entitlements,
+        "allocations": [{k: a[k] for k in ("entitlement_tag", "allocated_to_type", "allocated_to", "quantity")} for a in rows],
+    }
     usage = [{k: u[k] for k in ("ci", "user", "display_name", "publisher", "product", "last_used", "minutes_used")}
              for u in read_csv("11_software_usage.csv")]
     return {
@@ -78,6 +88,7 @@ def script_data() -> dict[str, object]:
         "01_load_northstar.js": loader,
         "02_allocate_licenses.js": allocations,
         "03_load_usage.js": usage,
+        "04_show_normalization.js": None,
     }
 
 
@@ -134,6 +145,13 @@ def build_markdown(content: dict) -> str:
     ]
     for st in content["stages"]:
         lines.append(f"| {st['number']} | {st['title']} | {st['time']} |")
+    moves = content.get("moves")
+    if moves:
+        lines += ["", "## Moving around ServiceNow", "", md_inline(moves["intro"]), ""]
+        for m in moves["moves"]:
+            lines += [f"### {m['title']}", ""] + [f"- {md_inline(h)}" for h in m["how"]]
+            lines += ([f"", f"Tip: {md_inline(m['tip'])}"] if m.get("tip") else []) + [""]
+        lines += ["### Four more things you will meet", ""] + [f"- **{x['title']}:** {md_inline(x['text'])}" for x in moves["extras"]] + [""]
     for st in content["stages"]:
         lines += ["", f"## Stage {st['number']}: {st['title']}", "", f"**Time:** {st['time']}", "",
                   f"**Goal:** {md_inline(st['goal'])}", "", f"**Why it matters:** {md_inline(st['why'])}", ""]
@@ -144,6 +162,8 @@ def build_markdown(content: dict) -> str:
             lines += [f"### Step {step['num']}: {md_inline(step['title'])}{tag}", ""]
             if step.get("where"):
                 lines += [f"*Where:* {step['where']}", ""]
+            if step.get("what"):
+                lines += [f"**What this step does:** {md_inline(step['what'])}", ""]
             for i, line in enumerate(step.get("do", []), 1):
                 lines.append(f"{i}. {md_inline(line)}")
             if step.get("do"):
@@ -157,12 +177,18 @@ def build_markdown(content: dict) -> str:
             for link in step.get("links", []):
                 if link.get("url"):
                     lines.append(f"- {link['label']}: <{link['url']}>")
+                elif link.get("view"):
+                    lines.append(f"- {link['label']}: in the guide app")
                 else:
                     lines.append(f"- {link['label']}: open `{link['path']}` on your instance")
             if step.get("links"):
                 lines.append("")
             if step.get("script"):
                 lines += [f"Script: `data/northstar/servicenow/{step['script']}` (copy it from the app or open the file).", ""]
+            for f in step.get("form", []):
+                lines += [f"**{f.get('title', 'Fill in')}**", ""]
+                lines += md_table([{"key": "field", "label": "Field"}, {"key": "value", "label": "What to enter"},
+                                   {"key": "note", "label": "Note"}], f["rows"]) + [""]
             if step.get("table"):
                 lines += md_table(step["table"]["columns"], step["table"]["rows"]) + [""]
             if step.get("grid"):
@@ -173,7 +199,10 @@ def build_markdown(content: dict) -> str:
                 for r in g["rows"]:
                     row = {"label": r["label"]}
                     for c in g["columns"]:
-                        row[c["key"]] = r.get(c["key"], "") if c.get("fixed") else "(record in app)"
+                        if c.get("type") == "link":
+                            row[c["key"]] = f"`{r.get(c['key'], '')}`"
+                        else:
+                            row[c["key"]] = r.get(c["key"], "") if c.get("fixed") else "(record in app)"
                     rows.append(row)
                 lines += md_table(cols, rows) + [""]
             if step.get("note"):
@@ -236,7 +265,7 @@ def validate(content: dict) -> None:
     seen = set()
     for st in content["stages"]:
         for step in st["steps"]:
-            for key in ("id", "num", "title"):
+            for key in ("id", "num", "title", "what"):
                 if key not in step:
                     raise SystemExit(f"stage {st['id']}: a step has no {key}")
             if step["id"] in seen:
@@ -249,7 +278,7 @@ def validate(content: dict) -> None:
                 raise SystemExit(f"duplicate check id {chk['id']}")
             seen.add(chk["id"])
     terms = {g["term"].lower() for g in content["glossary"]}
-    blob = json.dumps(content["stages"]) + json.dumps(content.get("basics", {}))
+    blob = json.dumps(content["stages"]) + json.dumps(content.get("basics", {})) + json.dumps(content.get("moves", {}))
     for m in INLINE_TERM.finditer(blob):
         if m.group(1).lower() not in terms:
             raise SystemExit(f"glossary term missing: {m.group(1)}")

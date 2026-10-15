@@ -2,7 +2,7 @@
   "meta": {
     "title": "SAM Pro Build Guide",
     "subtitle": "Build ServiceNow Software Asset Management Professional on a free Zurich sandbox, one stage at a time.",
-    "version": "1.0",
+    "version": "1.1",
     "updated": "2026-10-15",
     "release": "Zurich",
     "company": "Northstar Manufacturing"
@@ -105,6 +105,85 @@
       }
     ]
   },
+  "moves": {
+    "intro": "Six moves cover almost everything this guide asks you to do in ServiceNow. Learn them once in step 1.2; come back here whenever a step feels unclear.",
+    "moves": [
+      {
+        "title": "1. Find a page with the All menu",
+        "how": [
+          "Click **All** at the top left.",
+          "Type a few letters in the filter box, for example **update sets**.",
+          "Click the matching item in the results."
+        ],
+        "tip": "Type a list name such as **cmdb_ci_computer.list** and press Enter to open that list directly."
+      },
+      {
+        "title": "2. Open a page from this guide",
+        "how": [
+          "Click a green **Open** button in a step. It opens the exact list or form in a new tab, already filtered to Northstar records.",
+          "The buttons need the instance address from step 0.5. Without it they show a name to copy into the All menu instead."
+        ],
+        "tip": "Leave the guide open in one browser tab and the instance in another."
+      },
+      {
+        "title": "3. Read a list",
+        "how": [
+          "One row is one record.",
+          "The count is at the bottom right, for example **1 to 20 of 248**: 248 rows in total.",
+          "Click a column heading to sort by it."
+        ],
+        "tip": "A column you need is missing: right-click a column heading, choose **Configure**, **List Layout**, move the field to the right side and click **Save**."
+      },
+      {
+        "title": "4. Filter or group a list",
+        "how": [
+          "Filter: click the funnel icon at the top left of the list. Choose a field, a condition and a value, and click **Run**.",
+          "Group: right-click a column heading and choose **Group By**.",
+          "Undo both: click **All** in the grey line above the list."
+        ],
+        "tip": "The grey line above the list always shows which filter is active."
+      },
+      {
+        "title": "5. Open and fill in a record",
+        "how": [
+          "Click the blue text in the first column to open a record. Its form opens.",
+          "A red star marks a required field.",
+          "A field with a magnifier icon points to another record: type the first letters and pick from the list that appears.",
+          "A small **(i)** button next to such a field shows that record; click **Open Record** to go there.",
+          "Tabs below the fields (such as **General** or **Financial**) and lists at the bottom (such as **Roles**) hold more fields and linked records."
+        ],
+        "tip": "Grey fields cannot be changed. The system fills them in."
+      },
+      {
+        "title": "6. Save, or leave without saving",
+        "how": [
+          "New record: **Submit** saves it and goes back to the list.",
+          "Existing record: **Update** saves it and goes back.",
+          "Save and stay on the form: right-click the grey header bar of the form and choose **Save**.",
+          "Leave without saving: click the back arrow at the top left of the form."
+        ],
+        "tip": "In the Software Asset Workspace the buttons are simply called **Save**, and **Publish** for entitlements."
+      }
+    ],
+    "extras": [
+      {
+        "title": "Scripts - Background",
+        "text": "A page where an admin pastes a script and clicks **Run script**. This guide uses it for 5 scripts. Each script says at the top what it does, and none of them deletes anything."
+      },
+      {
+        "title": "Elevate role",
+        "text": "Some pages need a temporary extra permission. Click your picture (top right), **Elevate role**, tick **security_admin** and click **Update**. It lasts until you sign out."
+      },
+      {
+        "title": "Execute Now",
+        "text": "Scheduled jobs normally run at night or once a week. Open the job and click **Execute Now** to start it at once. It runs in the background; check its result in the list the step names."
+      },
+      {
+        "title": "Update sets",
+        "text": "The globe icon in the top bar shows which update set records your changes. Each stage starts its own."
+      }
+    ]
+  },
   "stories": [
     {
       "scenario": "A",
@@ -158,6 +237,10 @@
       "plain": "Assigning a license to a specific person or computer."
     },
     {
+      "term": "Asset tag",
+      "plain": "A short label that identifies one record. Our five purchases are tagged NSM-ENT-A to NSM-ENT-E, so scripts, reports and backups can find them."
+    },
+    {
       "term": "Background script",
       "plain": "A page (Scripts - Background) where an admin pastes a script and runs it once."
     },
@@ -183,11 +266,15 @@
     },
     {
       "term": "Discovery map",
-      "plain": "The rule that connects found installations to a software model. Without it the model counts nothing."
+      "plain": "The rule that connects found installations to a software model. On the model it shows as the tab Matching Discovery Models. A model without a match counts nothing."
     },
     {
       "term": "Discovery model",
       "plain": "One record for each unique combination of publisher, program name and version found on computers."
+    },
+    {
+      "term": "Elevate role",
+      "plain": "Switching on an extra admin permission, security_admin, for the current session. Some pages, such as Scripts - Background, need it."
     },
     {
       "term": "Entitlement",
@@ -223,7 +310,7 @@
     },
     {
       "term": "Normalization status",
-      "plain": "How well a discovery model was cleaned: Normalized, Partially normalized, Publisher normalized, Match not found or Manually normalized."
+      "plain": "How well a discovery model was cleaned: Normalized, Partially Normalized, Publisher Normalized, Match Not Found, Manually Normalized or New. Normalized and Manually Normalized count as clean."
     },
     {
       "term": "Northstar Manufacturing",
@@ -240,6 +327,14 @@
     {
       "term": "Plugin",
       "plain": "A package of features that you switch on in an instance. SAM Professional is a set of plugins."
+    },
+    {
+      "term": "Product type",
+      "plain": "Says whether software needs a license. Only software with product type Licensable is counted in the license check."
+    },
+    {
+      "term": "Publish",
+      "plain": "The button that switches on an entitlement. It changes the State from Build to In use; the license check ignores entitlements in Build."
     },
     {
       "term": "Publisher pack",
@@ -299,7 +394,7 @@
     },
     {
       "term": "Software model",
-      "plain": "The product as we manage it for licensing, for example Microsoft Visio 2021 Professional."
+      "plain": "The product as we manage it for licensing, for example Microsoft Visio Professional. It collects the matching installations."
     },
     {
       "term": "Software usage",
@@ -312,6 +407,10 @@
     {
       "term": "True-up",
       "plain": "Paying the vendor for use above what you bought, often after an audit."
+    },
+    {
+      "term": "Unit cost",
+      "plain": "The price of one right: one user, one device or one processor core. ServiceNow multiplies it by the number of rights to show money."
     },
     {
       "term": "Update set",
@@ -337,9 +436,12 @@
           "num": "0.1",
           "title": "Sign in to the ServiceNow Developer Site",
           "where": "Developer Site",
+          "what": "Gets you into the [[Developer Site]], the free ServiceNow website where the sandbox is requested and managed.",
           "do": [
-            "Open the Developer Site with the button below.",
-            "Click **Sign In**. No account yet? Click **Sign Up**, fill in the form and confirm the email you receive."
+            "Click **Open the Developer Site** below. It opens developer.servicenow.com in a new tab.",
+            "Click **Sign In** at the top right.",
+            "Type your email address and click **Next**. Type your password and click **Sign In**.",
+            "No account yet: click **Sign Up** instead, fill in the form, open the email you receive and click its link. Then sign in."
           ],
           "links": [
             {
@@ -349,7 +451,8 @@
           ],
           "see": "You are signed in. Your name or picture shows at the top right.",
           "help": [
-            "The site shows an error or says it is busy: wait a few minutes and reload. The site had outages in 2026."
+            "The site shows an error or says it is busy: wait a few minutes and reload. The site had outages in 2026.",
+            "You forgot your password: click **Forgot password** on the sign-in page and follow the email."
           ]
         },
         {
@@ -357,10 +460,13 @@
           "num": "0.2",
           "title": "Check whether you already have an instance",
           "where": "Developer Site",
+          "what": "Each account can have only one instance. This step checks whether you already have one, so you never delete it by accident.",
           "do": [
-            "Open your profile menu (top right) and look for **Manage my instance**, or look at the home page.",
-            "If an instance is listed, note its release. If it is Zurich, go straight to step 0.5.",
-            "If it is another release and nothing in it matters to you, release it with **Release instance**. Releasing deletes everything in it."
+            "Look at the Developer Site home page. An existing instance shows as a card with its name (like dev123456) and its release.",
+            "Not on the home page: click your picture (top right) and look for **Manage instance** or **My instance**.",
+            "You have a **Zurich** instance: go straight to step 0.5.",
+            "You have an instance on another release and nothing in it matters to you: choose **Release instance** in its menu. Releasing deletes everything in it. Then go to step 0.3.",
+            "You have no instance: go to step 0.3."
           ],
           "see": "You know whether you already have an instance, and on which release."
         },
@@ -369,12 +475,16 @@
           "num": "0.3",
           "title": "Request a Zurich instance",
           "where": "Developer Site",
+          "what": "Asks ServiceNow for a free instance on Zurich, the release this guide is written for.",
           "do": [
-            "Click **Request Instance**.",
-            "Choose **Zurich** in the list of releases. Do not choose Australia (the current release) or Brazil (the newest, still in early access).",
-            "Click **Request**."
+            "Click **Request Instance** at the top right of the Developer Site.",
+            "In the list of releases, click **Zurich**. Do not choose Australia (newer) or Brazil (newest, still in early access).",
+            "Click **Request**.",
+            "Stay on the page. Most requests finish within a few minutes, and a box then shows the instance details. Go to step 0.5.",
+            "If the site says you are on a waitlist, stay on it and do step 0.4 while you wait. ServiceNow sends an email when the instance is ready.",
+            "Write the release and today's date in the box below."
           ],
-          "see": "A message that your instance is being prepared (usually a few minutes), or that you are on a waitlist.",
+          "see": "A box with the instance address, the user name **admin** and a password, or a message that you are on the waitlist.",
           "help": [
             "\"We were unable to assign an instance to you\": sign out, go back to the Developer Site home page, sign in and try again.",
             "On a waitlist: stay on it. Leaving and joining again puts you at the end. Waits of several days were common in 2026.",
@@ -394,10 +504,22 @@
           "title": "While you wait: learn and prepare",
           "where": "This guide",
           "optional": true,
+          "what": "Uses the waiting time to learn what SAM is and what we are going to build.",
           "do": [
-            "Read **Basics** in this guide (five minutes) and files 01 to 05 in the repository's docs folder.",
-            "Open **Northstar files** to see the invented company we will build.",
+            "Click **Basics in 5 minutes** in the menu on the left and read it.",
+            "Read files 01 to 05 in the repository's docs folder.",
+            "Open **Northstar files** in the Toolbox and look at the invented company we will build.",
             "Come back when the email says your instance is ready."
+          ],
+          "links": [
+            {
+              "label": "Open Basics",
+              "view": "basics"
+            },
+            {
+              "label": "Open Northstar files",
+              "view": "files"
+            }
           ],
           "see": "You can explain the five stories in your own words."
         },
@@ -406,10 +528,13 @@
           "num": "0.5",
           "title": "Save the instance details",
           "where": "Developer Site",
+          "what": "Keeps the sign-in details safe, and gives this guide the instance address so its **Open** buttons go straight to the right ServiceNow pages.",
           "do": [
-            "When the instance is ready, the Developer Site shows its address (like https://dev123456.service-now.com), the user name **admin** and a password.",
-            "Put the password in your password manager. Never type it into this guide, a chat or the repository.",
-            "Type the instance address below. The guide uses it to open the right ServiceNow pages for you."
+            "On the Developer Site, find the instance details: **Instance URL** (like https://dev123456.service-now.com), **Username** (admin) and **Password**.",
+            "The details box is gone: click your picture (top right) and choose **Manage instance password**. The label can differ slightly.",
+            "Save the address, the user name **admin** and the password in your password manager. Never type the password into this guide, a chat or the repository.",
+            "Copy the instance address and paste it into **Instance address** below.",
+            "Type the initials of the sandbox owner below."
           ],
           "record": [
             {
@@ -426,7 +551,7 @@
               "fact": true
             }
           ],
-          "see": "The address is saved, and the green Open buttons in later steps work.",
+          "see": "The hint under the address says which address the Open buttons use, and the buttons in later steps say **Open**.",
           "shot": "S0_01_developer_site_instance.png"
         },
         {
@@ -434,9 +559,13 @@
           "num": "0.6",
           "title": "Sign in and check that it is Zurich",
           "where": "Your instance",
+          "what": "Proves that the instance works and that it runs Zurich.",
           "do": [
-            "Click **Open stats page** and sign in as **admin** with the password from your password manager.",
-            "Find the line **Build name**."
+            "Click **Open stats page** below. The ServiceNow sign-in page opens.",
+            "Type **admin** as user name and the password from your password manager. Click **Log in**.",
+            "If ServiceNow asks you to choose a new password, do it and update your password manager.",
+            "The stats page shows many technical lines. Find the line **Build name**.",
+            "Type what it says into **Build name** below."
           ],
           "links": [
             {
@@ -446,8 +575,8 @@
           ],
           "see": "**Build name: Zurich**",
           "help": [
-            "Another release: stop here. Release the instance and request Zurich, or follow **Zurich is not offered** under Troubleshooting.",
-            "The page says the instance is asleep: wake it on the Developer Site. Waking takes 3 to 5 minutes, at most 20."
+            "Another release: stop here. Release the instance and request Zurich (step 0.3), or follow **Zurich is not offered** under Troubleshooting.",
+            "The page says the instance is asleep: sign in to the Developer Site and wake it. Waking takes 3 to 5 minutes, at most 20."
           ],
           "record": [
             {
@@ -469,9 +598,11 @@
           "num": "0.7",
           "title": "Set the weekly reminder",
           "where": "Calendar",
+          "what": "Keeps the sandbox alive. The Developer Site deletes an instance when its owner has not signed in for 10 days.",
           "do": [
-            "Create a weekly calendar reminder for the sandbox owner: **Sign in to developer.servicenow.com**.",
-            "The Developer Site deletes an instance that nobody used for 10 days. Signing in also wakes a sleeping instance."
+            "Open the sandbox owner's calendar.",
+            "Create a meeting that repeats every week, for example every Monday at 09:00.",
+            "Paste the reminder text below as its title."
           ],
           "copy": [
             {
@@ -479,7 +610,8 @@
               "value": "Sign in to developer.servicenow.com (keeps the SAM sandbox alive)"
             }
           ],
-          "see": "The reminder is in the owner's calendar."
+          "note": "Signing in to the Developer Site also wakes an instance that went to sleep.",
+          "see": "The weekly reminder is in the owner's calendar."
         }
       ],
       "checks": [
@@ -507,7 +639,7 @@
         },
         {
           "problem": "Forgot the admin password",
-          "fix": "Developer Site, profile menu, Manage instance password. The label can differ slightly."
+          "fix": "Developer Site, your picture (top right), Manage instance password. The label can differ slightly."
         },
         {
           "problem": "Still on the waitlist after many days",
@@ -529,45 +661,20 @@
       ],
       "steps": [
         {
-          "id": "s1-1",
-          "num": "1.1",
-          "title": "Start the change log for this stage",
-          "where": "Your instance",
-          "do": [
-            "Open **Update sets** below and click **New**.",
-            "Name it **SAM Portfolio S1 Foundation** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
-          ],
-          "copy": [
-            {
-              "label": "Update set name",
-              "value": "SAM Portfolio S1 Foundation"
-            }
-          ],
-          "links": [
-            {
-              "label": "Update sets",
-              "path": "sys_update_set_list.do"
-            }
-          ],
-          "note": "An [[update set]] records our configuration changes so we can export them as a backup in Stage 6. Every stage gets its own.",
-          "see": "**SAM Portfolio S1 Foundation** shows State **In progress** and is your current update set.",
-          "help": [
-            "To always see the current update set: profile picture (top right), **Preferences**, **Developer**, switch on the update set picker."
-          ]
-        },
-        {
           "id": "s1-2",
-          "num": "1.2",
+          "num": "1.1",
           "title": "Start the SAM Professional installation",
           "where": "Developer Site",
           "timer": true,
           "wait": "1 to 2 hours",
+          "what": "Switches on [[SAM Professional]] and its [[demo data]] in your instance. The Developer Site does the work; it runs by itself for 1 to 2 hours.",
           "do": [
-            "On the Developer Site open your profile menu (top right) and choose **Activate Plugin**. On some versions it sits on the **Manage my instance** page.",
-            "Search for **Software Asset Management Professional**.",
-            "Click **Activate** and choose the option **with demo data**. Confirm.",
-            "Click **Start timer**. Do not change anything in the instance while it installs."
+            "Click **Open the Developer Site** below and check that you are signed in.",
+            "Click your picture (top right) and choose **Activate Plugin**. On some versions it is on the **Manage instance** page.",
+            "In the search box, type **Software Asset Management Professional**.",
+            "Click **Activate** next to it and choose the option **with demo data**. Confirm.",
+            "Click **Start timer** below. Do not change anything in the instance while it installs. Looking around is fine.",
+            "Write each attempt and its time in the box below."
           ],
           "copy": [
             {
@@ -581,9 +688,9 @@
               "url": "https://developer.servicenow.com"
             }
           ],
-          "see": "A message that the activation has started. Later the Developer Site shows it as complete.",
+          "see": "A message that the activation has started. Later the Developer Site shows it as complete, and you usually receive an email.",
           "help": [
-            "It failed: try once more. Failed again: use **Activation keeps failing** under Troubleshooting.",
+            "It failed: try once more. Failed again: follow **Activation keeps failing** under Troubleshooting.",
             "Only an option without demo data: use it. Our own data arrives in Stage 2.",
             "Not in the list: search for **Software Asset** and write down what you see."
           ],
@@ -596,26 +703,106 @@
           ]
         },
         {
+          "id": "s1-moves",
+          "num": "1.2",
+          "title": "Learn the six moves in ServiceNow",
+          "where": "Your instance",
+          "what": "Teaches the six moves you make on almost every ServiceNow page: find a page, open one from this guide, read a list, filter or group it, open a record, and save or leave it. It takes about 10 minutes and only looks, so it is safe while the installation runs.",
+          "do": [
+            "Open **Moving around ServiceNow** below. It explains the same six moves in a few lines. Keep it open next to the instance.",
+            "**Move 1, find a page.** In the instance click **All** (top left) and type **users**. Click **Users** in the results. The user list opens.",
+            "**Move 2, open a page from this guide.** Click the **Users** button below. The same list opens in a new tab. Close that tab again.",
+            "**Move 3, read a list.** Look at the bottom right of the list. It says something like **1 to 20 of 600**: 600 rows in total.",
+            "**Move 4, filter or group.** Right-click the column heading **Department** and choose **Group By Department**. Click **All** in the grey line above the list to undo it. Then click the funnel icon at the top left, choose **First name**, keep **is**, type **Abel** and click **Run**. One row remains: Abel Tuter.",
+            "**Move 5, open a record.** Click **Abel Tuter**. The user form opens. Look at the fields, then scroll down to the tabs at the bottom, such as **Roles**.",
+            "**Move 6, save or leave.** Do not save anything now. Click the back arrow at the top left of the form to leave without saving."
+          ],
+          "links": [
+            {
+              "label": "Moving around ServiceNow",
+              "view": "moves"
+            },
+            {
+              "label": "Users",
+              "path": "sys_user_list.do"
+            }
+          ],
+          "note": "Saving works in two ways: **Submit** saves a new record and **Update** saves a changed one; both take you back to the list. Moving around ServiceNow also explains how to save and stay on the form.",
+          "see": "You can find a page, read a count, group, filter, open a record and leave it without saving.",
+          "help": [
+            "No Abel Tuter: the demo users are missing. Try any other first name from the list."
+          ]
+        },
+        {
           "id": "s1-3",
           "num": "1.3",
           "title": "While it installs: read the basics",
           "where": "This guide",
           "optional": true,
+          "what": "Uses the waiting time to learn the words the next stages use.",
           "do": [
-            "Open **Basics** and read the five-minute explanation.",
-            "Open **Northstar files** and look at the people, computers and software we load in Stage 2."
+            "Click **Basics in 5 minutes** in the menu on the left and read it.",
+            "Open **Northstar files** in the Toolbox and look at the people, computers and software we load in Stage 2."
+          ],
+          "links": [
+            {
+              "label": "Open Basics",
+              "view": "basics"
+            },
+            {
+              "label": "Open Northstar files",
+              "view": "files"
+            }
           ],
           "see": "You can explain installation, entitlement and reconciliation in one sentence each."
         },
         {
-          "id": "s1-4",
+          "id": "s1-1",
           "num": "1.4",
+          "title": "Start the change log for this stage",
+          "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
+          "do": [
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
+          ],
+          "form": [
+            {
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S1 Foundation"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Update sets",
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
+            }
+          ],
+          "see": "The list shows **SAM Portfolio S1 Foundation** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ],
+          "note": "Every stage from now on starts with its own update set. The data we load with scripts is not in update sets; the scripts in this guide can load it again at any time."
+        },
+        {
+          "id": "s1-4",
+          "num": "1.5",
           "title": "Check the installed parts",
           "where": "Your instance",
+          "what": "Confirms that the installation finished and records exactly which SAM parts and versions we have.",
           "do": [
-            "When the installation is complete, sign in to the instance again.",
-            "Click **Plugin list**. It shows the plugins whose ID contains samp.",
-            "Write down the IDs and versions."
+            "Wait until the Developer Site says the activation is complete. Then sign in to the instance again.",
+            "Click **Plugin list** below. It lists the [[plugin|plugins]] whose ID contains samp.",
+            "Check that they show as active.",
+            "Copy the **ID** and **Version** of each row into the box below, one per line."
           ],
           "links": [
             {
@@ -625,7 +812,7 @@
           ],
           "see": "Several active plugins, for example **com.snc.samp**.",
           "help": [
-            "The list is empty or not filtered: in the list's search box choose **ID**, type ***samp** and press Enter."
+            "The list is empty or not filtered: in the search box above the list, choose **ID**, type ***samp** and press Enter."
           ],
           "record": [
             {
@@ -639,12 +826,14 @@
         },
         {
           "id": "s1-5",
-          "num": "1.5",
+          "num": "1.6",
           "title": "Check the SAM tables",
           "where": "Your instance",
+          "what": "Makes sure the six main SAM lists exist and open without errors, and records how many sample rows they hold.",
           "do": [
-            "Open each list with its button. Every list must open without an error.",
-            "Write the number of rows of the first four in the table. The count shows above or below the list."
+            "Click each button below. Each opens one list in a new tab.",
+            "Each list must open without an error message.",
+            "For the first four lists, read the count at the bottom right (for example **1 to 20 of 1,240**) and type the total in the table."
           ],
           "links": [
             {
@@ -704,18 +893,20 @@
           },
           "see": "Every list opens. With demo data the first four show rows. The last two may be empty.",
           "help": [
-            "\"Invalid table\" on one of the first four: the installation is not finished or failed. Go back to step 1.2."
+            "\"Invalid table\" on one of the first four: the installation is not finished or failed. Go back to step 1.1."
           ],
           "shot": "S1_02_tables.png"
         },
         {
           "id": "s1-6",
-          "num": "1.6",
+          "num": "1.7",
           "title": "Check the SAM roles and automatic jobs",
           "where": "Your instance",
+          "what": "Confirms the SAM permissions exist and finds the automatic jobs we start by hand in later stages.",
           "do": [
-            "Open **Roles**. You should find **sam_user** and **sam_admin**.",
-            "Open **Scheduled jobs**. Write down the job names for normalization, reconciliation and reclamation candidates."
+            "Click **Roles** below. Find **sam_user** and **sam_admin** in the list.",
+            "Click **Scheduled jobs** below. It lists the jobs whose name starts with SAM.",
+            "Find the jobs for normalization, reconciliation and reclamation candidates, and copy their names into the box below."
           ],
           "links": [
             {
@@ -727,8 +918,8 @@
               "path": "sysauto_list.do?sysparm_query=nameSTARTSWITHSAM"
             }
           ],
-          "note": "A [[role]] is a set of permissions. A [[scheduled job]] is a task the system runs on its own; we will start some by hand.",
-          "see": "**sam_user** and **sam_admin** exist, and several jobs start with **SAM**.",
+          "note": "A [[role]] is a set of permissions. A [[scheduled job]] is a task the system runs on its own; we start some of them at once with **Execute Now**.",
+          "see": "**sam_user** and **sam_admin** exist, and several jobs start with **SAM**, such as **SAM - Software License Reconciliation**.",
           "record": [
             {
               "id": "jobs",
@@ -740,16 +931,25 @@
         },
         {
           "id": "s1-7",
-          "num": "1.7",
+          "num": "1.8",
           "title": "Open the Software Asset Workspace",
           "where": "Your instance",
+          "what": "Opens the [[Software Asset Workspace]], the modern screen where most SAM work and all results are shown.",
           "do": [
-            "Click **All** (top left) and type **Software Asset Workspace**. Click it.",
-            "Look around. The menu on the left has views such as **License usage** and **License operations**."
+            "Click **All** (top left) and type **Software Asset Workspace**.",
+            "Click **Software Asset Workspace** in the results. The workspace opens on the page **Software asset overview**.",
+            "Look at the menu on the left. It has views such as **License usage** and **License operations**. Click each one once.",
+            "Write in the box below whether it opened directly."
           ],
-          "see": "The [[Software Asset Workspace]] opens.",
+          "copy": [
+            {
+              "label": "All menu text",
+              "value": "Software Asset Workspace"
+            }
+          ],
+          "see": "The Software Asset Workspace opens and shows **License usage** and **License operations** in its menu.",
           "help": [
-            "It is not in the menu: this is a known sandbox issue with a known fix. Follow **Workspace is missing** under Troubleshooting, then come back."
+            "It is not in the All menu, or it opens an empty page: this is a known sandbox problem. Do step 1.9, then come back."
           ],
           "record": [
             {
@@ -761,12 +961,56 @@
           "shot": "S1_04_sam_workspace.png"
         },
         {
+          "id": "s1-wsfix",
+          "num": "1.9",
+          "title": "Only if the workspace is missing: install it",
+          "where": "Your instance",
+          "optional": true,
+          "what": "Fixes a known sandbox problem: SAM Professional sometimes arrives without its workspace. Skip this step when step 1.8 worked.",
+          "do": [
+            "Click **All** and type **All Available Applications**. Click **All** under it. The application manager opens.",
+            "In its search box type **Software Asset Management Guided Experiences**. Older name: **Software Asset Management Playbooks and Guided Setups**.",
+            "Click the result, click **Install** and confirm. It brings the workspace with it. Wait until it shows as installed, 10 to 30 minutes.",
+            "Not listed: search **Software Asset Workspace** instead and install it. If it already shows as installed, open it and click **Repair**.",
+            "Sign out, close the browser, sign in again and repeat step 1.8.",
+            "Still missing: copy the workspace installer script below, run it in **Scripts - Background**, wait 30 minutes and repeat step 1.8.",
+            "Still missing after two tries: work in the classic menus (All, Software Asset). Every step in this guide also names the classic way. Write the decision in tracker/decisions.md."
+          ],
+          "copy": [
+            {
+              "label": "Search text",
+              "value": "Software Asset Management Guided Experiences"
+            },
+            {
+              "label": "Or",
+              "value": "Software Asset Workspace"
+            }
+          ],
+          "script": "00_install_workspace.js",
+          "links": [
+            {
+              "label": "Scripts - Background",
+              "path": "sys.scripts.do"
+            }
+          ],
+          "see": "The Software Asset Workspace opens, or the classic-menu decision is written in tracker/decisions.md.",
+          "record": [
+            {
+              "id": "workspace_fix",
+              "label": "What you tried and what worked",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
           "id": "s1-8",
-          "num": "1.8",
+          "num": "1.10",
           "title": "Check for the Content Service",
           "where": "Your instance",
+          "what": "Records that the paid [[Content Service]] is not part of a sandbox. Stage 3 shows how we clean software names without it.",
           "do": [
-            "Click **Content Service setup**."
+            "Click **Content Service setup** below.",
+            "Write what you see in the box below."
           ],
           "links": [
             {
@@ -774,7 +1018,7 @@
               "path": "sn_samp_content_service_setup_list.do"
             }
           ],
-          "see": "On a sandbox this usually shows an error or an empty page. That is expected: the [[Content Service]] needs a paid license, and Stage 3 shows our way around it. If it opens, write that down.",
+          "see": "On a sandbox this usually shows an error or an empty page. That is expected. If it opens with settings, write that down.",
           "record": [
             {
               "id": "content_service",
@@ -786,13 +1030,14 @@
         },
         {
           "id": "s1-9",
-          "num": "1.9",
+          "num": "1.11",
           "title": "Take the before picture of normalization",
           "where": "Your instance",
+          "what": "Counts how clean the sample software names are before we start. This is the starting point for the case study.",
           "do": [
-            "Open **Discovery models**.",
+            "Click **Discovery models** below.",
             "Right-click the column heading **Normalization status** and choose **Group By Normalization status**.",
-            "Write down the count of each group."
+            "Copy each group name and its count into the box below."
           ],
           "links": [
             {
@@ -800,8 +1045,11 @@
               "path": "cmdb_sam_sw_discovery_model_list.do"
             }
           ],
-          "note": "[[Normalization]] cleans messy software names. This count is our starting point.",
-          "see": "Groups such as Normalized, Partially normalized, Publisher normalized and Match not found, each with a count.",
+          "note": "[[Normalization]] cleans messy software names into standard ones.",
+          "see": "Groups such as Normalized, Partially Normalized, Publisher Normalized and Match Not Found, each with a count.",
+          "help": [
+            "No column **Normalization status**: right-click any column heading, choose **Configure**, **List Layout**, move **Normalization status** to the right side and click **Save**."
+          ],
           "record": [
             {
               "id": "baseline_norm",
@@ -814,14 +1062,45 @@
         },
         {
           "id": "s1-10",
-          "num": "1.10",
+          "num": "1.12",
           "title": "Give each team member their own login",
           "where": "Your instance",
           "optional": true,
+          "what": "Lets every team member sign in with their own user, so nobody shares the admin password.",
           "do": [
-            "Open **Users**, click **New**, fill in **User ID**, **First name** and **Last name**, and click **Submit**.",
-            "Open the new user, go to **Roles**, click **Edit**, add **admin** and save.",
-            "Click **Set Password** and give the person their password privately."
+            "Click **Users** below, then **New**.",
+            "Fill in the form as shown in the table and click **Submit**.",
+            "Open the new user again. In the **Roles** tab at the bottom, click **Edit...**.",
+            "In the left box find **admin**, select it, click the arrow pointing right, then click **Save**.",
+            "Click **Set Password**, click **Generate**, copy the password, click **Save Password**. Give it to the person privately; they change it at first login."
+          ],
+          "form": [
+            {
+              "title": "New user",
+              "rows": [
+                {
+                  "field": "User ID",
+                  "value": "first.last",
+                  "note": "their own name, for example anna.devries",
+                  "copy": false
+                },
+                {
+                  "field": "First name",
+                  "value": "their first name",
+                  "copy": false
+                },
+                {
+                  "field": "Last name",
+                  "value": "their last name",
+                  "copy": false
+                },
+                {
+                  "field": "Password needs reset",
+                  "value": "ticked",
+                  "copy": false
+                }
+              ]
+            }
           ],
           "links": [
             {
@@ -829,7 +1108,7 @@
               "path": "sys_user_list.do"
             }
           ],
-          "see": "Each team member signs in with their own user, and nobody shares the admin password."
+          "see": "Each team member signs in with their own user."
         }
       ],
       "checks": [
@@ -857,11 +1136,11 @@
       "problems": [
         {
           "problem": "Activation keeps failing",
-          "fix": "1) Wait 30 minutes, then try again from the Developer Site. 2) In the instance open All, All Available Applications, All. Search Software Asset Management and install the basic application if it is offered, then try the Developer Site again. 3) Write down the exact error text and time in step 1.2. This order fixed repeated failures for others in 2025 and 2026."
+          "fix": "1) Wait 30 minutes, then try again from the Developer Site. 2) In the instance open All, All Available Applications, All. Search Software Asset Management and install the basic application if it is offered, then try the Developer Site again. 3) Write the exact error text and time in step 1.1. This order fixed repeated failures for others in 2025 and 2026."
         },
         {
           "problem": "Workspace is missing",
-          "fix": "1) All, All Available Applications, All: search Software Asset Management Guided Experiences (older name: Software Asset Management Playbooks and Guided Setups) and install it. It brings the workspace. 2) Not listed: search Software Asset Workspace and install it. If it is installed but you cannot see it, open it, click Repair, wait, clear the browser cache and sign in again. 3) Last resort: run the Workspace installer from the Scripts page of this guide. 4) Still missing after two tries: work in the classic menus (All, Software Asset), write it in tracker/decisions.md and try again next session."
+          "fix": "Do step 1.9. It covers the Guided Experiences application, Repair, the installer script and the classic-menu fallback."
         },
         {
           "problem": "Lists are empty after activation",
@@ -869,7 +1148,7 @@
         },
         {
           "problem": "A security or access message",
-          "fix": "Make sure you are signed in as admin. For scripts: profile picture, Elevate role, tick security_admin, Update."
+          "fix": "Make sure you are signed in as admin. For scripts: your picture (top right), Elevate role, tick security_admin, Update."
         }
       ]
     },
@@ -890,33 +1169,45 @@
           "num": "2.1",
           "title": "Start the change log for this stage",
           "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
           "do": [
-            "Open **Update sets** below, click **New**.",
-            "Name it **SAM Portfolio S2 Data** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Update set name",
-              "value": "SAM Portfolio S2 Data"
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S2 Data"
+                }
+              ]
             }
           ],
           "links": [
             {
               "label": "Update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
-          "see": "**SAM Portfolio S2 Data** is your current update set."
+          "see": "The list shows **SAM Portfolio S2 Data** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ]
         },
         {
           "id": "s2-2",
           "num": "2.2",
           "title": "Open Scripts - Background",
           "where": "Your instance",
+          "what": "Opens the page where an admin pastes a script and runs it once. We use it to load Northstar.",
           "do": [
-            "Click **Scripts - Background**.",
-            "If a message says you need elevated rights: profile picture (top right), **Elevate role**, tick **security_admin**, click **Update**, then open Scripts - Background again."
+            "Click **Scripts - Background** below. Or: click **All**, type **Scripts - Background** and click it.",
+            "If a message says you need elevated rights, or there is no **Run script** button: click your picture (top right), choose **Elevate role**, tick **security_admin** and click **Update**. Then click **Scripts - Background** again."
           ],
           "links": [
             {
@@ -924,8 +1215,8 @@
               "path": "sys.scripts.do"
             }
           ],
-          "note": "A [[background script]] runs once, as admin. Our scripts only create or update Northstar records.",
-          "see": "A page with a large text box and a **Run script** button."
+          "note": "A [[background script]] runs once, as admin. Our scripts only create or update Northstar records and never delete anything.",
+          "see": "A page with a large empty text box, a list next to **in scope** that says **global**, and a **Run script** button."
         },
         {
           "id": "s2-3",
@@ -933,16 +1224,19 @@
           "title": "Run the Northstar loader",
           "where": "Your instance",
           "script": "01_load_northstar.js",
+          "what": "Creates the whole fake company in one go: 2 companies, 3 sites, 6 departments, 60 people, 45 laptops, 12 servers and 248 software installations.",
           "do": [
-            "Click **Copy script**.",
-            "Click into the big text box in Scripts - Background and paste (Ctrl+V, or Cmd+V on a Mac).",
-            "Keep the scope **global** if asked, then click **Run script**.",
-            "Wait for the result page, about 1 to 2 minutes. Copy its lines into the box below."
+            "Click **Copy script** below. The guide copies the whole script, about 49 KB.",
+            "Go to the Scripts - Background page. Click inside the big text box and paste: Ctrl+V, or Cmd+V on a Mac.",
+            "Check that **in scope** says **global**. Leave the tick boxes as they are.",
+            "Click **Run script**.",
+            "Wait 1 to 2 minutes. A white page with result lines appears.",
+            "Select all result lines, copy them and paste them into the box below."
           ],
-          "see": "The result ends with **RESULT: OK** and shows 60 users, 45 computers, 12 servers and 248 installations, each with a discovery model.",
+          "see": "The last line says **RESULT: OK**. The lines above it show 60 users, 45 computers, 12 servers, 248 installations and 8 discovery models.",
           "help": [
-            "The result says CHECK or ERROR: paste the lines into the box and read the notes. Running the script again fixes most issues.",
-            "Ran it twice by mistake: no problem. The script updates records instead of duplicating them.",
+            "The result says CHECK or ERROR: paste the lines into the box and read the notes. Running the script again fixes most problems.",
+            "Ran it twice by mistake: no problem. The script updates records instead of creating copies.",
             "Nothing happens for a long time: wait 5 minutes, then check the installations list in step 2.6. The records may already be there."
           ],
           "record": [
@@ -959,8 +1253,10 @@
           "num": "2.4",
           "title": "Check the people and computers",
           "where": "Your instance",
+          "what": "Confirms that the people, laptops and servers exist.",
           "do": [
-            "Open the three lists."
+            "Click each of the three buttons below.",
+            "In each list, read the count at the bottom right."
           ],
           "links": [
             {
@@ -973,7 +1269,7 @@
             },
             {
               "label": "Northstar servers",
-              "path": "cmdb_ci_server_list.do?sysparm_query=nameSTARTSWITHNSM-"
+              "path": "cmdb_ci_server_list.do?sysparm_query=nameSTARTSWITHNSM-%5EORDERBYname"
             }
           ],
           "see": "60 users, 45 laptops and 12 servers.",
@@ -984,27 +1280,32 @@
           "num": "2.5",
           "title": "Check the server processor numbers",
           "where": "Your instance",
+          "what": "Checks the two numbers that decide how many core licenses Microsoft wants: processors per server and cores per processor.",
           "do": [
-            "Open **Northstar servers** and click **NSM-SQL-01**.",
-            "Find **CPU count** and **CPU core count**."
+            "Click **Northstar servers** below.",
+            "Click **NSM-SQL-01** in the Name column. The server form opens.",
+            "Find the fields **CPU count** and **CPU core count**. Scroll down if you do not see them.",
+            "Click the back arrow and open **NSM-WIN-01** the same way."
           ],
           "links": [
             {
               "label": "Northstar servers",
-              "path": "cmdb_ci_server_list.do?sysparm_query=nameSTARTSWITHNSM-"
+              "path": "cmdb_ci_server_list.do?sysparm_query=nameSTARTSWITHNSM-%5EORDERBYname"
             }
           ],
-          "note": "CPU core count means cores per processor. [[Per core licensing]] in Stage 4 is calculated from these two numbers.",
-          "see": "NSM-SQL-01: **CPU count 2**, **CPU core count 4**, so 8 cores. NSM-WIN-01 shows 2 and 8, so 16 cores."
+          "note": "CPU count is the number of processors. CPU core count is the number of cores in each processor. [[Per core licensing]] in Stage 4 multiplies the two.",
+          "see": "NSM-SQL-01: **CPU count 2**, **CPU core count 4**, so 8 cores. NSM-WIN-01: 2 and 8, so 16 cores."
         },
         {
           "id": "s2-6",
           "num": "2.6",
           "title": "Check the software installations",
           "where": "Your instance",
+          "what": "Confirms the 248 [[installation|installations]] exist and that each one was linked to a [[discovery model]].",
           "do": [
-            "Open **Northstar installations** and check the row count.",
-            "Click an **Adobe Acrobat (64-bit)** row on **NSM-WS-001** and look at the field **Discovery model**."
+            "Click **Northstar installations** below and read the count at the bottom right.",
+            "Click any **Adobe Acrobat (64-bit)** row. The installation form opens.",
+            "Look at the field **Discovery model**. It must be filled in."
           ],
           "links": [
             {
@@ -1012,10 +1313,10 @@
               "path": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-"
             }
           ],
-          "note": "Each row is one [[installation]]: one program on one computer.",
-          "see": "248 installations. The Discovery model field is filled in.",
+          "note": "Each row is one installation: one program on one computer.",
+          "see": "248 installations, and the Discovery model field is filled in.",
           "help": [
-            "Discovery model is empty: wait one minute and reload. Still empty: type **sys_script.list** in the All menu search, find the business rule **Create a Software Normalization** and check that it is active."
+            "Discovery model is empty: wait one minute and reload. Still empty: click **All**, type **sys_script.list** and press Enter, search the business rule **Create a Software Normalization** and check that it is active."
           ],
           "shot": "S2_03_installations.png"
         },
@@ -1024,11 +1325,23 @@
           "num": "2.7",
           "title": "Group the installations by discovery model",
           "where": "Your instance",
+          "what": "Shows that 248 installations boil down to 8 different programs.",
           "do": [
-            "In the installations list, right-click the column heading **Discovery model** and choose **Group By Discovery model**."
+            "Stay in the installations list from the previous step.",
+            "Right-click the column heading **Discovery model** and choose **Group By Discovery model**.",
+            "Count the groups."
           ],
-          "note": "Each group is one [[discovery model]]: one record per unique publisher, name and version found on computers.",
+          "links": [
+            {
+              "label": "Northstar installations",
+              "path": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-"
+            }
+          ],
+          "note": "Each group is one discovery model: one record per unique publisher, name and version found on computers.",
           "see": "8 groups: 5 licensed products (Acrobat, SQL Server, Visio, Project, Windows Server) and 3 free tools (Chrome, 7-Zip, Notepad++).",
+          "help": [
+            "No column **Discovery model**: right-click a column heading, choose **Configure**, **List Layout**, move **Discovery model** to the right side and click **Save**."
+          ],
           "shot": "S2_04_installations_by_discovery_model.png"
         },
         {
@@ -1036,9 +1349,13 @@
           "num": "2.8",
           "title": "Run the name cleaning once",
           "where": "Your instance",
+          "what": "Starts ServiceNow's automatic name cleaning now instead of waiting for tonight's run. Stage 3 starts from its result.",
           "do": [
-            "Open **Normalization jobs**. Open the job that normalizes discovery models. Its name looks like **SAM - Normalize discovery models using content library rules**.",
-            "Click **Execute Now** and wait 2 to 5 minutes."
+            "Click **Normalization jobs** below. A list of scheduled jobs opens.",
+            "Click **SAM - Normalize discovery models using content library rules**.",
+            "Click **Execute Now** at the top right of the form.",
+            "Wait 5 minutes. The job runs in the background; nothing changes on screen.",
+            "Copy the job name into the box below."
           ],
           "links": [
             {
@@ -1046,7 +1363,10 @@
               "path": "sysauto_list.do?sysparm_query=nameLIKEnormaliz"
             }
           ],
-          "see": "A message that the job was scheduled.",
+          "see": "A short message that the job was scheduled, or you are back in the list.",
+          "help": [
+            "The exact name differs: pick the job that mentions discovery models and content library."
+          ],
           "record": [
             {
               "id": "norm_job",
@@ -1060,12 +1380,24 @@
           "title": "Learn the manual import way",
           "where": "Your instance",
           "optional": true,
+          "what": "Practises how real projects load spreadsheets, with an [[import set|Import Set]]. Our users already exist, so this only updates them.",
           "do": [
-            "Real projects load spreadsheets with [[Import set|Import Sets]]. To practise once: click **All**, type **Load Data** and open it.",
-            "Choose **Create table**, label **NSM Users test**, upload **04_users.csv** from **Northstar files**, and click **Submit**.",
-            "Click **Create transform map**, set the target table to **User [sys_user]**, click **Auto Map Matching Fields**, tick **Coalesce** on user_name, save, and click **Transform**."
+            "Open **Northstar files** in this guide and download **04_users.csv**.",
+            "In the instance click **All**, type **Load Data** and click it.",
+            "Choose **Create table**, type the label **NSM Users test**, choose the file **04_users.csv** and click **Submit**.",
+            "When the load finishes, click **Create transform map**.",
+            "Set **Target table** to **User [sys_user]**, right-click the header and choose **Save**.",
+            "Under Related Links click **Auto Map Matching Fields**.",
+            "In the **Field Maps** list, open the row for **user_name**, tick **Coalesce** and click **Update**.",
+            "Under Related Links click **Transform**, then **Transform** again."
           ],
-          "see": "The import updates the 60 existing users instead of creating copies. Coalesce does that."
+          "links": [
+            {
+              "label": "Open Northstar files",
+              "view": "files"
+            }
+          ],
+          "see": "The transform history shows 60 rows updated and none inserted. Coalesce made it update the existing users instead of creating copies."
         }
       ],
       "checks": [
@@ -1122,39 +1454,53 @@
           "num": "3.1",
           "title": "Start the change log for this stage",
           "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
           "do": [
-            "Open **Update sets** below, click **New**.",
-            "Name it **SAM Portfolio S3 Normalization** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Update set name",
-              "value": "SAM Portfolio S3 Normalization"
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S3 Normalization"
+                }
+              ]
             }
           ],
           "links": [
             {
               "label": "Update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
-          "see": "**SAM Portfolio S3 Normalization** is your current update set."
+          "see": "The list shows **SAM Portfolio S3 Normalization** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ]
         },
         {
           "id": "s3-2",
           "num": "3.2",
-          "title": "Write down the status of our 8 discovery models",
+          "title": "Read the status of our 8 discovery models",
           "where": "Your instance",
+          "script": "04_show_normalization.js",
+          "what": "Shows how clean the 8 Northstar software names are before we touch them. A read-only script lists all 8 at once, so nobody has to open 8 records.",
           "do": [
-            "Open **Installations by discovery model**. If the list is not grouped, right-click the column heading **Discovery model** and choose **Group By Discovery model**.",
-            "For each group, open one installation, then its discovery model, and read **Normalization status**.",
-            "Choose that status in the table."
+            "Click **Scripts - Background** below.",
+            "Click **Copy script**, paste it into the big text box and click **Run script**. It only reads; it changes nothing.",
+            "The result lists 8 discovery models, each with a **Status** line. Choose that status for each row in the table below.",
+            "Copy all result lines into the box below. You need the clean values in the next steps."
           ],
           "links": [
             {
-              "label": "Installations by discovery model",
-              "path": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5EGROUPBYdiscovery_model"
+              "label": "Scripts - Background",
+              "path": "sys.scripts.do"
             }
           ],
           "grid": {
@@ -1165,7 +1511,7 @@
               "column": "before",
               "good": [
                 "Normalized",
-                "Manually normalized"
+                "Manually Normalized"
               ],
               "label": "Clean before"
             },
@@ -1176,50 +1522,62 @@
                 "type": "select",
                 "options": [
                   "Normalized",
-                  "Partially normalized",
-                  "Publisher normalized",
-                  "Match not found",
-                  "Manually normalized"
+                  "Manually Normalized",
+                  "Partially Normalized",
+                  "Publisher Normalized",
+                  "Match Not Found",
+                  "New"
                 ]
               }
             ],
             "rows": [
               {
                 "id": "acrobat",
-                "label": "Adobe Acrobat (64-bit) 24.2.20857"
+                "label": "Adobe Acrobat (64-bit)"
               },
               {
                 "id": "sql",
-                "label": "Microsoft SQL Server 2022 Standard Edition 16.0.4135.4"
+                "label": "Microsoft SQL Server 2022 Standard Edition"
               },
               {
                 "id": "visio",
-                "label": "Microsoft Visio Professional 2021 16.0.14332.20637"
+                "label": "Microsoft Visio Professional 2021"
               },
               {
                 "id": "project",
-                "label": "Microsoft Project Professional 2021 16.0.14332.20637"
+                "label": "Microsoft Project Professional 2021"
               },
               {
                 "id": "winsrv",
-                "label": "Microsoft Windows Server 2022 Standard 10.0.20348"
+                "label": "Microsoft Windows Server 2022 Standard"
               },
               {
                 "id": "chrome",
-                "label": "Google Chrome 130.0.6723.117"
+                "label": "Google Chrome"
               },
               {
                 "id": "zip",
-                "label": "7-Zip 24.08 (x64) 24.08"
+                "label": "7-Zip 24.08 (x64)"
               },
               {
                 "id": "npp",
-                "label": "Notepad++ (64-bit x64) 8.7.1"
+                "label": "Notepad++ (64-bit x64)"
               }
             ]
           },
-          "note": "The [[normalization status]] tells how well a name was cleaned.",
-          "see": "A status for all 8 rows.",
+          "note": "The [[normalization status]] tells how well a name was cleaned. **Normalized** and **Manually Normalized** count as clean.",
+          "see": "8 numbered entries with a status each, and a last line such as **Clean (Normalized or Manually normalized): 3 of 8**.",
+          "help": [
+            "Fewer than 8 entries: the loader did not finish. Run step 2.3 again.",
+            "Status shows **(empty)** for all: the name cleaning job has not run yet. Do step 2.8, wait 5 minutes and run this script again."
+          ],
+          "record": [
+            {
+              "id": "norm_status_before",
+              "label": "Result lines of the status script",
+              "type": "textarea"
+            }
+          ],
           "shot": "S3_01_normalization_before.png"
         },
         {
@@ -1227,122 +1585,193 @@
           "num": "3.3",
           "title": "Accept the suggestions that fit",
           "where": "Software Asset Workspace",
+          "optional": true,
+          "what": "Lets ServiceNow's own suggestions clean a name for you, where it has one.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Normalization suggestions** (under Content suggestions).",
-            "Look for suggestions for our products. Accept one only when it matches the clean name in step 3.4."
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace).",
+            "Click **License operations** in the menu on the left, then **Normalization suggestions**.",
+            "Look for suggestions for our 8 products. Accept one only when its publisher and product match the table in step 3.4."
           ],
-          "see": "Accepted suggestions change the status of that discovery model.",
-          "help": [
-            "No suggestions for our products: normal on a sandbox. Go on to step 3.4."
-          ]
+          "see": "Accepted suggestions change the status of that discovery model. Often there are none on a sandbox. That is fine."
         },
         {
           "id": "s3-4",
           "num": "3.4",
           "title": "Clean the remaining names by hand",
-          "where": "Software Asset Workspace",
+          "where": "Your instance",
+          "what": "Gives each Northstar product a clean publisher, product, version, edition and product type, so the license check recognises it. We do it by hand because a sandbox has no paid Content Service.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Discovery models**, and open each Northstar model that is not **Normalized**.",
-            "Set **Publisher**, **Product**, **Version** and **Edition** to the clean names in the table. Type the first letters and pick from the list that appears.",
-            "Save. The status changes to **Manually normalized**."
+            "Work through the 8 products below one at a time. Products already **Normalized** or **Manually Normalized** in step 3.2: choose **Already clean** and skip them.",
+            "Click the product's **Installations** button. The list of its installations opens.",
+            "Click the first installation in the list (the blue text). The installation form opens.",
+            "Next to the field **Discovery model**, click the small **(i)** button, then **Open Record**. The discovery model form opens.",
+            "Fill in **Publisher**, **Product**, **Version** and **Edition** with the values shown for the product below. In Publisher and Product, type the first letters and pick from the list that appears.",
+            "Set **Product type** to the value shown below.",
+            "Right-click the grey header bar of the form and choose **Save**. **Normalization status** changes to **Manually Normalized**.",
+            "Choose **Cleaned by hand** for the product and go on to the next one."
           ],
-          "table": {
+          "grid": {
+            "id": "norm_manual",
+            "layout": "cards",
+            "rowLabel": "Discovery model (as found)",
+            "summary": true,
             "columns": [
               {
-                "key": "found",
-                "label": "Found as"
+                "key": "open",
+                "label": "Open",
+                "type": "link",
+                "linkLabel": "Installations"
               },
               {
                 "key": "publisher",
-                "label": "Clean publisher"
+                "label": "Publisher",
+                "fixed": true,
+                "copy": true
               },
               {
                 "key": "product",
-                "label": "Clean product"
+                "label": "Product",
+                "fixed": true,
+                "copy": true
               },
               {
                 "key": "version",
-                "label": "Version"
+                "label": "Version",
+                "fixed": true,
+                "copy": true
               },
               {
                 "key": "edition",
-                "label": "Edition"
+                "label": "Edition",
+                "fixed": true,
+                "copy": true
+              },
+              {
+                "key": "type",
+                "label": "Product type",
+                "fixed": true
+              },
+              {
+                "key": "result",
+                "label": "Result",
+                "type": "select",
+                "options": [
+                  "Already clean",
+                  "Cleaned by hand",
+                  "Could not clean"
+                ]
               }
             ],
             "rows": [
               {
-                "found": "Adobe Acrobat (64-bit) 24.2.20857",
+                "id": "acrobat",
+                "label": "Adobe Acrobat (64-bit)",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DAdobe%20Acrobat%20%2864-bit%29",
                 "publisher": "Adobe",
                 "product": "Acrobat",
                 "version": "2024",
-                "edition": "Pro"
+                "edition": "Pro",
+                "type": "Licensable"
               },
               {
-                "found": "Microsoft SQL Server 2022 Standard Edition 16.0.4135.4",
+                "id": "sql",
+                "label": "Microsoft SQL Server 2022 Standard Edition",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DMicrosoft%20SQL%20Server%202022%20Standard%20Edition",
                 "publisher": "Microsoft",
                 "product": "SQL Server",
                 "version": "2022",
-                "edition": "Standard"
+                "edition": "Standard",
+                "type": "Licensable"
               },
               {
-                "found": "Microsoft Visio Professional 2021 16.0.14332.20637",
+                "id": "visio",
+                "label": "Microsoft Visio Professional 2021",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DMicrosoft%20Visio%20Professional%202021",
                 "publisher": "Microsoft",
                 "product": "Visio",
                 "version": "2021",
-                "edition": "Professional"
+                "edition": "Professional",
+                "type": "Licensable"
               },
               {
-                "found": "Microsoft Project Professional 2021 16.0.14332.20637",
+                "id": "project",
+                "label": "Microsoft Project Professional 2021",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DMicrosoft%20Project%20Professional%202021",
                 "publisher": "Microsoft",
                 "product": "Project",
                 "version": "2021",
-                "edition": "Professional"
+                "edition": "Professional",
+                "type": "Licensable"
               },
               {
-                "found": "Microsoft Windows Server 2022 Standard 10.0.20348",
+                "id": "winsrv",
+                "label": "Microsoft Windows Server 2022 Standard",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DMicrosoft%20Windows%20Server%202022%20Standard",
                 "publisher": "Microsoft",
                 "product": "Windows Server",
                 "version": "2022",
-                "edition": "Standard"
+                "edition": "Standard",
+                "type": "Licensable"
               },
               {
-                "found": "Google Chrome 130.0.6723.117",
+                "id": "chrome",
+                "label": "Google Chrome",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DGoogle%20Chrome",
                 "publisher": "Google",
                 "product": "Chrome",
                 "version": "130",
-                "edition": "none"
+                "edition": "leave empty",
+                "type": "Not Licensable"
               },
               {
-                "found": "7-Zip 24.08 (x64) 24.08",
+                "id": "zip",
+                "label": "7-Zip 24.08 (x64)",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3D7-Zip%2024.08%20%28x64%29",
                 "publisher": "Igor Pavlov",
                 "product": "7-Zip",
                 "version": "24.08",
-                "edition": "none"
+                "edition": "leave empty",
+                "type": "Not Licensable"
               },
               {
-                "found": "Notepad++ (64-bit x64) 8.7.1",
-                "publisher": "Notepad++ Team (or what the list offers)",
+                "id": "npp",
+                "label": "Notepad++ (64-bit x64)",
+                "open": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DNotepad%2B%2B%20%2864-bit%20x64%29",
+                "publisher": "Notepad++ Team",
                 "product": "Notepad++",
                 "version": "8.7",
-                "edition": "none"
+                "edition": "leave empty",
+                "type": "Not Licensable"
               }
             ]
           },
-          "note": "A manually normalized model keeps your values. The automatic job no longer changes it.",
-          "see": "All 8 show **Normalized** or **Manually normalized**.",
+          "note": "A manually normalized model keeps your values; the automatic job no longer changes it. Only **Licensable** software is counted in the license check, so the 5 licensed products must say Licensable.",
+          "see": "Every product is **Already clean** or **Cleaned by hand**.",
           "help": [
-            "A product is missing from the pick list: type fewer letters or choose the publisher first. If it is truly missing, note it and move on. The 5 licensed products matter most.",
-            "Acrobat versions appear as DC or 2024: pick the closest and write down what you chose."
+            "**Publisher** is grey and cannot be changed: it is already clean. Leave it and fill in the other fields.",
+            "The product is not in the list: type fewer letters. Still missing: click the magnifier icon next to **Product**, click **New** in the window that opens, type the product name, pick the publisher and click **Submit**. Then pick it.",
+            "Acrobat is offered with other names (for example Acrobat Pro or Acrobat DC): pick the closest and write down what you chose. Use the same choice in step 3.6.",
+            "No **Save** in the right-click menu: click **Update** instead. It saves and goes back."
           ],
           "shot": "S3_02_manual_normalization.png"
         },
         {
           "id": "s3-5",
           "num": "3.5",
-          "title": "Write down the status after cleaning",
+          "title": "Check the status after cleaning",
           "where": "Your instance",
+          "script": "04_show_normalization.js",
+          "what": "Proves that all 8 names are now clean, and shows the exact clean values the software models must use.",
           "do": [
-            "Check each of the 8 discovery models again and choose its status in the table."
+            "Click **Scripts - Background** below, paste the same status script again and click **Run script**.",
+            "Choose the new status for each row in the table.",
+            "Copy all result lines into the box below."
+          ],
+          "links": [
+            {
+              "label": "Scripts - Background",
+              "path": "sys.scripts.do"
+            }
           ],
           "grid": {
             "id": "norm_after",
@@ -1352,7 +1781,7 @@
               "column": "after",
               "good": [
                 "Normalized",
-                "Manually normalized"
+                "Manually Normalized"
               ],
               "label": "Clean after"
             },
@@ -1363,135 +1792,510 @@
                 "type": "select",
                 "options": [
                   "Normalized",
-                  "Partially normalized",
-                  "Publisher normalized",
-                  "Match not found",
-                  "Manually normalized"
+                  "Manually Normalized",
+                  "Partially Normalized",
+                  "Publisher Normalized",
+                  "Match Not Found",
+                  "New"
                 ]
               }
             ],
             "rows": [
               {
                 "id": "acrobat",
-                "label": "Adobe Acrobat (64-bit) 24.2.20857"
+                "label": "Adobe Acrobat (64-bit)"
               },
               {
                 "id": "sql",
-                "label": "Microsoft SQL Server 2022 Standard Edition 16.0.4135.4"
+                "label": "Microsoft SQL Server 2022 Standard Edition"
               },
               {
                 "id": "visio",
-                "label": "Microsoft Visio Professional 2021 16.0.14332.20637"
+                "label": "Microsoft Visio Professional 2021"
               },
               {
                 "id": "project",
-                "label": "Microsoft Project Professional 2021 16.0.14332.20637"
+                "label": "Microsoft Project Professional 2021"
               },
               {
                 "id": "winsrv",
-                "label": "Microsoft Windows Server 2022 Standard 10.0.20348"
+                "label": "Microsoft Windows Server 2022 Standard"
               },
               {
                 "id": "chrome",
-                "label": "Google Chrome 130.0.6723.117"
+                "label": "Google Chrome"
               },
               {
                 "id": "zip",
-                "label": "7-Zip 24.08 (x64) 24.08"
+                "label": "7-Zip 24.08 (x64)"
               },
               {
                 "id": "npp",
-                "label": "Notepad++ (64-bit x64) 8.7.1"
+                "label": "Notepad++ (64-bit x64)"
               }
             ]
           },
-          "see": "8 of 8 are clean.",
+          "see": "The last line says **Clean (Normalized or Manually normalized): 8 of 8**.",
+          "help": [
+            "A row is still not clean: open it again as in step 3.4 and check that you saved."
+          ],
+          "record": [
+            {
+              "id": "norm_status_after",
+              "label": "Result lines of the status script",
+              "type": "textarea"
+            }
+          ],
           "shot": "S3_03_normalization_after.png"
         },
         {
-          "id": "s3-6",
+          "id": "s3-model-a",
           "num": "3.6",
-          "title": "Create the 5 software models",
-          "where": "Software Asset Workspace",
+          "title": "Create software model A: Adobe Acrobat Pro",
+          "where": "Your instance",
+          "what": "Creates [[software model]] A, the product we count Acrobat licenses against. It collects every Acrobat Pro installation, whatever its version number.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Software models**, **New** (classic menu: All, Software Asset, Software Models, New).",
-            "Create one model per row. Use the same publisher and product as in step 3.4.",
-            "If the form offers a version condition, choose **All versions**. That is the safest choice. Otherwise use the version in the table. Set the edition from the table.",
-            "Save. If an identical model already exists from the demo data, use that one and mark it as reused."
+            "Click **New software model** below. An empty software model form opens. The button already fills in the short description.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit**. You are back in the list of software models.",
+            "Click **Our software models** below and click **Adobe Acrobat Pro**.",
+            "Scroll down to the tabs at the bottom and click **Matching Discovery Models**."
           ],
-          "table": {
-            "columns": [
-              {
-                "key": "name",
-                "label": "Software model"
-              },
-              {
-                "key": "publisher",
-                "label": "Publisher"
-              },
-              {
-                "key": "product",
-                "label": "Product"
-              },
-              {
-                "key": "version",
-                "label": "Version"
-              },
-              {
-                "key": "edition",
-                "label": "Edition"
-              },
-              {
-                "key": "story",
-                "label": "Story"
-              }
-            ],
-            "rows": [
-              {
-                "name": "Adobe Acrobat 2024 Pro",
-                "publisher": "Adobe",
-                "product": "Acrobat",
-                "version": "2024",
-                "edition": "Pro",
-                "story": "A"
-              },
-              {
-                "name": "Microsoft SQL Server 2022 Standard",
-                "publisher": "Microsoft",
-                "product": "SQL Server",
-                "version": "2022",
-                "edition": "Standard",
-                "story": "B"
-              },
-              {
-                "name": "Microsoft Visio 2021 Professional",
-                "publisher": "Microsoft",
-                "product": "Visio",
-                "version": "2021",
-                "edition": "Professional",
-                "story": "C"
-              },
-              {
-                "name": "Microsoft Project 2021 Professional",
-                "publisher": "Microsoft",
-                "product": "Project",
-                "version": "2021",
-                "edition": "Professional",
-                "story": "D"
-              },
-              {
-                "name": "Microsoft Windows Server 2022 Standard",
-                "publisher": "Microsoft",
-                "product": "Windows Server",
-                "version": "2022",
-                "edition": "Standard",
-                "story": "E"
-              }
-            ]
-          },
+          "form": [
+            {
+              "title": "Software model form",
+              "rows": [
+                {
+                  "field": "Publisher",
+                  "value": "Adobe",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Product",
+                  "value": "Acrobat",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Version condition",
+                  "value": "is anything",
+                  "note": "already set; this counts every version",
+                  "copy": false
+                },
+                {
+                  "field": "Version",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Edition condition",
+                  "value": "is",
+                  "copy": false
+                },
+                {
+                  "field": "Edition",
+                  "value": "Pro"
+                },
+                {
+                  "field": "Product type",
+                  "value": "Licensable",
+                  "note": "in the Software Licensing section",
+                  "copy": false
+                },
+                {
+                  "field": "License under management",
+                  "value": "ticked",
+                  "note": "already set",
+                  "copy": false
+                },
+                {
+                  "field": "Short description",
+                  "value": "Northstar story A",
+                  "note": "filled in by the button; check it"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "New software model",
+              "path": "cmdb_software_product_model.do?sys_id=-1&sysparm_query=short_description%3DNorthstar%20story%20A"
+            },
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
+          "see": "**Adobe Acrobat Pro** is in the list, and its tab **Matching Discovery Models** lists the Acrobat discovery model (40 installations).",
+          "help": [
+            "Publisher, product and edition must be exactly the clean values the status script showed in step 3.5. If you picked something else in step 3.4, use that here too.",
+            "**Matching Discovery Models** is empty: compare the three values with the status script. Still empty: set **Edition condition** to **is anything** and click **Update**.",
+            "A model called Adobe Acrobat Pro already exists from the demo data: use it instead. Set its **Short description** to **Northstar story A**, check the fields against the table and click **Update**.",
+            "No Open button: click **All**, then **Software Asset**, **Licensing**, **Software Models**, and click **New**."
+          ],
+          "note": "We use the classic form here because the workspace locks Version and Edition after saving. **Version condition: is anything** is a deliberate choice: installations report build numbers such as 24.2.20857, never 2024, and Northstar has one version of each product.",
+          "shot": "S3_04_software_model.png"
+        },
+        {
+          "id": "s3-model-b",
+          "num": "3.7",
+          "title": "Create software model B: Microsoft SQL Server Standard",
+          "where": "Your instance",
+          "what": "Creates [[software model]] B, the database product we count processor cores for. It collects every SQL Server Standard installation, whatever its version number.",
+          "do": [
+            "Click **New software model** below. An empty software model form opens. The button already fills in the short description.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit**. You are back in the list of software models.",
+            "Click **Our software models** below and click **Microsoft SQL Server Standard**.",
+            "Scroll down to the tabs at the bottom and click **Matching Discovery Models**."
+          ],
+          "form": [
+            {
+              "title": "Software model form",
+              "rows": [
+                {
+                  "field": "Publisher",
+                  "value": "Microsoft",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Product",
+                  "value": "SQL Server",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Version condition",
+                  "value": "is anything",
+                  "note": "already set; this counts every version",
+                  "copy": false
+                },
+                {
+                  "field": "Version",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Edition condition",
+                  "value": "is",
+                  "copy": false
+                },
+                {
+                  "field": "Edition",
+                  "value": "Standard"
+                },
+                {
+                  "field": "Product type",
+                  "value": "Licensable",
+                  "note": "in the Software Licensing section",
+                  "copy": false
+                },
+                {
+                  "field": "License under management",
+                  "value": "ticked",
+                  "note": "already set",
+                  "copy": false
+                },
+                {
+                  "field": "Short description",
+                  "value": "Northstar story B",
+                  "note": "filled in by the button; check it"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "New software model",
+              "path": "cmdb_software_product_model.do?sys_id=-1&sysparm_query=short_description%3DNorthstar%20story%20B"
+            },
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
+          "see": "**Microsoft SQL Server Standard** is in the list, and its tab **Matching Discovery Models** lists the SQL Server discovery model (3 installations).",
+          "help": [
+            "Publisher, product and edition must be exactly the clean values the status script showed in step 3.5. If you picked something else in step 3.4, use that here too.",
+            "**Matching Discovery Models** is empty: compare the three values with the status script. Still empty: set **Edition condition** to **is anything** and click **Update**.",
+            "A model called Microsoft SQL Server Standard already exists from the demo data: use it instead. Set its **Short description** to **Northstar story B**, check the fields against the table and click **Update**.",
+            "No Open button: click **All**, then **Software Asset**, **Licensing**, **Software Models**, and click **New**."
+          ]
+        },
+        {
+          "id": "s3-model-c",
+          "num": "3.8",
+          "title": "Create software model C: Microsoft Visio Professional",
+          "where": "Your instance",
+          "what": "Creates [[software model]] C, the diagram product we own too many licenses for. It collects every Visio Professional installation, whatever its version number.",
+          "do": [
+            "Click **New software model** below. An empty software model form opens. The button already fills in the short description.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit**. You are back in the list of software models.",
+            "Click **Our software models** below and click **Microsoft Visio Professional**.",
+            "Scroll down to the tabs at the bottom and click **Matching Discovery Models**."
+          ],
+          "form": [
+            {
+              "title": "Software model form",
+              "rows": [
+                {
+                  "field": "Publisher",
+                  "value": "Microsoft",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Product",
+                  "value": "Visio",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Version condition",
+                  "value": "is anything",
+                  "note": "already set; this counts every version",
+                  "copy": false
+                },
+                {
+                  "field": "Version",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Edition condition",
+                  "value": "is",
+                  "copy": false
+                },
+                {
+                  "field": "Edition",
+                  "value": "Professional"
+                },
+                {
+                  "field": "Product type",
+                  "value": "Licensable",
+                  "note": "in the Software Licensing section",
+                  "copy": false
+                },
+                {
+                  "field": "License under management",
+                  "value": "ticked",
+                  "note": "already set",
+                  "copy": false
+                },
+                {
+                  "field": "Short description",
+                  "value": "Northstar story C",
+                  "note": "filled in by the button; check it"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "New software model",
+              "path": "cmdb_software_product_model.do?sys_id=-1&sysparm_query=short_description%3DNorthstar%20story%20C"
+            },
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
+          "see": "**Microsoft Visio Professional** is in the list, and its tab **Matching Discovery Models** lists the Visio discovery model (35 installations).",
+          "help": [
+            "Publisher, product and edition must be exactly the clean values the status script showed in step 3.5. If you picked something else in step 3.4, use that here too.",
+            "**Matching Discovery Models** is empty: compare the three values with the status script. Still empty: set **Edition condition** to **is anything** and click **Update**.",
+            "A model called Microsoft Visio Professional already exists from the demo data: use it instead. Set its **Short description** to **Northstar story C**, check the fields against the table and click **Update**.",
+            "No Open button: click **All**, then **Software Asset**, **Licensing**, **Software Models**, and click **New**."
+          ]
+        },
+        {
+          "id": "s3-model-d",
+          "num": "3.9",
+          "title": "Create software model D: Microsoft Project Professional",
+          "where": "Your instance",
+          "what": "Creates [[software model]] D, the planning product with unused installations. It collects every Project Professional installation, whatever its version number.",
+          "do": [
+            "Click **New software model** below. An empty software model form opens. The button already fills in the short description.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit**. You are back in the list of software models.",
+            "Click **Our software models** below and click **Microsoft Project Professional**.",
+            "Scroll down to the tabs at the bottom and click **Matching Discovery Models**."
+          ],
+          "form": [
+            {
+              "title": "Software model form",
+              "rows": [
+                {
+                  "field": "Publisher",
+                  "value": "Microsoft",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Product",
+                  "value": "Project",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Version condition",
+                  "value": "is anything",
+                  "note": "already set; this counts every version",
+                  "copy": false
+                },
+                {
+                  "field": "Version",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Edition condition",
+                  "value": "is",
+                  "copy": false
+                },
+                {
+                  "field": "Edition",
+                  "value": "Professional"
+                },
+                {
+                  "field": "Product type",
+                  "value": "Licensable",
+                  "note": "in the Software Licensing section",
+                  "copy": false
+                },
+                {
+                  "field": "License under management",
+                  "value": "ticked",
+                  "note": "already set",
+                  "copy": false
+                },
+                {
+                  "field": "Short description",
+                  "value": "Northstar story D",
+                  "note": "filled in by the button; check it"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "New software model",
+              "path": "cmdb_software_product_model.do?sys_id=-1&sysparm_query=short_description%3DNorthstar%20story%20D"
+            },
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
+          "see": "**Microsoft Project Professional** is in the list, and its tab **Matching Discovery Models** lists the Project discovery model (28 installations).",
+          "help": [
+            "Publisher, product and edition must be exactly the clean values the status script showed in step 3.5. If you picked something else in step 3.4, use that here too.",
+            "**Matching Discovery Models** is empty: compare the three values with the status script. Still empty: set **Edition condition** to **is anything** and click **Update**.",
+            "A model called Microsoft Project Professional already exists from the demo data: use it instead. Set its **Short description** to **Northstar story D**, check the fields against the table and click **Update**.",
+            "No Open button: click **All**, then **Software Asset**, **Licensing**, **Software Models**, and click **New**."
+          ]
+        },
+        {
+          "id": "s3-model-e",
+          "num": "3.10",
+          "title": "Create software model E: Microsoft Windows Server Standard",
+          "where": "Your instance",
+          "what": "Creates [[software model]] E, the server operating system with Microsoft's core minimums. It collects every Windows Server Standard installation, whatever its version number.",
+          "do": [
+            "Click **New software model** below. An empty software model form opens. The button already fills in the short description.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit**. You are back in the list of software models.",
+            "Click **Our software models** below and click **Microsoft Windows Server Standard**.",
+            "Scroll down to the tabs at the bottom and click **Matching Discovery Models**."
+          ],
+          "form": [
+            {
+              "title": "Software model form",
+              "rows": [
+                {
+                  "field": "Publisher",
+                  "value": "Microsoft",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Product",
+                  "value": "Windows Server",
+                  "note": "type the first letters and pick it from the list"
+                },
+                {
+                  "field": "Version condition",
+                  "value": "is anything",
+                  "note": "already set; this counts every version",
+                  "copy": false
+                },
+                {
+                  "field": "Version",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Edition condition",
+                  "value": "is",
+                  "copy": false
+                },
+                {
+                  "field": "Edition",
+                  "value": "Standard"
+                },
+                {
+                  "field": "Product type",
+                  "value": "Licensable",
+                  "note": "in the Software Licensing section",
+                  "copy": false
+                },
+                {
+                  "field": "License under management",
+                  "value": "ticked",
+                  "note": "already set",
+                  "copy": false
+                },
+                {
+                  "field": "Short description",
+                  "value": "Northstar story E",
+                  "note": "filled in by the button; check it"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "New software model",
+              "path": "cmdb_software_product_model.do?sys_id=-1&sysparm_query=short_description%3DNorthstar%20story%20E"
+            },
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
+          "see": "**Microsoft Windows Server Standard** is in the list, and its tab **Matching Discovery Models** lists the Windows Server discovery model (7 installations).",
+          "help": [
+            "Publisher, product and edition must be exactly the clean values the status script showed in step 3.5. If you picked something else in step 3.4, use that here too.",
+            "**Matching Discovery Models** is empty: compare the three values with the status script. Still empty: set **Edition condition** to **is anything** and click **Update**.",
+            "A model called Microsoft Windows Server Standard already exists from the demo data: use it instead. Set its **Short description** to **Northstar story E**, check the fields against the table and click **Update**.",
+            "No Open button: click **All**, then **Software Asset**, **Licensing**, **Software Models**, and click **New**."
+          ]
+        },
+        {
+          "id": "s3-7",
+          "num": "3.11",
+          "title": "Check the five software models together",
+          "where": "Your instance",
+          "what": "Confirms in one list that all five products exist and each one finds its installations.",
+          "do": [
+            "Click **Our software models** below. It shows the models whose short description starts with Northstar.",
+            "Open each model and look at its tab **Matching Discovery Models**.",
+            "Choose the result for each row in the table."
+          ],
+          "links": [
+            {
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar%5EORDERBYshort_description"
+            }
+          ],
           "grid": {
             "id": "models_made",
             "rowLabel": "Software model",
+            "summary": true,
             "columns": [
               {
                 "key": "how",
@@ -1501,53 +2305,49 @@
                   "Created",
                   "Reused from demo data"
                 ]
+              },
+              {
+                "key": "match",
+                "label": "Matching discovery model",
+                "type": "select",
+                "options": [
+                  "Found",
+                  "Missing"
+                ]
               }
             ],
             "rows": [
               {
                 "id": "A",
-                "label": "Adobe Acrobat 2024 Pro"
+                "label": "Adobe Acrobat Pro"
               },
               {
                 "id": "B",
-                "label": "Microsoft SQL Server 2022 Standard"
+                "label": "Microsoft SQL Server Standard"
               },
               {
                 "id": "C",
-                "label": "Microsoft Visio 2021 Professional"
+                "label": "Microsoft Visio Professional"
               },
               {
                 "id": "D",
-                "label": "Microsoft Project 2021 Professional"
+                "label": "Microsoft Project Professional"
               },
               {
                 "id": "E",
-                "label": "Microsoft Windows Server 2022 Standard"
+                "label": "Microsoft Windows Server Standard"
               }
             ]
           },
-          "note": "A [[software model]] is the product as we manage it. In a real company it is created from the publisher's part number, which adds details such as downgrade rights. Our invented purchases have no real part numbers, so we create the models by hand.",
-          "see": "5 software models with publisher, product, version and edition.",
-          "shot": "S3_04_software_model.png"
-        },
-        {
-          "id": "s3-7",
-          "num": "3.7",
-          "title": "Check that each model finds its installations",
-          "where": "Software Asset Workspace",
-          "do": [
-            "Open each of the 5 models and find **Discovery maps** (a tab, or a list at the bottom).",
-            "There should be a map for the product. If the list is empty, click **New** and enter the same publisher, product, version and edition."
-          ],
-          "note": "The [[discovery map]] connects installations to the model. Without it the model counts zero.",
-          "see": "Each model has at least one discovery map.",
+          "note": "The [[discovery map]] connects installations to a model. A model without a matching discovery model counts zero.",
+          "see": "5 models, Northstar story A to E, each with **Found**.",
           "shot": "S3_05_discovery_map.png"
         }
       ],
       "checks": [
         {
           "id": "s3-c1",
-          "text": "All 8 Northstar discovery models are Normalized or Manually normalized."
+          "text": "All 8 Northstar discovery models are Normalized or Manually Normalized."
         },
         {
           "id": "s3-c2",
@@ -1555,11 +2355,11 @@
         },
         {
           "id": "s3-c3",
-          "text": "5 software models exist with publisher, product, version and edition."
+          "text": "5 software models exist with short description Northstar story A to E."
         },
         {
           "id": "s3-c4",
-          "text": "Each model has a discovery map."
+          "text": "Each model lists its discovery model under Matching Discovery Models."
         }
       ],
       "problems": [
@@ -1569,7 +2369,7 @@
         },
         {
           "problem": "A model later shows 0 installations",
-          "fix": "Usually the version or edition does not match. Set the version condition to All versions, or make the edition match the discovery model exactly. Then run the license check again."
+          "fix": "Publisher, product or edition differ from the discovery model. Run the status script, copy the exact values into the model, or set Edition condition to is anything. Then run the license check again."
         },
         {
           "problem": "The form looks different from this guide",
@@ -1586,7 +2386,7 @@
       "goal": "Record the 5 purchases, hand out the Acrobat and Project licenses, run the license check and read the five results.",
       "why": "This is the heart of SAM: comparing what is installed with what was bought. The result shows where we are short, which is an audit risk, and where we pay for licenses nobody uses.",
       "before": [
-        "Stage 3 is finished: 5 software models with discovery maps."
+        "Stage 3 is finished: 5 software models, each with a matching discovery model."
       ],
       "steps": [
         {
@@ -1594,202 +2394,581 @@
           "num": "4.1",
           "title": "Start the change log for this stage",
           "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
           "do": [
-            "Open **Update sets** below, click **New**.",
-            "Name it **SAM Portfolio S4 Entitlements** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Update set name",
-              "value": "SAM Portfolio S4 Entitlements"
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S4 Entitlements"
+                }
+              ]
             }
           ],
           "links": [
             {
               "label": "Update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
-          "see": "**SAM Portfolio S4 Entitlements** is your current update set."
+          "see": "The list shows **SAM Portfolio S4 Entitlements** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ]
         },
         {
-          "id": "s4-2",
+          "id": "s4-ent-a",
           "num": "4.2",
-          "title": "Create the 5 entitlements",
+          "title": "Enter purchase A: Adobe Acrobat Pro",
           "where": "Software Asset Workspace",
+          "what": "Records our Acrobat purchase: 40 named-user subscriptions at EUR 192 each, valid until 31 January 2027.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Software entitlements**, **New** (classic menu: All, Software Asset, Entitlements, New).",
-            "Create one [[entitlement]] per row: software model, license metric, rights, unit cost, license type and dates.",
-            "Where the form shows them, also fill in **Vendor** (Synthetic Reseller BV) and **PO number**. The script in step 4.4 finds the entitlements by PO number.",
-            "Save each one, then tick it in the second table."
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace). It opens on **Software asset overview**.",
+            "Click **Create entitlement**. A box opens.",
+            "Choose **Fill out the details in a standard form** and click **Next**. The page **Create New Software Entitlement** opens.",
+            "Fill in the fields of the first table. Leave every other field as it is.",
+            "Click **Save**. Four tabs appear: **Allocations**, **General**, **Financial** and **Contracts**.",
+            "Fill in the fields of the second table on the **General** and **Financial** tabs. Click **Save** again.",
+            "Click **Publish**. The State changes from **Build** to **In use**."
           ],
-          "table": {
-            "columns": [
-              {
-                "key": "s",
-                "label": "Story"
-              },
-              {
-                "key": "model",
-                "label": "Software model"
-              },
-              {
-                "key": "metric",
-                "label": "License metric"
-              },
-              {
-                "key": "rights",
-                "label": "Rights"
-              },
-              {
-                "key": "cost",
-                "label": "Unit cost EUR"
-              },
-              {
-                "key": "type",
-                "label": "Type"
-              },
-              {
-                "key": "start",
-                "label": "Start"
-              },
-              {
-                "key": "end",
-                "label": "End"
-              },
-              {
-                "key": "po",
-                "label": "PO number"
-              }
-            ],
-            "rows": [
-              {
-                "s": "A",
-                "model": "Adobe Acrobat 2024 Pro",
-                "metric": "Per Named User (or Per User)",
-                "rights": "40",
-                "cost": "192.00",
-                "type": "Subscription",
-                "start": "2026-02-01",
-                "end": "2027-01-31",
-                "po": "NSM-PO-2026-0101"
-              },
-              {
-                "s": "B",
-                "model": "Microsoft SQL Server 2022 Standard",
-                "metric": "Per Core",
-                "rights": "16 (8 packs of 2)",
-                "cost": "3,945.00",
-                "type": "Perpetual",
-                "start": "2025-11-20",
-                "end": "",
-                "po": "NSM-PO-2025-0877"
-              },
-              {
-                "s": "C",
-                "model": "Microsoft Visio 2021 Professional",
-                "metric": "Per Device",
-                "rights": "60",
-                "cost": "579.00",
-                "type": "Perpetual",
-                "start": "2025-06-10",
-                "end": "",
-                "po": "NSM-PO-2025-0412"
-              },
-              {
-                "s": "D",
-                "model": "Microsoft Project 2021 Professional",
-                "metric": "Per Device",
-                "rights": "30",
-                "cost": "1,059.00",
-                "type": "Perpetual",
-                "start": "2025-06-10",
-                "end": "",
-                "po": "NSM-PO-2025-0413"
-              },
-              {
-                "s": "E",
-                "model": "Microsoft Windows Server 2022 Standard",
-                "metric": "Per Core",
-                "rights": "112 (56 packs of 2)",
-                "cost": "248.00",
-                "type": "Perpetual",
-                "start": "2025-03-05",
-                "end": "",
-                "po": "NSM-PO-2025-0150"
-              }
-            ]
-          },
+          "form": [
+            {
+              "title": "First screen",
+              "rows": [
+                {
+                  "field": "Software model",
+                  "value": "Adobe Acrobat Pro",
+                  "note": "type the first letters and pick our model"
+                },
+                {
+                  "field": "Asset tag",
+                  "value": "NSM-ENT-A"
+                },
+                {
+                  "field": "License type",
+                  "value": "Subscription",
+                  "copy": false
+                },
+                {
+                  "field": "License metric",
+                  "value": "Per Named User",
+                  "note": "not offered: choose the closest, see If not",
+                  "copy": false
+                },
+                {
+                  "field": "Subscription period",
+                  "value": "Annually",
+                  "note": "only if the form shows it",
+                  "copy": false
+                },
+                {
+                  "field": "Start date",
+                  "value": "2026-02-01"
+                },
+                {
+                  "field": "End date",
+                  "value": "2027-01-31"
+                },
+                {
+                  "field": "Purchased rights",
+                  "value": "40"
+                },
+                {
+                  "field": "Unit cost",
+                  "value": "192.00",
+                  "note": "price of one user per year"
+                }
+              ]
+            },
+            {
+              "title": "After the first Save: General and Financial tabs",
+              "rows": [
+                {
+                  "field": "Company (General tab)",
+                  "value": "Northstar Manufacturing"
+                },
+                {
+                  "field": "Vendor (Financial tab)",
+                  "value": "Synthetic Reseller BV"
+                },
+                {
+                  "field": "Invoice number (Financial tab)",
+                  "value": "NSM-INV-2026-0101"
+                },
+                {
+                  "field": "Purchased (Financial tab)",
+                  "value": "2026-01-15"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Entitlement (classic form)",
+              "path": "alm_license.do?sys_id=-1&sysparm_query=asset_tag%3DNSM-ENT-A"
+            }
+          ],
+          "see": "The entitlement shows Asset tag **NSM-ENT-A**, 40 purchased rights and State **In use**.",
+          "help": [
+            "The workspace is missing or **Create entitlement** does nothing: click the button **Entitlement (classic form)** in this step. Fill in both tables (Company is on the **General** tab, the other three on the **Financial** tab), set **State** on the **General** tab to **In use** and click **Submit**.",
+            "**Per Named User** is not offered: choose **Per User**. Both give 40 of 40 in the license check.",
+            "**Publish** is not shown: a required field is still empty. Look for a red star or a red message at the top.",
+            "Dates: type them as shown (2026-02-01) or pick them with the calendar icon."
+          ],
+          "note": "The [[asset tag]] NSM-ENT-A to NSM-ENT-E is how the scripts, reports and backups find our five purchases. [[Unit cost]] is the price of one right (one user, one device or one core): ServiceNow multiplies it by the number of rights.",
+          "shot": "S4_01_entitlement_form.png"
+        },
+        {
+          "id": "s4-ent-b",
+          "num": "4.3",
+          "title": "Enter purchase B: SQL Server Standard",
+          "where": "Software Asset Workspace",
+          "what": "Records our SQL Server purchase: 16 core licenses, bought as 8 packs of 2 cores at EUR 3,945 per pack.",
+          "do": [
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace). It opens on **Software asset overview**.",
+            "Click **Create entitlement**. A box opens.",
+            "Choose **Fill out the details in a standard form** and click **Next**. The page **Create New Software Entitlement** opens.",
+            "Fill in the fields of the first table. Leave every other field as it is.",
+            "Click **Save**. Four tabs appear: **Allocations**, **General**, **Financial** and **Contracts**.",
+            "Fill in the fields of the second table on the **General** and **Financial** tabs. Click **Save** again.",
+            "Click **Publish**. The State changes from **Build** to **In use**."
+          ],
+          "form": [
+            {
+              "title": "First screen",
+              "rows": [
+                {
+                  "field": "Software model",
+                  "value": "Microsoft SQL Server Standard",
+                  "note": "type the first letters and pick our model"
+                },
+                {
+                  "field": "Asset tag",
+                  "value": "NSM-ENT-B"
+                },
+                {
+                  "field": "License type",
+                  "value": "Perpetual",
+                  "copy": false
+                },
+                {
+                  "field": "License metric",
+                  "value": "Per Core",
+                  "copy": false
+                },
+                {
+                  "field": "Rights per license pack",
+                  "value": "2"
+                },
+                {
+                  "field": "Number of packs",
+                  "value": "8"
+                },
+                {
+                  "field": "Purchased rights",
+                  "value": "16",
+                  "note": "fills itself in: packs x rights per pack",
+                  "copy": false
+                },
+                {
+                  "field": "Unit cost",
+                  "value": "1972.50",
+                  "note": "price of ONE core: a pack of 2 cores costs EUR 3,945"
+                }
+              ]
+            },
+            {
+              "title": "After the first Save: General and Financial tabs",
+              "rows": [
+                {
+                  "field": "Company (General tab)",
+                  "value": "Northstar Manufacturing"
+                },
+                {
+                  "field": "Vendor (Financial tab)",
+                  "value": "Synthetic Reseller BV"
+                },
+                {
+                  "field": "Invoice number (Financial tab)",
+                  "value": "NSM-INV-2025-0877"
+                },
+                {
+                  "field": "Purchased (Financial tab)",
+                  "value": "2025-11-20"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Entitlement (classic form)",
+              "path": "alm_license.do?sys_id=-1&sysparm_query=asset_tag%3DNSM-ENT-B"
+            }
+          ],
+          "see": "The entitlement shows Asset tag **NSM-ENT-B**, 16 purchased rights and State **In use**.",
+          "help": [
+            "The workspace is missing or **Create entitlement** does nothing: click the button **Entitlement (classic form)** in this step. Fill in both tables (Company is on the **General** tab, the other three on the **Financial** tab), set **State** on the **General** tab to **In use** and click **Submit**.",
+            "Choose **Per Core**, not **Per Core (with CAL)**. No plain Per Core: choose the metric with **Core** in its name and write it down.",
+            "**Publish** is not shown: a required field is still empty. Look for a red star or a red message at the top.",
+            "Dates: type them as shown (2026-02-01) or pick them with the calendar icon."
+          ]
+        },
+        {
+          "id": "s4-ent-c",
+          "num": "4.4",
+          "title": "Enter purchase C: Visio Professional",
+          "where": "Software Asset Workspace",
+          "what": "Records our Visio purchase: 60 device licenses at EUR 579 each.",
+          "do": [
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace). It opens on **Software asset overview**.",
+            "Click **Create entitlement**. A box opens.",
+            "Choose **Fill out the details in a standard form** and click **Next**. The page **Create New Software Entitlement** opens.",
+            "Fill in the fields of the first table. Leave every other field as it is.",
+            "Click **Save**. Four tabs appear: **Allocations**, **General**, **Financial** and **Contracts**.",
+            "Fill in the fields of the second table on the **General** and **Financial** tabs. Click **Save** again.",
+            "Click **Publish**. The State changes from **Build** to **In use**."
+          ],
+          "form": [
+            {
+              "title": "First screen",
+              "rows": [
+                {
+                  "field": "Software model",
+                  "value": "Microsoft Visio Professional",
+                  "note": "type the first letters and pick our model"
+                },
+                {
+                  "field": "Asset tag",
+                  "value": "NSM-ENT-C"
+                },
+                {
+                  "field": "License type",
+                  "value": "Perpetual",
+                  "copy": false
+                },
+                {
+                  "field": "License metric",
+                  "value": "Per Device",
+                  "note": "not offered: choose the closest, see If not",
+                  "copy": false
+                },
+                {
+                  "field": "Purchased rights",
+                  "value": "60"
+                },
+                {
+                  "field": "Unit cost",
+                  "value": "579.00",
+                  "note": "price of one device license"
+                }
+              ]
+            },
+            {
+              "title": "After the first Save: General and Financial tabs",
+              "rows": [
+                {
+                  "field": "Company (General tab)",
+                  "value": "Northstar Manufacturing"
+                },
+                {
+                  "field": "Vendor (Financial tab)",
+                  "value": "Synthetic Reseller BV"
+                },
+                {
+                  "field": "Invoice number (Financial tab)",
+                  "value": "NSM-INV-2025-0412"
+                },
+                {
+                  "field": "Purchased (Financial tab)",
+                  "value": "2025-06-10"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Entitlement (classic form)",
+              "path": "alm_license.do?sys_id=-1&sysparm_query=asset_tag%3DNSM-ENT-C"
+            }
+          ],
+          "see": "The entitlement shows Asset tag **NSM-ENT-C**, 60 purchased rights and State **In use**.",
+          "help": [
+            "The workspace is missing or **Create entitlement** does nothing: click the button **Entitlement (classic form)** in this step. Fill in both tables (Company is on the **General** tab, the other three on the **Financial** tab), set **State** on the **General** tab to **In use** and click **Submit**.",
+            "**Per Device** is not offered: choose **Per Installation** and write it down.",
+            "**Publish** is not shown: a required field is still empty. Look for a red star or a red message at the top.",
+            "Dates: type them as shown (2026-02-01) or pick them with the calendar icon."
+          ]
+        },
+        {
+          "id": "s4-ent-d",
+          "num": "4.5",
+          "title": "Enter purchase D: Project Professional",
+          "where": "Software Asset Workspace",
+          "what": "Records our Project purchase: 30 device licenses at EUR 1,059 each.",
+          "do": [
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace). It opens on **Software asset overview**.",
+            "Click **Create entitlement**. A box opens.",
+            "Choose **Fill out the details in a standard form** and click **Next**. The page **Create New Software Entitlement** opens.",
+            "Fill in the fields of the first table. Leave every other field as it is.",
+            "Click **Save**. Four tabs appear: **Allocations**, **General**, **Financial** and **Contracts**.",
+            "Fill in the fields of the second table on the **General** and **Financial** tabs. Click **Save** again.",
+            "Click **Publish**. The State changes from **Build** to **In use**."
+          ],
+          "form": [
+            {
+              "title": "First screen",
+              "rows": [
+                {
+                  "field": "Software model",
+                  "value": "Microsoft Project Professional",
+                  "note": "type the first letters and pick our model"
+                },
+                {
+                  "field": "Asset tag",
+                  "value": "NSM-ENT-D"
+                },
+                {
+                  "field": "License type",
+                  "value": "Perpetual",
+                  "copy": false
+                },
+                {
+                  "field": "License metric",
+                  "value": "Per Device",
+                  "note": "not offered: choose the closest, see If not",
+                  "copy": false
+                },
+                {
+                  "field": "Purchased rights",
+                  "value": "30"
+                },
+                {
+                  "field": "Unit cost",
+                  "value": "1059.00",
+                  "note": "price of one device license"
+                }
+              ]
+            },
+            {
+              "title": "After the first Save: General and Financial tabs",
+              "rows": [
+                {
+                  "field": "Company (General tab)",
+                  "value": "Northstar Manufacturing"
+                },
+                {
+                  "field": "Vendor (Financial tab)",
+                  "value": "Synthetic Reseller BV"
+                },
+                {
+                  "field": "Invoice number (Financial tab)",
+                  "value": "NSM-INV-2025-0413"
+                },
+                {
+                  "field": "Purchased (Financial tab)",
+                  "value": "2025-06-10"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Entitlement (classic form)",
+              "path": "alm_license.do?sys_id=-1&sysparm_query=asset_tag%3DNSM-ENT-D"
+            }
+          ],
+          "see": "The entitlement shows Asset tag **NSM-ENT-D**, 30 purchased rights and State **In use**.",
+          "help": [
+            "The workspace is missing or **Create entitlement** does nothing: click the button **Entitlement (classic form)** in this step. Fill in both tables (Company is on the **General** tab, the other three on the **Financial** tab), set **State** on the **General** tab to **In use** and click **Submit**.",
+            "**Per Device** is not offered: choose **Per Installation** and write it down.",
+            "**Publish** is not shown: a required field is still empty. Look for a red star or a red message at the top.",
+            "Dates: type them as shown (2026-02-01) or pick them with the calendar icon."
+          ]
+        },
+        {
+          "id": "s4-ent-e",
+          "num": "4.6",
+          "title": "Enter purchase E: Windows Server Standard",
+          "where": "Software Asset Workspace",
+          "what": "Records our Windows Server purchase: 112 core licenses, bought as 56 packs of 2 cores.",
+          "do": [
+            "Open the **Software Asset Workspace** (All, Software Asset Workspace). It opens on **Software asset overview**.",
+            "Click **Create entitlement**. A box opens.",
+            "Choose **Fill out the details in a standard form** and click **Next**. The page **Create New Software Entitlement** opens.",
+            "Fill in the fields of the first table. Leave every other field as it is.",
+            "Click **Save**. Four tabs appear: **Allocations**, **General**, **Financial** and **Contracts**.",
+            "Fill in the fields of the second table on the **General** and **Financial** tabs. Click **Save** again.",
+            "Click **Publish**. The State changes from **Build** to **In use**."
+          ],
+          "form": [
+            {
+              "title": "First screen",
+              "rows": [
+                {
+                  "field": "Software model",
+                  "value": "Microsoft Windows Server Standard",
+                  "note": "type the first letters and pick our model"
+                },
+                {
+                  "field": "Asset tag",
+                  "value": "NSM-ENT-E"
+                },
+                {
+                  "field": "License type",
+                  "value": "Perpetual",
+                  "copy": false
+                },
+                {
+                  "field": "License metric",
+                  "value": "Per Core",
+                  "copy": false
+                },
+                {
+                  "field": "Rights per license pack",
+                  "value": "2"
+                },
+                {
+                  "field": "Number of packs",
+                  "value": "56"
+                },
+                {
+                  "field": "Purchased rights",
+                  "value": "112",
+                  "note": "fills itself in: packs x rights per pack",
+                  "copy": false
+                },
+                {
+                  "field": "Unit cost",
+                  "value": "124.00",
+                  "note": "price of ONE core: a pack of 2 cores costs EUR 248"
+                }
+              ]
+            },
+            {
+              "title": "After the first Save: General and Financial tabs",
+              "rows": [
+                {
+                  "field": "Company (General tab)",
+                  "value": "Northstar Manufacturing"
+                },
+                {
+                  "field": "Vendor (Financial tab)",
+                  "value": "Synthetic Reseller BV"
+                },
+                {
+                  "field": "Invoice number (Financial tab)",
+                  "value": "NSM-INV-2025-0150"
+                },
+                {
+                  "field": "Purchased (Financial tab)",
+                  "value": "2025-03-05"
+                }
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Entitlement (classic form)",
+              "path": "alm_license.do?sys_id=-1&sysparm_query=asset_tag%3DNSM-ENT-E"
+            }
+          ],
+          "see": "The entitlement shows Asset tag **NSM-ENT-E**, 112 purchased rights and State **In use**.",
+          "help": [
+            "The workspace is missing or **Create entitlement** does nothing: click the button **Entitlement (classic form)** in this step. Fill in both tables (Company is on the **General** tab, the other three on the **Financial** tab), set **State** on the **General** tab to **In use** and click **Submit**.",
+            "Choose **Per Core**, not **Per Core (with CAL)**. No plain Per Core: choose the metric with **Core** in its name and write it down.",
+            "**Publish** is not shown: a required field is still empty. Look for a red star or a red message at the top.",
+            "Dates: type them as shown (2026-02-01) or pick them with the calendar icon."
+          ]
+        },
+        {
+          "id": "s4-3",
+          "num": "4.7",
+          "title": "Check that all five purchases are In use",
+          "where": "Your instance",
+          "what": "Confirms all five purchases are published. The license check ignores entitlements still in State **Build**.",
+          "do": [
+            "Click **Our entitlements** below. It lists the entitlements whose asset tag starts with NSM-ENT.",
+            "Read the **State** column of each row. No State column: open each entitlement and look on its **General** tab.",
+            "Choose the State for each row in the table."
+          ],
+          "links": [
+            {
+              "label": "Our entitlements",
+              "path": "alm_license_list.do?sysparm_query=asset_tagSTARTSWITHNSM-ENT%5EORDERBYasset_tag"
+            }
+          ],
           "grid": {
-            "id": "ents_made",
+            "id": "ents_in_use",
             "rowLabel": "Entitlement",
+            "summary": true,
+            "rate": {
+              "column": "state",
+              "good": [
+                "In use"
+              ],
+              "label": "Published",
+              "fact": "Northstar entitlements in use"
+            },
             "columns": [
               {
-                "key": "saved",
-                "label": "Saved",
-                "type": "check"
+                "key": "state",
+                "label": "State shown",
+                "type": "select",
+                "options": [
+                  "In use",
+                  "Build",
+                  "Other"
+                ]
               }
             ],
             "rows": [
               {
                 "id": "A",
-                "label": "A  Adobe Acrobat 2024 Pro"
+                "label": "NSM-ENT-A  Adobe Acrobat Pro"
               },
               {
                 "id": "B",
-                "label": "B  SQL Server 2022 Standard"
+                "label": "NSM-ENT-B  SQL Server Standard"
               },
               {
                 "id": "C",
-                "label": "C  Visio 2021 Professional"
+                "label": "NSM-ENT-C  Visio Professional"
               },
               {
                 "id": "D",
-                "label": "D  Project 2021 Professional"
+                "label": "NSM-ENT-D  Project Professional"
               },
               {
                 "id": "E",
-                "label": "E  Windows Server 2022 Standard"
+                "label": "NSM-ENT-E  Windows Server Standard"
               }
             ]
           },
-          "note": "Unit cost is the price of one right: one user, one device or one core. With it the system shows money, not just counts. The [[license metric]] says what is counted.",
+          "see": "5 rows, NSM-ENT-A to NSM-ENT-E, all with State **In use**.",
           "help": [
-            "The exact metric is not offered: for Acrobat use **Per User** or **Per Device**; both give 40 of 40. For SQL Server and Windows Server choose the metric with **Core** in its name.",
-            "The form asks for packs: SQL Server is 8 packs of 2 cores, Windows Server is 56 packs of 2 cores."
+            "A row shows **Build**: open it and click **Publish**. In the classic form, set **State** to **In use** on the General tab and click **Update**."
           ],
-          "see": "5 entitlements saved, still in **Draft**.",
-          "shot": "S4_01_entitlement_form.png"
-        },
-        {
-          "id": "s4-3",
-          "num": "4.3",
-          "title": "Publish each entitlement",
-          "where": "Software Asset Workspace",
-          "do": [
-            "New entitlements start as **Draft**, and the license check ignores drafts.",
-            "Open each of the 5 entitlements and click **Publish**."
-          ],
-          "links": [
-            {
-              "label": "Northstar entitlements",
-              "path": "alm_license_list.do?sysparm_query=po_numberSTARTSWITHNSM-PO"
-            }
-          ],
-          "see": "All 5 show **Published**.",
           "shot": "S4_02_entitlements_published.png"
         },
         {
           "id": "s4-4",
-          "num": "4.4",
+          "num": "4.8",
           "title": "Hand out the licenses",
           "where": "Your instance",
           "script": "02_allocate_licenses.js",
+          "what": "Gives one Acrobat license to each of the 40 Acrobat users and one Project license to each of the 28 laptops with Project. One script does all 68 [[allocation|allocations]].",
           "do": [
-            "Open **Scripts - Background**, click **Copy script**, paste it and click **Run script**.",
-            "The script gives one Acrobat license to each of the 40 Acrobat users and one Project license to each of the 28 laptops with Project.",
-            "Copy the result lines into the box."
+            "Click **Scripts - Background** below.",
+            "Click **Copy script**, paste it into the big text box and click **Run script**.",
+            "Copy the result lines into the box below."
           ],
           "links": [
             {
@@ -1797,11 +2976,12 @@
               "path": "sys.scripts.do"
             }
           ],
-          "note": "An [[allocation]] ties a license to a named person or computer.",
-          "see": "Acrobat: **40 created**. Project: **28 created**.",
+          "note": "An allocation ties a license to a named person or computer. The script finds the purchases by their asset tags NSM-ENT-A and NSM-ENT-D.",
+          "see": "Acrobat: **40 created**. Project: **28 created**. Both found by asset tag, with State In use.",
           "help": [
-            "\"No Acrobat entitlement found\": check that the Acrobat entitlement is saved and published and has PO number NSM-PO-2026-0101, then run again.",
-            "Prefer clicking: open the Acrobat entitlement, go to its allocations, click Allocate and add the users of NSM-WS-001 to NSM-WS-040 (Northstar files, 10_allocations.csv)."
+            "\"No Acrobat entitlement found\": check that purchase A exists with Asset tag **NSM-ENT-A** (step 4.2), then run again.",
+            "A note says the State is Build: publish that entitlement (step 4.7) and run the script again. It never creates duplicates.",
+            "Prefer clicking: open the Acrobat entitlement, open the **Allocations** tab and add the 40 users listed in **10_allocations.csv** (Northstar files)."
           ],
           "record": [
             {
@@ -1814,19 +2994,22 @@
         },
         {
           "id": "s4-5",
-          "num": "4.5",
+          "num": "4.9",
           "title": "Run the license check",
-          "where": "Software Asset Workspace",
+          "where": "Your instance",
           "timer": true,
           "wait": "5 to 15 minutes",
+          "what": "Runs the [[reconciliation|license check]] now instead of waiting for its weekly automatic run. It compares installations and allocations with what we bought.",
           "do": [
-            "Open Software Asset Workspace, **License usage**. If you see **Run reconciliation**, click it.",
-            "No such button: open **Reconciliation job**, open the job, click **Execute Now**.",
-            "Click **Start timer**, then watch **Reconciliation runs** until the newest run is finished."
+            "Click **License check job** below. A list of scheduled jobs opens.",
+            "Click **SAM - Software License Reconciliation**.",
+            "Click **Execute Now** at the top right. Then click **Start timer** below.",
+            "Click **Reconciliation runs** below. The newest run is at the top. Reload the page every few minutes.",
+            "The run is finished when the newest row shows it ended (for example a state such as Completed, or an end time)."
           ],
           "links": [
             {
-              "label": "Reconciliation job",
+              "label": "License check job",
               "path": "sysauto_list.do?sysparm_query=nameLIKEreconcil"
             },
             {
@@ -1834,22 +3017,27 @@
               "path": "samp_reconciliation_result_list.do?sysparm_query=ORDERBYDESCsys_created_on"
             }
           ],
-          "note": "[[Reconciliation]] compares what is installed and allocated with what was bought, using the license metric and the vendor's rules.",
-          "see": "The newest reconciliation run is finished without errors."
+          "note": "Another way to start it: on the workspace page **Software asset overview**, click **Run reconciliation**. Never start a second run while one is still going.",
+          "see": "The newest reconciliation run finished without errors.",
+          "help": [
+            "The job name differs: open the job that mentions Software License Reconciliation."
+          ]
         },
         {
           "id": "s4-6",
-          "num": "4.6",
+          "num": "4.10",
           "title": "Read the five results",
           "where": "Software Asset Workspace",
+          "what": "Writes down the five [[license position|license positions]]: the core result of the whole project.",
           "do": [
-            "Open Software Asset Workspace, **License usage**, then Adobe and Microsoft, and find our five products. Or open **Results by product**.",
-            "Write what the system shows in the table. The expected values are on the left."
+            "Open the **Software Asset Workspace** and click **License usage** in the menu on the left.",
+            "Click **Adobe**, then **Microsoft**, and find our five products. Or click **Results by product** below: it lists the newest results of our five models first.",
+            "For each product, type what the system shows for **Owned** and **Used**, and choose the **Position** in the table."
           ],
           "links": [
             {
               "label": "Results by product",
-              "path": "samp_software_model_result_list.do?sysparm_query=ORDERBYDESCsys_created_on"
+              "path": "samp_software_model_result_list.do?sysparm_query=software_model.short_descriptionSTARTSWITHNorthstar%5EORDERBYDESCsys_created_on"
             }
           ],
           "grid": {
@@ -1912,46 +3100,66 @@
               }
             ]
           },
-          "note": "A [[license position]] is the result for one product. Under-licensed means a [[true-up]] risk.",
+          "note": "Under-licensed means a [[true-up]] risk: a bill after an audit. Over-licensed means money tied up in licenses nobody uses.",
           "see": "A compliant, B short by 8 cores, C 25 licenses unused, D compliant with 2 spare, E compliant.",
           "help": [
-            "A product shows 0 used: open its software model, check the discovery map and version (step 3.7), fix it and run the check again.",
-            "Windows Server shows 88 instead of 112: the system counted actual cores without Microsoft's minimums. Write it down. Stage 5 explains the difference."
+            "A product shows 0 used: open its software model and check **Matching Discovery Models** (step 3.11), fix it and run the license check again.",
+            "Windows Server shows 88 instead of 112: the system counted the actual cores without Microsoft's minimums. Write it down; Stage 5 explains the difference."
           ],
           "shot": "S4_04_results_overview.png"
         },
         {
           "id": "s4-7",
-          "num": "4.7",
+          "num": "4.11",
           "title": "Follow one result back to its source",
           "where": "Software Asset Workspace",
+          "what": "Proves that every number can be explained, by tracing the SQL Server shortage back to the three servers.",
           "do": [
-            "Open the SQL Server result: 24 cores needed, 16 owned.",
-            "Open the entitlement: 16 cores in 8 packs.",
-            "Open the installations: 3 servers, NSM-SQL-01 to NSM-SQL-03.",
-            "Open NSM-SQL-01: 2 processors with 4 cores each, so 8 cores. 3 servers times 8 cores is 24."
+            "Open the SQL Server result (from step 4.10). It shows 24 cores needed and 16 owned.",
+            "Open the purchase: entitlement **NSM-ENT-B** shows 16 cores in 8 packs of 2.",
+            "Open the installations of SQL Server: 3 servers, NSM-SQL-01 to NSM-SQL-03.",
+            "Open **NSM-SQL-01**: CPU count 2, CPU core count 4, so 8 cores. 3 servers times 8 cores is 24."
           ],
-          "see": "You can explain where every number comes from.",
+          "links": [
+            {
+              "label": "NSM-ENT-B",
+              "path": "alm_license_list.do?sysparm_query=asset_tag%3DNSM-ENT-B"
+            },
+            {
+              "label": "SQL Server installations",
+              "path": "cmdb_sam_sw_install_list.do?sysparm_query=installed_on.nameSTARTSWITHNSM-%5Edisplay_name%3DMicrosoft%20SQL%20Server%202022%20Standard%20Edition"
+            }
+          ],
+          "see": "You can explain where 24 and 16 come from.",
           "shot": "S4_05_trace_sql_server.png"
         },
         {
           "id": "s4-8",
-          "num": "4.8",
+          "num": "4.12",
           "title": "Look at the fix options",
           "where": "Software Asset Workspace",
+          "what": "Shows the [[remediation]] options ServiceNow offers for the SQL Server shortage, and what buying the missing licenses would cost.",
           "do": [
-            "On the SQL Server result, open **Remediation options**.",
-            "Look at the choices, such as buying more licenses or removing installations. Do not run any of them. Take the screenshot."
+            "Open the SQL Server result in **License usage**.",
+            "Open **Remediation options**.",
+            "Look at the choices, such as buying more licenses or removing installations. Do not run any of them.",
+            "Write down the price the system shows for buying the missing licenses."
           ],
-          "note": "[[Remediation]] means fixing a license problem.",
-          "see": "The options, and with the unit cost filled in, the price of buying 4 packs: EUR 15,780.",
+          "see": "The options, and a purchase price of 8 cores x EUR 1,972.50 = **EUR 15,780** (4 packs of 2 cores at EUR 3,945), or the system's own figure.",
+          "record": [
+            {
+              "id": "remediation_price",
+              "label": "Price shown to buy the missing SQL Server licenses (EUR)",
+              "fact": true
+            }
+          ],
           "shot": "S4_06_remediation_options.png"
         }
       ],
       "checks": [
         {
           "id": "s4-c1",
-          "text": "5 entitlements exist and all are Published."
+          "text": "5 entitlements exist with asset tags NSM-ENT-A to NSM-ENT-E, all in State In use."
         },
         {
           "id": "s4-c2",
@@ -1972,12 +3180,16 @@
       ],
       "problems": [
         {
+          "problem": "The workspace is not available",
+          "fix": "Use the button Entitlement (classic form) in each purchase step. Fill in the same values, set State to In use on the General tab and click Submit."
+        },
+        {
           "problem": "An entitlement cannot be published",
           "fix": "A required field is empty. The form highlights it. Usually it is the software model, the metric or the rights."
         },
         {
           "problem": "Per core numbers differ from the table",
-          "fix": "Check CPU count and CPU core count on the servers (step 2.5) and that a Microsoft plugin is in the plugin list (step 1.4). Write down what the system shows. Both readings can be explained."
+          "fix": "Check CPU count and CPU core count on the servers (step 2.5) and that a Microsoft plugin is in the plugin list (step 1.5). Write down what the system shows. Both readings can be explained."
         },
         {
           "problem": "The license check seems stuck",
@@ -2002,36 +3214,48 @@
           "num": "5.1",
           "title": "Start the change log for this stage",
           "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
           "do": [
-            "Open **Update sets** below, click **New**.",
-            "Name it **SAM Portfolio S5 Optimization** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Update set name",
-              "value": "SAM Portfolio S5 Optimization"
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S5 Optimization"
+                }
+              ]
             }
           ],
           "links": [
             {
               "label": "Update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
-          "see": "**SAM Portfolio S5 Optimization** is your current update set."
+          "see": "The list shows **SAM Portfolio S5 Optimization** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ]
         },
         {
           "id": "s5-2",
           "num": "5.2",
           "title": "Open the Microsoft view",
           "where": "Software Asset Workspace",
+          "what": "Shows the results that Microsoft's own licensing rules produce, from the Microsoft [[publisher pack]].",
           "do": [
-            "Open Software Asset Workspace, **License usage**, **Microsoft**.",
-            "Find Windows Server and SQL Server."
+            "Open the **Software Asset Workspace** and click **License usage** in the menu on the left.",
+            "Click **Microsoft**.",
+            "Find **Windows Server** and **SQL Server** and open each one."
           ],
-          "note": "The Microsoft [[publisher pack]] holds Microsoft's licensing rules.",
-          "see": "The Microsoft products with their positions.",
+          "see": "The Microsoft products with their positions and the number of cores counted.",
           "shot": "S5_01_microsoft_view.png"
         },
         {
@@ -2039,11 +3263,12 @@
           "num": "5.3",
           "title": "Understand the per core rule",
           "where": "This guide",
+          "what": "Explains in plain numbers why Windows Server needs 112 core licenses and SQL Server 24. You will be asked about this in every demo.",
           "do": [
             "**Windows Server Standard** is licensed per core. Every physical server needs at least 16 core licenses, and every processor at least 8. Licenses come in packs of 2.",
             "Our 4 application servers have 16 cores each: 64. Our 3 SQL servers have only 8 cores each, but the minimum is 16 per server: 48. Together 112. We own 112: **compliant**.",
-            "**SQL Server Standard** is licensed per core with at least 4 per processor. 3 servers with 2 processors of 4 cores need 24. We own 16: **8 short**. 4 packs at EUR 3,945 make **EUR 15,780** to pay after an audit.",
-            "Compare this with the Microsoft view and write down what the system shows."
+            "**SQL Server Standard** is licensed per core with at least 4 per processor. 3 servers with 2 processors of 4 cores need 24. We own 16: **8 short**. 8 cores at EUR 1,972.50 (4 packs of 2 cores at EUR 3,945) make **EUR 15,780** to pay after an audit.",
+            "Compare this with the Microsoft view from step 5.2 and write down what the system shows."
           ],
           "note": "Without the Microsoft rules a tool counts raw cores: 88 for Windows Server. [[Per core licensing]] minimums are why the right answer is 112.",
           "see": "You can explain 112 and 24 without notes.",
@@ -2063,10 +3288,12 @@
           "title": "Add the usage data",
           "where": "Your instance",
           "script": "03_load_usage.js",
+          "what": "Adds [[software usage]]: when each Acrobat, Visio and Project installation was last used and for how long. 12 Project installations were last used more than 90 days ago.",
           "do": [
-            "Open **Scripts - Background**, click **Copy script**, paste it and click **Run script**.",
-            "It adds 103 usage rows for Acrobat, Visio and Project. 12 Project installations were last used more than 90 days ago.",
-            "Copy the result lines into the box."
+            "Click **Scripts - Background** below.",
+            "Click **Copy script**, paste it into the big text box and click **Run script**.",
+            "Copy the result lines into the box below.",
+            "Click **Software usage** below and check the count at the bottom right."
           ],
           "links": [
             {
@@ -2075,13 +3302,13 @@
             },
             {
               "label": "Software usage",
-              "path": "samp_sw_usage_list.do"
+              "path": "samp_sw_usage_list.do?sysparm_query=ORDERBYDESCsys_created_on"
             }
           ],
-          "note": "[[Software usage]] normally comes from an agent on each computer or from SCCM. The script plays that role.",
-          "see": "**Usage rows: 103 created**, followed by the list of fields it filled.",
+          "note": "Usage normally comes from an agent on each computer or from Microsoft SCCM. The script plays that role.",
+          "see": "**Usage rows: 103 created**, followed by the list of fields it filled. The usage list shows 103 more rows.",
           "help": [
-            "A note says no last used field was found: carry on. The rule option **Include no activity** in step 5.5 still finds the unused installations."
+            "A note says no last-used field was found: carry on. The rule option **Include no activity** in step 5.5 still finds the unused installations."
           ],
           "record": [
             {
@@ -2097,65 +3324,71 @@
           "num": "5.5",
           "title": "Create the reclamation rule",
           "where": "Software Asset Workspace",
+          "what": "Creates the [[reclamation rule]] that decides when an installation counts as unused: not used for 3 months.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Reclamation rules**, **New** (classic menu: All, Software Asset, Administration, Reclamation Rules, New).",
-            "Fill in the form as in the table and click **Submit**.",
-            "Open the rule again. In the **Software Products** list click **Edit**, add **Project** (Microsoft) and save."
+            "Open the **Software Asset Workspace**, click **License operations**, then **Reclamation rules**, then **New**. Classic way: All, Software Asset, Administration, Reclamation Rules, New.",
+            "Fill in the fields as shown in the table. Leave every other field as it is.",
+            "Click **Submit** (or **Save**).",
+            "Open the rule again. In the **Software Products** list at the bottom, click **Edit...** (or **New**).",
+            "Add **Project** by **Microsoft** and save."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Rule name",
-              "value": "Northstar - Project unused 3 months"
+              "title": "Reclamation rule form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "Northstar - Project unused 3 months"
+                },
+                {
+                  "field": "Applies to",
+                  "value": "Software installations",
+                  "note": "the choice for installed software, not SaaS",
+                  "copy": false
+                },
+                {
+                  "field": "Reclamation type",
+                  "value": "Last Used Date",
+                  "copy": false
+                },
+                {
+                  "field": "Last used before",
+                  "value": "3 months",
+                  "copy": false
+                },
+                {
+                  "field": "Create reclamation candidate",
+                  "value": "ticked",
+                  "copy": false
+                },
+                {
+                  "field": "Include no activity",
+                  "value": "ticked",
+                  "note": "also catches installations with no usage at all",
+                  "copy": false
+                },
+                {
+                  "field": "Notify user",
+                  "value": "not ticked",
+                  "note": "nobody gets an email",
+                  "copy": false
+                },
+                {
+                  "field": "Days before auto-reclamation",
+                  "value": "leave empty",
+                  "note": "nothing is removed automatically",
+                  "copy": false
+                }
+              ]
             }
           ],
-          "table": {
-            "columns": [
-              {
-                "key": "field",
-                "label": "Field"
-              },
-              {
-                "key": "value",
-                "label": "Value"
-              }
-            ],
-            "rows": [
-              {
-                "field": "Name",
-                "value": "Northstar - Project unused 3 months"
-              },
-              {
-                "field": "Applies to",
-                "value": "Installed software"
-              },
-              {
-                "field": "Reclamation type",
-                "value": "Last Used Date"
-              },
-              {
-                "field": "Last used before",
-                "value": "3 months"
-              },
-              {
-                "field": "Create reclamation candidate",
-                "value": "Ticked"
-              },
-              {
-                "field": "Include no activity",
-                "value": "Ticked"
-              },
-              {
-                "field": "Notify user",
-                "value": "Not ticked"
-              },
-              {
-                "field": "Software install condition",
-                "value": "Installed on, Name, starts with, NSM-WS (optional)"
-              }
-            ]
-          },
-          "note": "A [[reclamation rule]] decides when installed software counts as unused. Include no activity also catches installations with no usage at all.",
-          "see": "The rule is saved with Project in its software products.",
+          "links": [
+            {
+              "label": "Our reclamation rule",
+              "path": "samp_sw_reclamation_rule_list.do?sysparm_query=nameSTARTSWITHNorthstar"
+            }
+          ],
+          "see": "The rule **Northstar - Project unused 3 months** is saved with **Project** in its Software Products list.",
           "shot": "S5_04_reclamation_rule.png"
         },
         {
@@ -2164,27 +3397,40 @@
           "title": "Find the unused installations",
           "where": "Your instance",
           "timer": true,
-          "wait": "2 to 5 minutes",
+          "wait": "10 to 20 minutes",
+          "what": "Runs the license check once more with the usage data, then the job that turns the rule into removal candidates.",
           "do": [
-            "Open **Reclamation jobs**, then **SAM - Identify New Reclamation Candidates**, and click **Execute Now**.",
-            "Click **Start timer** and wait 2 to 5 minutes."
+            "Click **License check job** below, open **SAM - Software License Reconciliation** and click **Execute Now**.",
+            "Click **Reconciliation runs** and wait until the newest run has finished, 5 to 15 minutes. The candidates job needs a fresh license check.",
+            "Click **Reclamation jobs** below and open **SAM - Identify new reclamation candidates**. The name can read Identifying instead of Identify.",
+            "Click **Execute Now**, then **Start timer** below.",
+            "Wait 2 to 5 minutes."
           ],
           "links": [
+            {
+              "label": "License check job",
+              "path": "sysauto_list.do?sysparm_query=nameLIKEreconcil"
+            },
+            {
+              "label": "Reconciliation runs",
+              "path": "samp_reconciliation_result_list.do?sysparm_query=ORDERBYDESCsys_created_on"
+            },
             {
               "label": "Reclamation jobs",
               "path": "sysauto_list.do?sysparm_query=nameLIKEreclamation"
             }
           ],
-          "see": "A message that the job was scheduled."
+          "see": "Both jobs ran. The next step shows their result."
         },
         {
           "id": "s5-7",
           "num": "5.7",
           "title": "Check the removal candidates",
           "where": "Software Asset Workspace",
+          "what": "Counts the [[removal candidate|removal candidates]]: installations the system suggests taking back.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Removal candidates**, or the list below.",
-            "Count the candidates for Microsoft Project."
+            "Open the **Software Asset Workspace**, click **License operations**, then **Removal candidates**. Or click **Removal candidates** below.",
+            "Count the candidates for Microsoft Project and type the number in the box below."
           ],
           "links": [
             {
@@ -2192,7 +3438,6 @@
               "path": "samp_sw_reclamation_candidate_list.do?sysparm_query=ORDERBYDESCsys_created_on"
             }
           ],
-          "note": "A [[removal candidate]] is an installation the system suggests taking back.",
           "see": "12 candidates, on laptops NSM-WS-026 to NSM-WS-037.",
           "help": [
             "None after 5 minutes: work through **No removal candidates** under Troubleshooting."
@@ -2212,11 +3457,12 @@
           "num": "5.8",
           "title": "Show the savings and the process",
           "where": "Software Asset Workspace",
+          "what": "Shows what taking back the unused licenses is worth, and how the take-back process looks. [[Reclamation]] reuses licenses instead of buying new ones.",
           "do": [
-            "Open Software Asset Workspace, **License operations**, **Reclamation summary** and note the potential savings.",
-            "Open one candidate and look at its states and buttons. Do not start any uninstall."
+            "Open the **Software Asset Workspace**, click **License operations**, then **Reclamation summary**.",
+            "Write the potential savings in the box below.",
+            "Open one removal candidate and look at its state and buttons. Do not start any uninstall."
           ],
-          "note": "[[Reclamation]] reuses licenses instead of buying new ones.",
           "see": "Potential savings of about 12 x EUR 1,059 = EUR 12,708, or the system's own figure.",
           "record": [
             {
@@ -2232,11 +3478,13 @@
           "num": "5.9",
           "title": "Look at the automation behind it",
           "where": "Your instance",
+          "what": "Shows the automated process a real company runs after a take-back is approved. We only look; nothing is changed or switched on.",
           "do": [
-            "Click **All**, type **Flow Designer** and open it.",
-            "Search **Software Asset Reclamation**, open the flow and look at its steps. Do not change or activate anything."
+            "Click **All**, type **Workflow Studio** (older name: Flow Designer) and open it.",
+            "Search for **reclamation** and open the flow whose name mentions software reclamation.",
+            "Look at its steps. Do not change or activate anything."
           ],
-          "see": "The steps a real company runs after approval: notify the user, wait, remove the software, return the license to the pool.",
+          "see": "Steps such as notify the user, wait, remove the software and return the license to the pool.",
           "shot": "S5_07_reclamation_flow.png"
         }
       ],
@@ -2265,11 +3513,11 @@
       "problems": [
         {
           "problem": "No removal candidates",
-          "fix": "1) Open Software usage and check there are Project rows. 2) Check Project is allocated to the laptops (step 4.4). 3) Change the rule to Reclamation type Total Usage Time, Aggregate usage by the last 3 months, Total hours used 1, keep Include no activity ticked, and run the job again. 4) Still none: filter Software usage on Project with last used before 3 months ago, take that screenshot as evidence and write it in tracker/decisions.md. The story and the savings stay valid."
+          "fix": "1) Open Software usage and check there are Project rows. 2) Check Project is allocated to the laptops (step 4.8). 3) Change the rule to Reclamation type Total Usage Time, Aggregate usage by the last 3 months, Total hours used 1, keep Include no activity ticked, and run both jobs again (step 5.6). 4) Still none: filter Software usage on Project with last used before 3 months ago, take that screenshot as evidence and write it in tracker/decisions.md. The story and the savings stay valid."
         },
         {
           "problem": "The Microsoft view is empty",
-          "fix": "Run the license check again (step 4.5) after confirming a Microsoft plugin is in the plugin list (step 1.4)."
+          "fix": "Run the license check again (step 4.9) after confirming a Microsoft plugin is in the plugin list (step 1.5)."
         }
       ]
     },
@@ -2290,33 +3538,45 @@
           "num": "6.1",
           "title": "Start the change log for this stage",
           "where": "Your instance",
+          "what": "Creates an [[update set]] for this stage. It records every setting we change, so Stage 6 can export it as a backup.",
           "do": [
-            "Open **Update sets** below, click **New**.",
-            "Name it **SAM Portfolio S6 Presentation** and click **Submit**.",
-            "Open it again and click **Make This My Current Set**."
+            "Click **Update sets** below. The list **Local Update Sets** opens.",
+            "Click **New** at the top of the list. An empty update set form opens.",
+            "Fill in **Name** as shown in the table.",
+            "Click **Submit and Make Current**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Update set name",
-              "value": "SAM Portfolio S6 Presentation"
+              "title": "Update set form",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "SAM Portfolio S6 Presentation"
+                }
+              ]
             }
           ],
           "links": [
             {
               "label": "Update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
-          "see": "**SAM Portfolio S6 Presentation** is your current update set."
+          "see": "The list shows **SAM Portfolio S6 Presentation** with State **In progress**, and the globe icon in the top bar shows it as your current update set.",
+          "help": [
+            "There is only a **Submit** button: click it, click the new update set in the list, then click **Make This My Current Set**.",
+            "To check the current update set at any time, click the globe icon in the top bar. No globe icon: click your picture (top right), **Preferences**, **Developer**, and switch on **Show update set picker in header**."
+          ]
         },
         {
           "id": "s6-2",
           "num": "6.2",
           "title": "Look at the built-in analytics",
           "where": "Software Asset Workspace",
+          "what": "Checks whether the workspace's own charts already show Northstar numbers.",
           "do": [
-            "Look at the overview and analytics pages of the Software Asset Workspace.",
-            "Charts empty: open **Analytics jobs** (or click **All** and go to Performance Analytics, Data Collector, Jobs), run each job that mentions Software Asset or SAM with **Execute Now**, wait 10 minutes and reload."
+            "Open the **Software Asset Workspace** and look at **Software asset overview** and the other views with charts.",
+            "Charts are empty: click **Analytics jobs** below (or All, Performance Analytics, Data Collector, Jobs). Open each job that mentions Software Asset or SAM and click **Execute Now**. Wait 10 minutes and reload the workspace."
           ],
           "links": [
             {
@@ -2324,96 +3584,121 @@
               "path": "sysauto_pa_list.do?sysparm_query=nameLIKEsoftware%5EORnameLIKEsam"
             }
           ],
-          "see": "Charts with Northstar numbers. If they stay empty, the next step builds the dashboard from reports.",
+          "see": "Charts with Northstar numbers. If they stay empty, the next two steps build the dashboard anyway.",
           "shot": "S6_01_workspace_analytics.png"
         },
         {
           "id": "s6-3",
           "num": "6.3",
-          "title": "Build the management dashboard",
+          "title": "Create the dashboard page",
           "where": "Your instance",
+          "what": "Creates the empty dashboard that will answer the five management questions on one screen.",
           "do": [
-            "Create each report: click **All**, type **Reports**, open **Create New**. Pick the table, type, grouping and filter from the table, then **Save**.",
-            "Create the dashboard: click **All**, type **Dashboards**, click **New**, name it **Northstar Software Asset Overview** and add the 6 reports.",
-            "Tick each report in the second table when it is on the dashboard."
+            "Click **All** and type **Dashboards**. Under **Platform Analytics**, click **Dashboards**.",
+            "Click **Create New Dashboard** at the top right. On some versions the button is called **New**.",
+            "Fill in the name from the table and click **Create** (or **Save**). The empty dashboard opens in edit mode."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "Dashboard name",
-              "value": "Northstar Software Asset Overview"
+              "title": "New dashboard",
+              "rows": [
+                {
+                  "field": "Name",
+                  "value": "Northstar Software Asset Overview"
+                }
+              ]
             }
+          ],
+          "see": "An empty dashboard called **Northstar Software Asset Overview**.",
+          "help": [
+            "There are no Platform Analytics dashboards: click **All**, type **Dashboards**, open the classic **Dashboards** list and click **New**. Use the same name."
+          ]
+        },
+        {
+          "id": "s6-charts",
+          "num": "6.4",
+          "title": "Add the six charts",
+          "where": "Your instance",
+          "what": "Fills the dashboard with six charts: what we have, how clean it is, what we own, where the risk is, where we can save and what renews soon.",
+          "do": [
+            "On the dashboard click **Add New Element** (or the **+** button). Choose **Data Visualization**, then create a new one.",
+            "Choose the visualization type shown in the **Type** column, for example **Bar**.",
+            "As data source, choose the table shown in the **Table** column: type the first letters of its name and pick it.",
+            "Add the condition shown in the **Filter** column, and set **Group by** to the field in the **Group by** column.",
+            "Type the name from the **Title** column, save the chart and place it on the dashboard.",
+            "Repeat for all six charts, then save the dashboard. Tick each chart in the second table when it is on the dashboard."
           ],
           "table": {
             "columns": [
               {
-                "key": "r",
-                "label": "Report"
-              },
-              {
-                "key": "t",
-                "label": "Table"
+                "key": "title",
+                "label": "Title"
               },
               {
                 "key": "type",
                 "label": "Type"
               },
               {
-                "key": "g",
-                "label": "Group by"
+                "key": "table",
+                "label": "Table"
               },
               {
-                "key": "f",
+                "key": "filter",
                 "label": "Filter"
+              },
+              {
+                "key": "group",
+                "label": "Group by"
               }
             ],
             "rows": [
               {
-                "r": "Installations by publisher",
-                "t": "cmdb_sam_sw_install",
+                "title": "Installations by publisher",
                 "type": "Bar",
-                "g": "Publisher",
-                "f": "Installed on starts with NSM-"
+                "table": "Software Installation (cmdb_sam_sw_install)",
+                "filter": "Installed on, Name, starts with, NSM-",
+                "group": "Publisher"
               },
               {
-                "r": "Normalization status",
-                "t": "cmdb_sam_sw_discovery_model",
+                "title": "Normalization status",
                 "type": "Pie",
-                "g": "Normalization status",
-                "f": "none"
+                "table": "Software Discovery Model (cmdb_sam_sw_discovery_model)",
+                "filter": "none",
+                "group": "Normalization status"
               },
               {
-                "r": "Rights owned by product",
-                "t": "alm_license",
+                "title": "Rights owned by product",
                 "type": "Bar",
-                "g": "Software model (sum of rights)",
-                "f": "PO number starts with NSM-PO"
+                "table": "Software Entitlement (alm_license)",
+                "filter": "Asset tag, starts with, NSM-ENT",
+                "group": "Software model, showing the sum of Purchased rights"
               },
               {
-                "r": "License positions",
-                "t": "samp_software_model_result",
+                "title": "License positions",
                 "type": "List",
-                "g": "Software model",
-                "f": "Newest run"
+                "table": "Software Model Result (samp_software_model_result)",
+                "filter": "Software model, Short description, starts with, Northstar",
+                "group": "Software model"
               },
               {
-                "r": "Removal candidates",
-                "t": "samp_sw_reclamation_candidate",
+                "title": "Removal candidates",
                 "type": "Single score",
-                "g": "count",
-                "f": "Product is Project"
+                "table": "Removal candidate (samp_sw_reclamation_candidate)",
+                "filter": "Product (or Software model) contains Project",
+                "group": "Count of records"
               },
               {
-                "r": "Renewals coming up",
-                "t": "alm_license",
+                "title": "Renewals coming up",
                 "type": "List",
-                "g": "End date",
-                "f": "End date is not empty"
+                "table": "Software Entitlement (alm_license)",
+                "filter": "Asset tag, starts with, NSM-ENT, and End date, is not empty",
+                "group": "End date"
               }
             ]
           },
           "grid": {
             "id": "reports_done",
-            "rowLabel": "Report",
+            "rowLabel": "Chart",
             "columns": [
               {
                 "key": "done",
@@ -2449,22 +3734,59 @@
             ]
           },
           "see": "One dashboard that answers: what do we have, how clean is the data, what do we own, where is the risk, where can we save.",
+          "help": [
+            "No **Data Visualization** option: build each chart as a classic report. Click **All**, type **Reports**, click **Create New**. Type the title as **Report name**, choose **Table** as source type and pick the table, click **Next**. Choose the type, set **Group by** and the filter, click **Save**. Then use **Add to Dashboard** in the menu next to Save.",
+            "A chart is empty: check the table and filter. License positions need a finished license check (step 4.9)."
+          ],
           "shot": "S6_02_dashboard.png"
         },
         {
           "id": "s6-4",
-          "num": "6.4",
+          "num": "6.5",
           "title": "Create the read-only visitor",
           "where": "Your instance",
+          "what": "Creates the login reviewers use later to look around the live system without being able to change anything.",
           "do": [
-            "Open **Users**, click **New**. User ID **portfolio.visitor**, First name **Portfolio**, Last name **Visitor**. Leave the email empty. Untick **Active**. Click **Submit**.",
-            "Open the user, go to **Roles**, click **Edit**, add **sam_user** and **snc_read_only**, and save.",
-            "Click **Set Password**, create a strong password used nowhere else, and keep it in the password manager."
+            "Click **Users** below, then **New**.",
+            "Fill in the form as shown in the table and click **Submit**.",
+            "Open **portfolio.visitor** again. In the **Roles** tab at the bottom, click **Edit...**.",
+            "In the left box type **sam_user**, select it and click the arrow pointing right. Do the same for **snc_read_only**. Click **Save**.",
+            "Click **Set Password**. Click **Generate**, copy the password into your password manager, then click **Save Password**."
           ],
-          "copy": [
+          "form": [
             {
-              "label": "User ID",
-              "value": "portfolio.visitor"
+              "title": "New user",
+              "rows": [
+                {
+                  "field": "User ID",
+                  "value": "portfolio.visitor"
+                },
+                {
+                  "field": "First name",
+                  "value": "Portfolio"
+                },
+                {
+                  "field": "Last name",
+                  "value": "Visitor"
+                },
+                {
+                  "field": "Email",
+                  "value": "leave empty",
+                  "copy": false
+                },
+                {
+                  "field": "Password needs reset",
+                  "value": "not ticked",
+                  "note": "a read-only user cannot change its own password",
+                  "copy": false
+                },
+                {
+                  "field": "Active",
+                  "value": "not ticked",
+                  "note": "we switch it on in Stage 7",
+                  "copy": false
+                }
+              ]
             }
           ],
           "links": [
@@ -2474,18 +3796,28 @@
             }
           ],
           "note": "[[snc_read_only]] stops this user from creating, changing or deleting anything. sam_user lets them see the SAM screens.",
-          "see": "The visitor exists with exactly 2 roles and is inactive."
+          "see": "The visitor exists, is not active, and has exactly 2 roles: sam_user and snc_read_only.",
+          "help": [
+            "The role list in the left box is long: type the role name in the search field above it."
+          ]
         },
         {
           "id": "s6-5",
-          "num": "6.5",
+          "num": "6.6",
           "title": "Test the visitor in a private window",
           "where": "Your instance",
+          "what": "Proves the visitor can look at everything that matters and change nothing.",
           "do": [
-            "Tick **Active** on the visitor and save.",
-            "Open a private browser window, go to your instance and sign in as portfolio.visitor.",
+            "Open **portfolio.visitor**, tick **Active** and click **Update**.",
+            "Open a private browser window, go to your instance address and sign in as **portfolio.visitor** with the password from the password manager.",
             "Try every line in the table and choose the result.",
-            "When you are done, untick **Active** again until Stage 7."
+            "Close the private window. Open portfolio.visitor as admin, untick **Active** and click **Update** until Stage 7."
+          ],
+          "links": [
+            {
+              "label": "Visitor user",
+              "path": "sys_user_list.do?sysparm_query=user_name%3Dportfolio.visitor"
+            }
           ],
           "grid": {
             "id": "visitor_tests",
@@ -2563,63 +3895,79 @@
           "see": "Every Opens line works and every Refused line is refused.",
           "help": [
             "The visitor can change something: check that snc_read_only is on the user, sign out and in again, and test again.",
-            "The visitor cannot open the workspace: make the dashboard the visitor's start page and note it."
+            "The visitor cannot open the dashboard: open it as admin, open its sharing settings and add the visitor or the sam_user role."
           ],
           "shot": "S6_03_visitor_refused.png"
         },
         {
           "id": "s6-6",
-          "num": "6.6",
+          "num": "6.7",
           "title": "Close and export the update sets",
           "where": "Your instance",
+          "what": "Turns the six change logs into six files that can rebuild our configuration on a new sandbox.",
           "do": [
-            "Open **Our update sets**. For each set S1 to S6: open it, set **State** to **Complete**, save, then click **Export to XML** under Related Links.",
-            "Keep the 6 files together on your computer."
+            "Click **Our update sets** below.",
+            "Open **SAM Portfolio S1 Foundation**. Set **State** to **Complete** and click **Update**.",
+            "Open it again. Under **Related Links** at the bottom, click **Export to XML**. Your browser saves a file.",
+            "Do the same for S2 to S6.",
+            "Keep the 6 files together in one folder on your computer."
           ],
           "links": [
             {
-              "label": "Our update sets",
-              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio"
+              "label": "Update sets",
+              "path": "sys_update_set_list.do?sysparm_query=nameSTARTSWITHSAM%20Portfolio%5EORDERBYname"
             }
           ],
           "note": "An update set can only be exported once it is Complete.",
-          "see": "6 XML files on your computer."
+          "see": "6 XML files on your computer, one per stage.",
+          "help": [
+            "No **Export to XML** link: the State is not Complete yet. Set it, click Update and open the update set again."
+          ]
         },
         {
           "id": "s6-7",
-          "num": "6.7",
+          "num": "6.8",
           "title": "Export our key records",
           "where": "Your instance",
+          "what": "Saves our software models, purchases and reclamation rule as files, so they can be loaded into a new sandbox.",
           "do": [
-            "Open each list below. Right-click a column heading, choose **Export**, then **XML**, and save the file.",
-            "For software models, first filter the list to our 5 models."
+            "Click each button below. Each opens a list filtered to our own records.",
+            "In each list, right-click any column heading and choose **Export**, then **XML**.",
+            "If a box appears, click **Download**. Save the file in the same folder as the update sets."
           ],
           "links": [
             {
-              "label": "Software models",
-              "path": "cmdb_software_product_model_list.do?sysparm_query=ORDERBYDESCsys_created_on"
+              "label": "Our software models",
+              "path": "cmdb_software_product_model_list.do?sysparm_query=short_descriptionSTARTSWITHNorthstar"
             },
             {
-              "label": "Northstar entitlements",
-              "path": "alm_license_list.do?sysparm_query=po_numberSTARTSWITHNSM-PO"
+              "label": "Our entitlements",
+              "path": "alm_license_list.do?sysparm_query=asset_tagSTARTSWITHNSM-ENT%5EORDERBYasset_tag"
             },
             {
-              "label": "Northstar reclamation rule",
+              "label": "Our reclamation rule",
               "path": "samp_sw_reclamation_rule_list.do?sysparm_query=nameSTARTSWITHNorthstar"
             }
           ],
-          "see": "3 more XML files."
+          "see": "3 more XML files: 5 software models, 5 entitlements and 1 rule."
         },
         {
           "id": "s6-8",
-          "num": "6.8",
+          "num": "6.9",
           "title": "Pack the backup for the repository",
           "where": "This guide",
+          "what": "Packs the 9 files with a list and checksums, so anyone can see later that the backup is complete and unchanged.",
           "do": [
-            "Open **Backup pack** in this guide.",
+            "Click **Open Backup pack** below.",
             "Drop all 9 XML files onto it and click **Download backup pack**.",
             "Unzip it into the repository folder. It creates exports/release_01 with the files, a manifest and checksums.",
-            "Upload that folder to GitHub with the end-of-session pack."
+            "Upload that folder to GitHub together with the end-of-session pack."
+          ],
+          "links": [
+            {
+              "label": "Open Backup pack",
+              "view": "backup"
+            }
           ],
           "see": "exports/release_01 contains the XML files, MANIFEST.md and SHA256SUMS.",
           "shot": "S6_04_backup_pack.png"
@@ -2646,11 +3994,11 @@
       "problems": [
         {
           "problem": "No Export to XML link on an update set",
-          "fix": "Set its State to Complete and save first."
+          "fix": "Set its State to Complete and click Update first."
         },
         {
-          "problem": "A report shows no data",
-          "fix": "Check the table and filter. License positions need a finished license check (step 4.5)."
+          "problem": "A chart shows no data",
+          "fix": "Check the table and filter. License positions need a finished license check (step 4.9)."
         },
         {
           "problem": "The visitor cannot see the dashboard",
@@ -2675,20 +4023,29 @@
           "num": "7.1",
           "title": "Copy your numbers into the case study",
           "where": "This guide",
+          "what": "Puts the real results from the sandbox into the case study, so every number in it is one you measured.",
           "do": [
-            "Open **Session report** in this guide and click **Copy results table**.",
-            "In the repository open docs/case_study.md and replace the Headline results table with it.",
+            "Click **Open Session report** below and click **Copy results table**.",
+            "In the repository open docs/case_study.md and replace the **Headline results** table with it.",
             "Fill each section marked 'filled in Stage N' with two or three sentences of what you did and saw."
           ],
-          "see": "The case study shows your real numbers and every claim links to a screenshot."
+          "links": [
+            {
+              "label": "Open Session report",
+              "view": "report"
+            }
+          ],
+          "see": "The case study shows your real numbers, and every claim links to a screenshot."
         },
         {
           "id": "s7-2",
           "num": "7.2",
           "title": "Run the acceptance checklist",
           "where": "This guide",
+          "what": "Checks the whole project against 19 acceptance points before anyone outside the team sees it.",
           "do": [
-            "Go through each line and choose the result. Fix what fails before you continue."
+            "Go through each line and choose the result.",
+            "Fix what fails before you continue, or write an accepted exception in tracker/decisions.md."
           ],
           "grid": {
             "id": "acceptance",
@@ -2744,12 +4101,12 @@
               },
               {
                 "id": "a7",
-                "label": "5 software models with discovery maps",
+                "label": "5 software models, each with a matching discovery model",
                 "stage": "3"
               },
               {
                 "id": "a8",
-                "label": "5 published entitlements with metric and cost",
+                "label": "5 entitlements In use, with metric, cost and asset tag",
                 "stage": "4"
               },
               {
@@ -2816,10 +4173,18 @@
           "num": "7.3",
           "title": "Switch on the visitor",
           "where": "Your instance",
+          "what": "Opens the live system to reviewers, read-only.",
           "do": [
-            "Tick **Active** on portfolio.visitor and save.",
-            "In a private window repeat four tests: open the workspace, change an entitlement (refused), open Scripts - Background (refused), delete a record (refused).",
-            "Put the instance address and the user name portfolio.visitor in the README section See it live. Give the password only to the people who review the project."
+            "Click **Visitor user** below, open **portfolio.visitor**, tick **Active** and click **Update**.",
+            "In a private window sign in as the visitor and repeat four tests: open the workspace (opens), change an entitlement (refused), open Scripts - Background (refused), delete a record (refused).",
+            "In the README section **See it live**, add the instance address and the user name **portfolio.visitor**. Never write the password there.",
+            "Give the password only to the people who review the project, for example in a direct message."
+          ],
+          "links": [
+            {
+              "label": "Visitor user",
+              "path": "sys_user_list.do?sysparm_query=user_name%3Dportfolio.visitor"
+            }
           ],
           "see": "Reviewers can sign in and look around, and nothing can be changed."
         },
@@ -2828,8 +4193,10 @@
           "num": "7.4",
           "title": "Run the paper recovery test",
           "where": "GitHub",
+          "what": "Proves that someone outside the team could rebuild the project from the repository alone.",
           "do": [
-            "Ask someone who did not build the project to read docs/10_recovery_plan.md and answer: which release, which activation, which files restore our changes, which data, in which order, and how we know it worked.",
+            "Ask someone who did not build the project to read docs/10_recovery_plan.md.",
+            "Ask them six questions: which release, which activation, which files restore our changes, which data, in which order, and how we know it worked.",
             "Improve the document wherever they got stuck."
           ],
           "see": "They answer all six questions from the repository alone."
@@ -2840,8 +4207,10 @@
           "title": "Rehearse the five-minute demo",
           "where": "This guide",
           "timer": true,
+          "what": "Practises the story you tell managers and interviewers, one minute per part.",
           "do": [
-            "Click **Start timer** and give the demo using the table. Practise twice."
+            "Click **Start timer** and give the demo using the table.",
+            "Practise twice. Stop at five minutes."
           ],
           "table": {
             "columns": [
@@ -2893,13 +4262,20 @@
           "num": "7.6",
           "title": "Publish the release",
           "where": "GitHub",
+          "what": "Freezes the finished project as version 1.0.0, so everyone refers to the same state.",
           "do": [
-            "On GitHub open **Releases**, click **Draft a new release**, create the tag **v1.0.0**, title **SAM Professional case study**, and publish."
+            "On the repository page on GitHub, click **Releases**, then **Draft a new release**.",
+            "Click **Choose a tag**, type **v1.0.0** and choose **Create new tag**.",
+            "Type the title **SAM Professional case study** and click **Publish release**."
           ],
           "copy": [
             {
               "label": "Tag",
               "value": "v1.0.0"
+            },
+            {
+              "label": "Title",
+              "value": "SAM Professional case study"
             }
           ],
           "see": "Release v1.0.0 is listed on the repository page."
@@ -2909,9 +4285,10 @@
           "num": "7.7",
           "title": "Present it",
           "where": "GitHub",
+          "what": "Gets the case study in front of the people it is for.",
           "do": [
             "Send the README link to your manager and book the demo.",
-            "Before every demo: sign in to the Developer Site to wake the sandbox 30 minutes early, and check the visitor login."
+            "Before every demo: sign in to the Developer Site 30 minutes early to wake the sandbox, and test the visitor login."
           ],
           "see": "The demo is booked."
         }

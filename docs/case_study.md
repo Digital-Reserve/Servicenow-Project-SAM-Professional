@@ -63,7 +63,7 @@ To be written: the rate before and after, which products the built-in library re
 
 ### Software models and entitlements (filled in Stages 3 and 4)
 
-To be written: the five models and their discovery maps, the five published entitlements with metric, rights, packs and cost, and the 68 allocations.
+To be written: the five models and their matching discovery models, the five entitlements (asset tags NSM-ENT-A to NSM-ENT-E, State In use) with metric, rights, packs and cost, and the 68 allocations.
 
 ### Reconciliation (filled in Stage 4)
 

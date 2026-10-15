@@ -87,7 +87,7 @@ Source: ServiceNow community blog What's New in Zurich Release for Software Asse
 
 Normalization status values documented by ServiceNow staff: Normalized, Partially Normalized, Publisher Normalized, Match Not Found, plus Manually Normalized when a suggestion is accepted.
 
-Entitlement states: new entitlements are created as Draft and must be Published; draft entitlements are not considered for licensing or reconciliation.
+Entitlement states: new entitlements are created as Draft and must be Published; draft entitlements are not considered for licensing or reconciliation. *Corrected on 15 October 2026: the Zurich documentation names the states Build and In use, and the entitlement form has no PO number field. See [platform_research_2026-10-15.md](platform_research_2026-10-15.md).*
 
 Publisher part numbers can auto create software models with enrichment. For Microsoft products sold in packs, record rights per pack and number of packs. Unit cost is needed for true up and savings figures.
 

@@ -33,6 +33,21 @@ ServiceNow knowledge article KB0696858 and community answers define `cpu_count` 
 
 Effect: the Northstar data was corrected. SQL servers are now 2 processors x 4 cores and Windows application servers 2 processors x 8 cores. The licensing results stay the same: SQL Server needs 24 cores (16 owned) and Windows Server needs 112 under Microsoft's 16-core minimum per server (88 actual cores).
 
+## Forms and buttons the guide names (second check, 15 October 2026)
+
+A second pass through the Zurich documentation, so that every step can name the exact field and button.
+
+| Finding | Effect on the project |
+| --- | --- |
+| Entitlements in the workspace: Software asset overview, **Create entitlement**, **Fill out the details in a standard form**, **Next**, fill in, **Save** (the Allocations, General, Financial and Contracts tabs appear), then **Publish**. A new entitlement is in state Build; Publish moves it to In use, which makes it count in reconciliation. | Stage 4 has one step per purchase with these clicks. Decision D15. |
+| The entitlement form has **Asset tag**, Software model, License type, License metric, Rights per license pack, Number of packs, Purchased rights (packs x rights per pack for Microsoft per core), Unit cost, and on the tabs Company, Vendor, Invoice number and Purchased. It has no PO number field. | Purchases are tagged `NSM-ENT-A` to `NSM-ENT-E`; the allocation script, list links, reports and exports use the tag. Decision D12. |
+| Unit cost is multiplied by the number of rights, so a pack price must be divided by the rights per pack (community answer). | SQL Server is entered at EUR 1,972.50 per core (EUR 3,945 per pack of 2). Decision D14. |
+| The software model form has Publisher, Product, **Version condition** (starts with, is, is anything; default is anything), Version, **Edition condition**, Edition, **Product type**, License under management and Short description, and a tab **Matching Discovery Models**. The workspace locks version and edition after saving (community answer). | Models are created in the classic form, match every version and one edition, and carry the short description `Northstar story A` to `E`. Decision D13. |
+| The discovery model form has Normalization status, Publisher, Product, Version, Edition, Product type and the discovered values. Only Licensable models count in reconciliation. Manual normalization: fill in the fields and Save; the status becomes Manually Normalized. In the workspace: License operations, Discovery models, the ellipsis menu, Normalize. | Step 3.4 sets Product type as well as the names, and the read-only status script `04_show_normalization.js` shows all 8 values at once. |
+| A user interface policy makes Publisher read-only when the status is Normalized, Publisher Normalized or Partially Normalized (knowledge article KB0852551). | Step 3.4 says to leave a grey Publisher field as it is. |
+| Job names: SAM - Normalize discovery models using content library rules (daily), SAM - Software License Reconciliation (weekly), SAM - Identify new reclamation candidates (monthly; it needs a successful reconciliation first). | The steps name these jobs and run a fresh license check before the candidates job. |
+| Zurich dashboards: Platform Analytics, Dashboards, Create New Dashboard, Add New Element, Data Visualization (community guides). Classic reports remain available. | Step 6.3 creates the dashboard and step 6.4 adds six charts, with classic reports as the fallback. |
+
 ## Sources
 
 - Zurich, License operations view: https://www.servicenow.com/docs/r/zurich/it-asset-management/software-asset-management/operations-workspace.html
@@ -46,3 +61,19 @@ Effect: the Northstar data was corrected. SQL servers are now 2 processors x 4 c
 - PDI waitlist reports (2026): https://www.servicenow.com/community/developer-forum/i-requested-a-personal-developer-instance-pdi-seven-days-ago/td-p/3567239
 - Brazil release dates (third party): https://nowben.com/servicenow-brazil-release-key-dates-and-preview-information/
 - Brazil release (community): https://www.servicenow.com/community/servicenow-impact-forum/brazil-release/m-p/3518630
+- Zurich, Create entitlements in workspace: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/O~JVsyQdaW99Fe~XMND4nA
+- Zurich, Create entitlements using the guided walk-through: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/wJ~MxrbMj7k2PMSUNbBcaQ
+- Zurich, Create entitlements in Software Asset Management classic: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/fSB_J0XtiCVH9Yb3z0nl5Q
+- Software entitlement fields: https://www.servicenow.com/docs/r/it-asset-management/software-asset-management/software-entitlement-fields.html
+- Zurich, Software model fields: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/~W3T7ze0NV958wBRZ5iw3Q
+- Zurich, Discovery models fields: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/Ht4DWOQhpdO_GYV9yqU7Bg
+- Zurich, Manually normalize a software discovery model (classic): https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/WeO4A2hUBRPE0PIrfcAN8A
+- Zurich, Manually normalize in the workspace: https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/ZqZ6~iILd4Kf6VMsqsNajw
+- Edit the Publisher of a normalized discovery model (KB0852551): https://support.servicenow.com/kb/kb/kb?id=kb_article_view&sysparm_article=KB0852551
+- Software normalization and its scheduled job: https://www.servicenow.com/docs/r/it-asset-management/software-asset-management/sam-normalization.html
+- Software installation optimization and removal (reclamation jobs): https://www.servicenow.com/docs/r/1zMxrAxr2iK81FYv03BwFA/5IomUwdHuahRQ0OEkm_QXA
+- SAM Pro packs and unit cost (community): https://www.servicenow.com/community/sam-forum/itam-sam-pro-packs-related-query/td-p/2426630
+- SAM Pro reconciliation job name (community): https://www.servicenow.com/community/sam-forum/sam-pro-reconciliation-not-bringing-in-new-entitlement/td-p/3461578
+- Dashboards and reports in Zurich (community): https://www.servicenow.com/community/servicenow-ai-platform-articles/how-to-create-servicenow-dashboards-and-reports-zurich-version/ta-p/3430404
+- Creating dashboards step by step (community): https://www.servicenow.com/community/servicenow-ai-platform-forum/article-how-to-create-dashboards-in-servicenow-step-by-step-for/m-p/3357342
+- Version and edition locked in the workspace (community): https://www.servicenow.com/community/sam-forum/need-guidance-on-organizing-software-model-information-in/td-p/2674849

@@ -23,7 +23,7 @@ Scanners report names the way each program describes itself, which is messy: "Ad
 
 ## 4. Software models (Stage 3)
 
-A software model is the product as we manage it for licensing, such as Microsoft Visio 2021 Professional. Its discovery map tells SAM which normalized installations belong to it.
+A software model is the product as we manage it for licensing, such as Microsoft Visio Professional. Its discovery map, shown on the model as the tab Matching Discovery Models, tells SAM which normalized installations belong to it.
 
 ## 5. Entitlements and allocations (Stage 4)
 

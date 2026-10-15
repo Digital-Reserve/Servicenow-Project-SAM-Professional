@@ -11,7 +11,7 @@ Northstar Manufacturing is an invented company: 60 employees, 45 laptops and 12 
 ## B. Microsoft SQL Server Standard: under-licensed
 
 **Situation.** Three database servers each have 2 processors with 4 cores: 24 cores. Northstar bought 16 core licenses.
-**What the system shows.** 24 needed, 16 owned: 8 cores short. Licenses come in packs of 2 cores at EUR 3,945 per core, so closing the gap costs 8 x EUR 3,945 = **EUR 15,780**.
+**What the system shows.** 24 needed, 16 owned: 8 cores short. Licenses come in packs of 2 cores at EUR 3,945 per pack (EUR 1,972.50 per core), so closing the gap costs 4 packs, or 8 x EUR 1,972.50 = **EUR 15,780**.
 **Why it matters.** This is the classic audit finding. The system finds it before the vendor does and traces it to the three servers.
 
 ## C. Microsoft Visio Professional: over-licensed
